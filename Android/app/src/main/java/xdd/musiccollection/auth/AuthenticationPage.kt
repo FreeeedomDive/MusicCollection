@@ -11,15 +11,15 @@ enum class AuthenticationState{
 }
 
 @Composable
-fun AuthenticationPage() {
+fun AuthenticationPage(showMainPage: () -> Unit) {
     val (currentAuthenticationState, setAuthenticationState) = remember { mutableStateOf(AuthenticationState.Login) }
 
     Column {
         if (currentAuthenticationState == AuthenticationState.Login){
-            LoginPage { setAuthenticationState(AuthenticationState.Register) }
+            LoginPage(showMainPage) { setAuthenticationState(AuthenticationState.Register) }
         }
         if (currentAuthenticationState == AuthenticationState.Register){
-            RegistrationPage { setAuthenticationState(AuthenticationState.Login) }
+            RegistrationPage(showMainPage) { setAuthenticationState(AuthenticationState.Login) }
         }
     }
 }

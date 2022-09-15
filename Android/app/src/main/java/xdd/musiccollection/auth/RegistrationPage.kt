@@ -19,7 +19,7 @@ import xdd.musiccollection.ui.theme.BlueGradientBottom
 import xdd.musiccollection.ui.theme.BlueGradientTop
 
 @Composable
-fun RegistrationPage(switchToLogin: () -> Unit){
+fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit){
     val (loginValue, setLoginValue) = remember { mutableStateOf("") }
     val (passwordValue, setPasswordValue) = remember { mutableStateOf("") }
     val (confirmPasswordValue, setConfirmPasswordValue) = remember { mutableStateOf("") }
@@ -73,7 +73,12 @@ fun RegistrationPage(switchToLogin: () -> Unit){
                         }
                 )
                 RoundedCornerOutlinedButton(
-                    onClick = { setLoading(!isLoading) },
+                    onClick = {
+                        if (isLoading){
+                            showMainPage()
+                        }
+                        setLoading(true)
+                    },
                     modifier = Modifier
                         .height(60.dp)
                         .fillMaxWidth(),

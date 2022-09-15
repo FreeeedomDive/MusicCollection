@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -18,7 +17,7 @@ import xdd.musiccollection.ui.theme.BlueGradientBottom
 import xdd.musiccollection.ui.theme.BlueGradientTop
 
 @Composable
-fun LoginPage(switchToRegistration: () -> Unit) {
+fun LoginPage(showMainPage: () -> Unit, switchToRegistration: () -> Unit) {
     val (loginValue, setLoginValue) = remember { mutableStateOf("") }
     val (passwordValue, setPasswordValue) = remember { mutableStateOf("") }
     val (isLoading, setLoading) = remember { mutableStateOf(false) }
@@ -64,7 +63,12 @@ fun LoginPage(switchToRegistration: () -> Unit) {
                         }
                 )
                 RoundedCornerOutlinedButton(
-                    onClick = { setLoading(!isLoading) },
+                    onClick = {
+                        if (isLoading){
+                            showMainPage()
+                        }
+                        setLoading(true)
+                    },
                     modifier = Modifier
                         .height(60.dp)
                         .fillMaxWidth(),
