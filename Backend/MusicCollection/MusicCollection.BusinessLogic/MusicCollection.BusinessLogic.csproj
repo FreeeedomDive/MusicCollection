@@ -10,4 +10,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-rc.1.22426.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
+    </ItemGroup>
+
 </Project>

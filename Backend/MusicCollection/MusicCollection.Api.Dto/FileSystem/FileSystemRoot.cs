@@ -2,6 +2,6 @@
 
 public class FileSystemRoot
 {
-    public Guid Id { get; }
-    public string Path { get; }
+    public Guid Id { get; set; }
+    public string Path { get; set; }
 }

@@ -2,5 +2,6 @@
 
 public enum NodeType
 {
-    File, Directory
+    File,
+    Directory
 }
