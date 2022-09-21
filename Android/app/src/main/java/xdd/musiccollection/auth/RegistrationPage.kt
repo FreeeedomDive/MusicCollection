@@ -14,9 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import xdd.musiccollection.R
 import xdd.musiccollection.defaultComponents.RoundedCornerOutlinedButton
-import xdd.musiccollection.ui.theme.BlueGradientBottom
-import xdd.musiccollection.ui.theme.BlueGradientTop
+import xdd.musiccollection.defaultComponents.RoundedTextField
+import xdd.musiccollection.defaultComponents.RoundedTextFieldPosition
+import xdd.musiccollection.ui.theme.*
 
 @Composable
 fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit){
@@ -32,35 +34,35 @@ fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit){
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            BlueGradientTop,
-                            BlueGradientBottom,
+                            PurpleColorPalette3,
+                            PurpleColorPalette2,
                         )
                     )
                 ),
             verticalArrangement = Arrangement.Center
         ) {
             Column(
-                Modifier.padding(12.dp)
+                Modifier.padding(16.dp)
             ) {
-                OutlinedTextField(
+                RoundedTextField(
+                    position = RoundedTextFieldPosition.Top,
                     value = loginValue,
                     onValueChange = { setLoginValue(it) },
                     label = { Text(text = "Login") },
-                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
+                RoundedTextField(
+                    position = RoundedTextFieldPosition.Middle,
                     value = passwordValue,
                     onValueChange = { setPasswordValue(it) },
                     label = { Text(text = "Password") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    isPasswordInput = true
                 )
-                OutlinedTextField(
+                RoundedTextField(
+                    position = RoundedTextFieldPosition.Bottom,
                     value = confirmPasswordValue,
                     onValueChange = { setConfirmPasswordValue(it) },
                     label = { Text(text = "Confirm password") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    isPasswordInput = true
                 )
                 Text(
                     text = "Already have an account? Log in",
@@ -83,7 +85,9 @@ fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit){
                         .height(60.dp)
                         .fillMaxWidth(),
                     isLoading = isLoading,
-                    text = "Submit"
+                    text = "Register",
+                    backgroundColor = PurpleColorPalette1,
+                    iconId = R.drawable.user_add_alt_fill
                 )
             }
         }

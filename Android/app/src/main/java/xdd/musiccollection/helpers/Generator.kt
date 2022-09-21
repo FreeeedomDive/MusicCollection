@@ -17,7 +17,7 @@ class Generator {
                 NodeType.Back
             ))
         }
-        val parentPath = parent?.path ?: ""
+        val parentPath = parent?.path ?: "ExampleRoot"
         for (i in 0..itemsCount){
             val path = generateText(Random().nextInt(5));
             val element = FileSystemNode(
@@ -28,9 +28,8 @@ class Generator {
             )
             result.add(element);
         }
-        result.sortedBy { item -> item.path }
+        result.sortBy { x -> x }
 
-        Log.i("Generator", "Generated ${result.count()} items")
         return result
     }
 

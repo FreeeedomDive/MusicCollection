@@ -1,36 +1,40 @@
 package xdd.musiccollection.defaultComponents
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun RoundedCornerOutlinedButton(
     onClick: () -> Unit,
-    modifier: Modifier,
     isLoading: Boolean,
-    text: String
+    text: String,
+    iconId: Int?,
+    backgroundColor: Color,
+    modifier: Modifier,
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Transparent
+            backgroundColor = backgroundColor
         )
     )
     {
         if (isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = Color.White)
         }
         else{
+            if (iconId != null) {
+                Image(painter = painterResource(id = iconId), contentDescription = "Icon")
+            }
             Text(
                 text = text,
                 modifier = Modifier.padding(8.dp)

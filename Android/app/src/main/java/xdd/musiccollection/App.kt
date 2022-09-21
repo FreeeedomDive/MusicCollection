@@ -8,8 +8,7 @@ import xdd.musiccollection.mainPage.FileSystemPage
 
 enum class CurrentState {
     Authentication,
-    Browse,
-    Player
+    MainPage,
 }
 
 @Composable
@@ -18,9 +17,9 @@ fun App() {
 
 
     if (currentState == CurrentState.Authentication) {
-        AuthenticationPage { setCurrentState(CurrentState.Browse) }
+        AuthenticationPage { setCurrentState(CurrentState.MainPage) }
     }
-    if (currentState == CurrentState.Browse){
+    if (currentState == CurrentState.MainPage){
         FileSystemPage()
     }
 }
