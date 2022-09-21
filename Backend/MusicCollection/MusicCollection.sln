@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection", "MusicCollection\MusicCollection.csproj", "{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.Api", "MusicCollection.Api\MusicCollection.Api.csproj", "{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.Api.Dto", "MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj", "{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.BusinessLogic", "MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj", "{BF115754-F2AA-4F24-A8E8-CA9C601C5B9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +16,13 @@ Global
 		{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF115754-F2AA-4F24-A8E8-CA9C601C5B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF115754-F2AA-4F24-A8E8-CA9C601C5B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF115754-F2AA-4F24-A8E8-CA9C601C5B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF115754-F2AA-4F24-A8E8-CA9C601C5B9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
