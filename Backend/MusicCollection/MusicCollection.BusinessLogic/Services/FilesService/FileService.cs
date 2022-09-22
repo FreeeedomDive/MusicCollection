@@ -6,10 +6,10 @@ namespace MusicCollection.BusinessLogic.Services.FilesService;
 
 public class FileService : IFileService
 {
-    private readonly NodesRepository nodesRepository;
-    private readonly RootsRepository rootsRepository;
+    private readonly INodesRepository nodesRepository;
+    private readonly IRootsRepository rootsRepository;
 
-    public FileService(NodesRepository nodesRepository, RootsRepository rootsRepository)
+    public FileService(INodesRepository nodesRepository, IRootsRepository rootsRepository)
     {
         this.nodesRepository = nodesRepository;
         this.rootsRepository = rootsRepository;

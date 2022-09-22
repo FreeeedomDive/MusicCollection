@@ -1,18 +1,46 @@
-﻿using MusicCollection.BusinessLogic.Repositories;
+﻿using MusicCollection.Api.Dto.Auth;
+using MusicCollection.BusinessLogic.Repositories;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
+using MusicCollection.BusinessLogic.Repositories.Files;
 
 namespace MusicCollection.BusinessLogic.Services.AuthService;
 
 public class AuthService : IAuthService
 {
-    public Task RegisterUser(UserStorageElement user)
+    private readonly IUsersRepository usersRepository;
+
+    public AuthService(IUsersRepository usersRepository)
     {
-        throw new NotImplementedException();
+        this.usersRepository = usersRepository;
+    }
+    public async Task<User> ReadAsync(Guid id)
+    {
+        return await usersRepository.ReadAsync(id);
     }
 
-    public Task GetUser(Guid id)
+    public async Task<User?> TryReadAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await usersRepository.TryReadAsync(id);
+    }
+
+    public async Task CreateOrUpdateAsync(User user)
+    {
+        await usersRepository.CreateOrUpdateAsync(user);
+    }
+
+    public async Task CreateAsync(User user)
+    {
+        await usersRepository.CreateAsync(user);
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        await usersRepository.UpdateAsync(user);
+    }
+
+    public async Task<bool> TryDeleteAsync(User user)
+    {
+        return await usersRepository.TryDeleteAsync(user);
     }
 }

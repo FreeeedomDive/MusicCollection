@@ -49,7 +49,6 @@ public class UsersRepository : IUsersRepository
     {
         var requiredUser = await databaseContext.UsersStorage.FirstAsync(u => u.Id == user.Id);
         requiredUser.Login = user.Login;
-        requiredUser.Password = user.Password;
         await databaseContext.SaveChangesAsync();
     }
 
@@ -67,7 +66,6 @@ public class UsersRepository : IUsersRepository
         return new UserStorageElement()
         {
             Login = user.Login,
-            Password = user.Password
         };
     }
     
@@ -76,7 +74,6 @@ public class UsersRepository : IUsersRepository
         return new User()
         {
             Login = user.Login,
-            Password = user.Password
         };
     }
 }
