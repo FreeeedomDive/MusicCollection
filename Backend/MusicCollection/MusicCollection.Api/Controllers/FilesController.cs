@@ -7,7 +7,7 @@ using MusicCollection.BusinessLogic.Services.FilesService;
 namespace MusicCollection.Controllers;
 
 [ApiController]
-[Route("files")]
+[Route("roots")]
 public class FilesController : Controller
 {
     private readonly IFilesService filesService;
@@ -17,25 +17,12 @@ public class FilesController : Controller
         this.filesService = filesService;
     }
 
-    [HttpGet("nodes/{id:guid}")]
+    [HttpGet("{rootId:guid}/nodes/{id:guid}")]
     public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid id)
     {
         try
         {
-            return Ok(await filesService.ReadNodeAsync(id));
-        }
-        catch (FileSystemNodeNotFoundException e)
-        {
-            return NotFound();
-        }
-    }
-    
-    [HttpGet("roots/{id:guid}")]
-    public async Task<ActionResult<FileSystemNode>> GetRoot([FromRoute] Guid id)
-    {
-        try
-        {
-            return Ok(await filesService.ReadRootAsync(id));
+            return await filesService.ReadNodeAsync(id);
         }
         catch (FileSystemNodeNotFoundException e)
         {
@@ -43,30 +30,28 @@ public class FilesController : Controller
         }
     }
 
-    [HttpGet("nodes/{parentId:guid}/files")]
-    public async Task<ActionResult<List<FileSystemNode>>> GetAllFiles([FromRoute] Guid parentId)
+    [HttpGet("{rootId:guid}/{parentId:guid}")]
+    public async Task<ActionResult<FileSystemNode[]>> GetAllFiles([FromRoute] Guid parentId)
     {
         return await filesService.ReadAllFiles(parentId);
     }
-
-    [HttpPost("nodes/{id:guid}")]
-    public async Task<ActionResult> UpdateNode([FromBody] FileSystemNode node)
+    
+    [HttpGet]
+    public async Task<ActionResult> GetAllRoots()
     {
-        await filesService.UpdateNodeAsync(node);
-        return Ok();
-    }
-
-    [HttpDelete("nodes/{id:guid}")]
-    public async Task<ActionResult<bool>> DeleteNode([FromBody] FileSystemNode node)
-    {
-        await filesService.TryDeleteNodeAsync(node);
-        return Ok();
+        return Ok(await filesService.ReadAllRoots());
     }
     
-    [HttpDelete("roots/{id:guid}")]
-    public async Task<ActionResult<bool>> DeleteRoot([FromBody] FileSystemRoot root)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<FileSystemRoot>> GetRoot([FromRoute] Guid id)
     {
-        await filesService.TryDeleteRootAsync(root);
-        return Ok();
+        try
+        {
+            return await filesService.ReadRootAsync(id);
+        }
+        catch (RootNotFoundException e)
+        {
+            return NotFound();
+        }
     }
 }

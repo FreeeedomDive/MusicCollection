@@ -26,33 +26,17 @@ public class RootsRepository : IRootsRepository
         return ToModel(await databaseContext.RootsStorage.FirstAsync(root => root.Id == id));
     }
 
+    public async Task<FileSystemRoot[]> ReadAllAsync()
+    {
+        return await databaseContext.RootsStorage.Select(root => ToModel(root)).ToArrayAsync();
+    }
+
     public async Task CreateAsync(FileSystemRoot root)
     {
         await databaseContext.RootsStorage.AddAsync(ToStorageElement(root));
         await databaseContext.SaveChangesAsync();
     }
 
-    public async Task<bool> TryDeleteAsync(FileSystemRoot root)
-    {
-        var requiredRoot = await databaseContext.RootsStorage.FirstAsync(r => r.Id == root.Id);
-        if (requiredRoot is null)
-        {
-            return false;
-        }
-
-        databaseContext.Remove(requiredRoot);
-        await databaseContext.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<List<FileSystemRoot>> ReadManyAsync(Guid[] ids)
-    {
-        return await databaseContext.RootsStorage
-            .Where(root => ids.Contains(root.Id))
-            .Select(root => ToModel(root))
-            .ToListAsync();
-    }
-    
     private FileSystemRoot ToModel(RootStorageElement root)
     {
         return new FileSystemRoot()

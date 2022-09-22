@@ -21,21 +21,25 @@ public class UsersRepository : IUsersRepository
         return ToModel(user);
     }
 
+    public async Task<User> ReadAsync(string login, string encryptedPassword)
+    {
+        return ToModel(await databaseContext.UsersStorage.FirstAsync(user => user.Login == login
+                                                                             && user.Password == encryptedPassword));
+    }
+
     public async Task<User?> TryReadAsync(Guid id)
     {
         return ToModel( await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
     }
 
-    public async Task<Guid> CreateOrUpdateAsync(User user)
+    public async Task CreateAsync(string login, string encryptedPassword)
     {
-        var requiredUser = await TryReadAsync(user.Id);
-        if (requiredUser is null)
+        await databaseContext.UsersStorage.AddAsync(new UserStorageElement()
         {
-            await CreateAsync(user);
-            return user.Id;
-        }
-        await UpdateAsync(user);
-        return user.Id;
+            Login = login,
+            Password = encryptedPassword
+        });
+        await databaseContext.SaveChangesAsync();
     }
 
     public async Task<Guid> CreateAsync(User user)
@@ -45,34 +49,18 @@ public class UsersRepository : IUsersRepository
         return user.Id;
     }
 
-    public async Task<Guid> UpdateAsync(User user)
-    {
-        var requiredUser = await databaseContext.UsersStorage.FirstAsync(u => u.Id == user.Id);
-        requiredUser.Login = user.Login;
-        await databaseContext.SaveChangesAsync();
-        return user.Id;
-    }
-
-    public async Task<bool> TryDeleteAsync(User user)
-    {
-        var requiredUser = await databaseContext.UsersStorage.FirstAsync(u => u.Id == user.Id);
-        if (requiredUser is null) return false;
-
-        databaseContext.Remove(requiredUser);
-        return true;
-    }
-
     private static UserStorageElement ToStorageElement(User user)
     {
-        return new UserStorageElement()
+        return new UserStorageElement
         {
             Login = user.Login,
+            Password = user.Password
         };
     }
     
     private static User ToModel(UserStorageElement user)
     {
-        return new User()
+        return new User
         {
             Login = user.Login,
         };

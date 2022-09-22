@@ -21,33 +21,13 @@ public class NodesRepository : INodesRepository
         await databaseContext.NodesStorage.AddAsync(ToStorageElement(node));
         await databaseContext.SaveChangesAsync();
     }
-
-    public async Task CreateOrUpdateAsync(FileSystemNode node)
-    {
-        var requiredNode = await TryReadAsync(node.Id);
-        if (requiredNode is null)
-        {
-            await CreateAsync(node);
-        }
-        else
-        {
-            await UpdateAsync(node);
-        }
-    }
-
-    public async Task UpdateAsync(FileSystemNode node)
-    {
-        var requiredNode = await databaseContext.NodesStorage.FirstAsync(n => n.Id == node.Id);
-        requiredNode.Tags = node.Tags;
-        await databaseContext.SaveChangesAsync();
-    }
-
-    public async Task<List<FileSystemNode>> ReadAllFilesAsync(Guid parentId)
+    
+    public async Task<FileSystemNode[]> ReadAllFilesAsync(Guid parentId)
     {
         return await databaseContext.NodesStorage
             .Where(node => node.ParentId == parentId)
             .Select(node => ToModel(node))
-            .ToListAsync();
+            .ToArrayAsync();
     }
 
     public async Task<FileSystemNode> ReadAsync(Guid id)
@@ -60,19 +40,6 @@ public class NodesRepository : INodesRepository
     public async Task<FileSystemNode?> TryReadAsync(Guid id)
     {
         return ToModel(await databaseContext.NodesStorage.FirstAsync(node => node.Id == id));
-    }
-
-    public async Task<bool> TryDeleteAsync(FileSystemNode node)
-    {
-        var requiredNode = await databaseContext.NodesStorage.FirstAsync(n => n.Id == node.Id);
-        if (requiredNode is null)
-        {
-            return false;
-        }
-
-        databaseContext.NodesStorage.Remove(requiredNode);
-        await databaseContext.SaveChangesAsync();
-        return true;
     }
 
     private FileSystemNode ToModel(NodeStorageElement node)

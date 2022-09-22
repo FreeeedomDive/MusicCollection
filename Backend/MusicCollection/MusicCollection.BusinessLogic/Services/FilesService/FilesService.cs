@@ -15,9 +15,14 @@ public class FilesService : IFilesService
         this.rootsRepository = rootsRepository;
     }
 
-    public async Task<List<FileSystemNode>> ReadAllFiles(Guid parentId)
+    public async Task<FileSystemNode[]> ReadAllFiles(Guid parentId)
     {
         return await nodesRepository.ReadAllFilesAsync(parentId);
+    }
+
+    public async Task<FileSystemRoot[]> ReadAllRoots()
+    {
+        return await rootsRepository.ReadAllAsync();
     }
 
     public async Task<FileSystemNode> ReadNodeAsync(Guid id)
@@ -28,26 +33,6 @@ public class FilesService : IFilesService
     public async Task<FileSystemNode?> TryReadNodeAsync(Guid id)
     {
         return await nodesRepository.TryReadAsync(id);
-    }
-
-    public async Task UpdateNodeAsync(FileSystemNode node)
-    {
-        await nodesRepository.UpdateAsync(node);
-    }
-
-    public async Task TryDeleteNodeAsync(FileSystemNode node)
-    {
-        await nodesRepository.TryDeleteAsync(node);
-    }
-
-    public async Task<bool> TryDeleteRootAsync(FileSystemRoot root)
-    {
-        return await rootsRepository.TryDeleteAsync(root);
-    }
-
-    public async Task CreateOrUpdateNodeAsync(FileSystemNode node)
-    {
-        await nodesRepository.CreateOrUpdateAsync(node);
     }
 
     public async Task<FileSystemRoot> ReadRootAsync(Guid id)
@@ -64,15 +49,9 @@ public class FilesService : IFilesService
     {
         await rootsRepository.CreateAsync(root);
     }
-
-    public async Task<bool> TryDeleteAsync(FileSystemRoot root)
+    
+    public async Task<FileSystemRoot[]> ReadAllAsync()
     {
-        return await rootsRepository.TryDeleteAsync(root);
+        return await rootsRepository.ReadAllAsync();
     }
-
-    public async Task<List<FileSystemRoot>> ReadManyAsync(Guid[] ids)
-    {
-        return await rootsRepository.ReadManyAsync(ids);
-    }
-
 }

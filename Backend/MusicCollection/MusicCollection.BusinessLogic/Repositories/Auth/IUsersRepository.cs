@@ -5,9 +5,7 @@ namespace MusicCollection.BusinessLogic.Repositories.Auth;
 public interface IUsersRepository
 {
     Task<User> ReadAsync(Guid id);
+    Task<User> ReadAsync(string login, string encryptedPassword);
     Task<User?> TryReadAsync(Guid id);
-    Task<Guid> CreateOrUpdateAsync(User user);
-    Task<Guid> CreateAsync(User user);
-    Task<Guid> UpdateAsync(User user);
-    Task<bool> TryDeleteAsync(User user);
+    Task CreateAsync(string login, string encryptedPassword);
 }

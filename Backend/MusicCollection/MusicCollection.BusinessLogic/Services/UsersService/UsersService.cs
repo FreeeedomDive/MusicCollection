@@ -3,6 +3,7 @@ using MusicCollection.BusinessLogic.Repositories;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using MusicCollection.BusinessLogic.Repositories.Files;
+using MusicCollection.BusinessLogic.Services.UsersService;
 
 namespace MusicCollection.BusinessLogic.Services.AuthService;
 
@@ -19,28 +20,19 @@ public class AuthService : IUsersService
         return await usersRepository.ReadAsync(id);
     }
 
+    public async Task<User> ReadAsync(AuthCredentials authCredentials)
+    {
+        return await usersRepository.ReadAsync(authCredentials.Login, 
+            CryptoService.Encrypt(authCredentials.Password));
+    }
+
     public async Task<User?> TryReadAsync(Guid id)
     {
         return await usersRepository.TryReadAsync(id);
     }
 
-    public async Task<Guid> CreateOrUpdateAsync(User user)
+    public async Task CreateAsync(AuthCredentials authCredentials)
     {
-        return await usersRepository.CreateOrUpdateAsync(user);
-    }
-
-    public async Task<Guid> CreateAsync(User user)
-    {
-        return await usersRepository.CreateAsync(user);
-    }
-
-    public async Task<Guid> UpdateAsync(User user)
-    {
-        return await usersRepository.UpdateAsync(user);
-    }
-
-    public async Task<bool> TryDeleteAsync(User user)
-    {
-        return await usersRepository.TryDeleteAsync(user);
+        await usersRepository.CreateAsync(authCredentials.Login, authCredentials.Password);
     }
 }

@@ -8,7 +8,6 @@ public interface IRootsRepository
 {
     Task<FileSystemRoot> ReadAsync(Guid id);
     Task<FileSystemRoot> TryReadAsync(Guid id);
+    Task<FileSystemRoot[]> ReadAllAsync();
     Task CreateAsync(FileSystemRoot root);
-    Task<bool> TryDeleteAsync(FileSystemRoot root);
-    Task<List<FileSystemRoot>> ReadManyAsync(Guid[] ids);
 }
