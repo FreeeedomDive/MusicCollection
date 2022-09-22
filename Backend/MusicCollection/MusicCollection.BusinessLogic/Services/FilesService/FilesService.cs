@@ -4,12 +4,12 @@ using MusicCollection.BusinessLogic.Repositories.Files;
 
 namespace MusicCollection.BusinessLogic.Services.FilesService;
 
-public class FileService : IFileService
+public class FilesService : IFilesService
 {
     private readonly INodesRepository nodesRepository;
     private readonly IRootsRepository rootsRepository;
 
-    public FileService(INodesRepository nodesRepository, IRootsRepository rootsRepository)
+    public FilesService(INodesRepository nodesRepository, IRootsRepository rootsRepository)
     {
         this.nodesRepository = nodesRepository;
         this.rootsRepository = rootsRepository;
@@ -34,15 +34,15 @@ public class FileService : IFileService
     {
         await nodesRepository.UpdateAsync(node);
     }
-    
-    public async Task<List<FileSystemNode>> ReadManyNodesAsync(Guid[] ids)
-    {
-        return await nodesRepository.ReadManyAsync(ids);
-    }
 
     public async Task TryDeleteNodeAsync(FileSystemNode node)
     {
         await nodesRepository.TryDeleteAsync(node);
+    }
+
+    public async Task<bool> TryDeleteRootAsync(FileSystemRoot root)
+    {
+        return await rootsRepository.TryDeleteAsync(root);
     }
 
     public async Task CreateOrUpdateNodeAsync(FileSystemNode node)

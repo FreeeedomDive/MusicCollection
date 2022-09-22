@@ -6,7 +6,7 @@ using MusicCollection.BusinessLogic.Repositories.Files;
 
 namespace MusicCollection.BusinessLogic.Services.AuthService;
 
-public class AuthService : IAuthService
+public class AuthService : IUsersService
 {
     private readonly IUsersRepository usersRepository;
 
@@ -24,19 +24,19 @@ public class AuthService : IAuthService
         return await usersRepository.TryReadAsync(id);
     }
 
-    public async Task CreateOrUpdateAsync(User user)
+    public async Task<Guid> CreateOrUpdateAsync(User user)
     {
-        await usersRepository.CreateOrUpdateAsync(user);
+        return await usersRepository.CreateOrUpdateAsync(user);
     }
 
-    public async Task CreateAsync(User user)
+    public async Task<Guid> CreateAsync(User user)
     {
-        await usersRepository.CreateAsync(user);
+        return await usersRepository.CreateAsync(user);
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task<Guid> UpdateAsync(User user)
     {
-        await usersRepository.UpdateAsync(user);
+        return await usersRepository.UpdateAsync(user);
     }
 
     public async Task<bool> TryDeleteAsync(User user)

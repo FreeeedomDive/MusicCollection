@@ -26,30 +26,31 @@ public class UsersRepository : IUsersRepository
         return ToModel( await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
     }
 
-    public async Task CreateOrUpdateAsync(User user)
+    public async Task<Guid> CreateOrUpdateAsync(User user)
     {
         var requiredUser = await TryReadAsync(user.Id);
         if (requiredUser is null)
         {
             await CreateAsync(user);
+            return user.Id;
         }
-        else
-        {
-            await UpdateAsync(user);
-        }
+        await UpdateAsync(user);
+        return user.Id;
     }
 
-    public async Task CreateAsync(User user)
+    public async Task<Guid> CreateAsync(User user)
     {
         await databaseContext.UsersStorage.AddAsync(ToStorageElement(user));
         await databaseContext.SaveChangesAsync();
+        return user.Id;
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task<Guid> UpdateAsync(User user)
     {
         var requiredUser = await databaseContext.UsersStorage.FirstAsync(u => u.Id == user.Id);
         requiredUser.Login = user.Login;
         await databaseContext.SaveChangesAsync();
+        return user.Id;
     }
 
     public async Task<bool> TryDeleteAsync(User user)

@@ -10,6 +10,5 @@ public interface INodesRepository
     Task<List<FileSystemNode>> ReadAllFilesAsync(Guid parentId);
     Task<FileSystemNode> ReadAsync(Guid id);
     Task<FileSystemNode?> TryReadAsync(Guid id);
-    Task<List<FileSystemNode>> ReadManyAsync(Guid[] ids);
     Task<bool> TryDeleteAsync(FileSystemNode node);
 }

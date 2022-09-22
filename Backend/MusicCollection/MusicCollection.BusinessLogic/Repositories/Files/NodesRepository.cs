@@ -62,14 +62,6 @@ public class NodesRepository : INodesRepository
         return ToModel(await databaseContext.NodesStorage.FirstAsync(node => node.Id == id));
     }
 
-    public async Task<List<FileSystemNode>> ReadManyAsync(Guid[] ids)
-    {
-        return await databaseContext.NodesStorage
-            .Where(node => ids.Contains(node.Id))
-            .Select(node => ToModel(node))
-            .ToListAsync();
-    }
-
     public async Task<bool> TryDeleteAsync(FileSystemNode node)
     {
         var requiredNode = await databaseContext.NodesStorage.FirstAsync(n => n.Id == node.Id);
