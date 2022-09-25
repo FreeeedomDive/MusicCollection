@@ -21,11 +21,6 @@ public class RootsRepository : IRootsRepository
         return ToModel(requiredRoot);
     }
 
-    public async Task<FileSystemRoot> TryReadAsync(Guid id)
-    {
-        return ToModel(await databaseContext.RootsStorage.FirstAsync(root => root.Id == id));
-    }
-
     public async Task<FileSystemRoot[]> ReadAllAsync()
     {
         return await databaseContext.RootsStorage.Select(root => ToModel(root)).ToArrayAsync();

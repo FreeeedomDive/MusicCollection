@@ -24,16 +24,20 @@ public class NodesRepository : INodesRepository
     
     public async Task<FileSystemNode[]> ReadAllFilesAsync(Guid parentId)
     {
-        return await databaseContext.NodesStorage
-            .Where(node => node.ParentId == parentId)
-            .Select(node => ToModel(node))
-            .ToArrayAsync();
+        if ((await ReadAsync(parentId)).Type == NodeType.File)
+        {
+            throw new ReadFilesFromNonDirectoryException(parentId);
+        }
+        var requiredNodes = await databaseContext.NodesStorage
+            .Where(node => node.ParentId == parentId).ToArrayAsync();
+
+        return requiredNodes.Select(ToModel).ToArray();
     }
 
     public async Task<FileSystemNode> ReadAsync(Guid id)
     {
-        var requiredNode = await databaseContext.NodesStorage.FirstAsync(node => node.Id == id);
-        if (requiredNode is null) throw new FileSystemNodeNotFoundException();
+        var requiredNode = await databaseContext.NodesStorage.FirstOrDefaultAsync(node => node.Id == id);
+        if (requiredNode is null) throw new FileSystemNodeNotFoundException(id);
         return ToModel(requiredNode);
     }
 

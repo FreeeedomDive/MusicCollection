@@ -24,16 +24,27 @@ public class FilesController : Controller
         {
             return await filesService.ReadNodeAsync(id);
         }
-        catch (FileSystemNodeNotFoundException e)
+        catch (FileSystemNodeNotFoundException exception)
         {
-            return NotFound();
+            return NotFound(exception);
         }
     }
 
     [HttpGet("{rootId:guid}/{parentId:guid}")]
     public async Task<ActionResult<FileSystemNode[]>> GetAllFiles([FromRoute] Guid parentId)
     {
-        return await filesService.ReadAllFiles(parentId);
+        try
+        {
+            return await filesService.ReadAllFiles(parentId);
+        }
+        catch (FileSystemNodeNotFoundException exception)
+        {
+            return NotFound(exception);
+        }
+        catch (ReadFilesFromNonDirectoryException exception)
+        {
+            return Conflict(exception);
+        }
     }
     
     [HttpGet]
@@ -49,9 +60,9 @@ public class FilesController : Controller
         {
             return await filesService.ReadRootAsync(id);
         }
-        catch (RootNotFoundException e)
+        catch (RootNotFoundException exception)
         {
-            return NotFound();
+            return NotFound(exception);
         }
     }
 }

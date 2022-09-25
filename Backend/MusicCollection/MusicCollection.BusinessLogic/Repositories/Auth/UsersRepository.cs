@@ -14,17 +14,10 @@ public class UsersRepository : IUsersRepository
         this.databaseContext = databaseContext;
     }
 
-    public async Task<User> ReadAsync(Guid id)
+    public async Task<User> FindAsync(string login, string encryptedPassword)
     {
-        var user = await databaseContext.UsersStorage.FirstAsync(user => user.Id == id);
-        if (user is null) throw new UserNotFoundException();
-        return ToModel(user);
-    }
-
-    public async Task<User> ReadAsync(string login, string encryptedPassword)
-    {
-        return ToModel(await databaseContext.UsersStorage.FirstAsync(user => user.Login == login
-                                                                             && user.Password == encryptedPassword));
+        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user => user.Login == login
+            && user.Password == encryptedPassword) ?? throw new UserNotFoundException());
     }
 
     public async Task<User?> TryReadAsync(Guid id)
@@ -36,28 +29,13 @@ public class UsersRepository : IUsersRepository
     {
         await databaseContext.UsersStorage.AddAsync(new UserStorageElement()
         {
+            Id = new Guid(),
             Login = login,
             Password = encryptedPassword
         });
         await databaseContext.SaveChangesAsync();
     }
 
-    public async Task<Guid> CreateAsync(User user)
-    {
-        await databaseContext.UsersStorage.AddAsync(ToStorageElement(user));
-        await databaseContext.SaveChangesAsync();
-        return user.Id;
-    }
-
-    private static UserStorageElement ToStorageElement(User user)
-    {
-        return new UserStorageElement
-        {
-            Login = user.Login,
-            Password = user.Password
-        };
-    }
-    
     private static User ToModel(UserStorageElement user)
     {
         return new User

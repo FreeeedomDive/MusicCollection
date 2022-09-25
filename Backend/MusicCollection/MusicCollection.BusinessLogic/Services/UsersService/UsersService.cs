@@ -15,21 +15,13 @@ public class AuthService : IUsersService
     {
         this.usersRepository = usersRepository;
     }
-    public async Task<User> ReadAsync(Guid id)
-    {
-        return await usersRepository.ReadAsync(id);
-    }
 
-    public async Task<User> ReadAsync(AuthCredentials authCredentials)
+    public async Task<User> FindAsync(AuthCredentials authCredentials)
     {
-        return await usersRepository.ReadAsync(authCredentials.Login, 
+        return await usersRepository.FindAsync(authCredentials.Login, 
             CryptoService.Encrypt(authCredentials.Password));
     }
-
-    public async Task<User?> TryReadAsync(Guid id)
-    {
-        return await usersRepository.TryReadAsync(id);
-    }
+    
 
     public async Task CreateAsync(AuthCredentials authCredentials)
     {

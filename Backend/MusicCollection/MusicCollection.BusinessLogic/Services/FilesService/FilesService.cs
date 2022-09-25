@@ -40,18 +40,8 @@ public class FilesService : IFilesService
         return await rootsRepository.ReadAsync(id);
     }
 
-    public async Task<FileSystemRoot> TryReadRootAsync(Guid id)
-    {
-        return await rootsRepository.TryReadAsync(id);
-    }
-
     public async Task CreateRootAsync(FileSystemRoot root)
     {
         await rootsRepository.CreateAsync(root);
-    }
-    
-    public async Task<FileSystemRoot[]> ReadAllAsync()
-    {
-        return await rootsRepository.ReadAllAsync();
     }
 }

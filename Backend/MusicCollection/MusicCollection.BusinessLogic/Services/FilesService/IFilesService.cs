@@ -9,5 +9,4 @@ public interface IFilesService
     Task<FileSystemNode> ReadNodeAsync(Guid id);
     Task<FileSystemNode?> TryReadNodeAsync(Guid id);
     Task<FileSystemRoot> ReadRootAsync(Guid id);
-    Task<FileSystemRoot?> TryReadRootAsync(Guid id);
 }

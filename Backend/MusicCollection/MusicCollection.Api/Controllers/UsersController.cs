@@ -16,31 +16,24 @@ public class UsersController : Controller
     {
         this.usersService = usersService;
     }
-    
+
     [HttpPost("find")]
-    public async Task<ActionResult<User>> FindUser([FromBody]AuthCredentials authCredentials)
+    public async Task<ActionResult<User>> FindUser([FromBody] AuthCredentials authCredentials)
     {
         try
         {
-            return await usersService.ReadAsync(authCredentials);
+            return await usersService.FindAsync(authCredentials);
         }
-        catch (UserNotFoundException e)
+        catch (UserNotFoundException exception)
         {
-            return NotFound();
+            return NotFound(exception);
         }
     }
-    
+
     [HttpPost("register")]
-    public async Task<ActionResult> RegisterUser([FromBody]AuthCredentials authCredentials)
+    public async Task<ActionResult> RegisterUser([FromBody] AuthCredentials authCredentials)
     {
-        try
-        {
-            await usersService.CreateAsync(authCredentials);
-            return Ok();
-        }
-        catch (UserNotFoundException e)
-        {
-            return NotFound();
-        }
+        await usersService.CreateAsync(authCredentials);
+        return Ok();
     }
 }

@@ -5,8 +5,6 @@ namespace MusicCollection.BusinessLogic.Services.AuthService;
 
 public interface IUsersService
 {
-    Task<User> ReadAsync(Guid id);
-    Task<User> ReadAsync(AuthCredentials authCredentials);
-    Task<User?> TryReadAsync(Guid id);
+    Task<User> FindAsync(AuthCredentials authCredentials);
     Task CreateAsync(AuthCredentials authCredentials);
 }
