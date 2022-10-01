@@ -1,6 +1,8 @@
-﻿using System.Net;
-using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.BusinessLogic.Repositories.Files;
+﻿using MusicCollection.Api.Dto.FileSystem;
+using MusicCollection.BusinessLogic.Extensions;
+using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
+using MusicCollection.BusinessLogic.Repositories.Files.Roots;
+using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 
 namespace MusicCollection.BusinessLogic.Services.FilesService;
 
@@ -8,16 +10,24 @@ public class FilesService : IFilesService
 {
     private readonly INodesRepository nodesRepository;
     private readonly IRootsRepository rootsRepository;
+    private readonly ITagsRepository tagsRepository;
 
-    public FilesService(INodesRepository nodesRepository, IRootsRepository rootsRepository)
+    public FilesService(
+        INodesRepository nodesRepository,
+        IRootsRepository rootsRepository,
+        ITagsRepository tagsRepository
+    )
     {
         this.nodesRepository = nodesRepository;
         this.rootsRepository = rootsRepository;
+        this.tagsRepository = tagsRepository;
     }
 
     public async Task<FileSystemNode[]> ReadAllFiles(Guid parentId)
     {
-        return await nodesRepository.ReadAllFilesAsync(parentId);
+        var nodes = await nodesRepository.ReadAllFilesAsync(parentId);
+        var extendTasks = nodes.Select(x => x.ExtendAsync(ExtendFileWithTagsAsync));
+        return await Task.WhenAll(extendTasks);
     }
 
     public async Task<FileSystemRoot[]> ReadAllRoots()
@@ -27,12 +37,14 @@ public class FilesService : IFilesService
 
     public async Task<FileSystemNode> ReadNodeAsync(Guid id)
     {
-        return await nodesRepository.ReadAsync(id);
+        var node = await nodesRepository.ReadAsync(id);
+        return await node.ExtendAsync(ExtendFileWithTagsAsync);
     }
-    
+
     public async Task<FileSystemNode?> TryReadNodeAsync(Guid id)
     {
-        return await nodesRepository.TryReadAsync(id);
+        var node = await nodesRepository.TryReadAsync(id);
+        return node == null ? null : await node.ExtendAsync(ExtendFileWithTagsAsync);
     }
 
     public async Task<FileSystemRoot> ReadRootAsync(Guid id)
@@ -43,5 +55,19 @@ public class FilesService : IFilesService
     public async Task CreateRootAsync(FileSystemRoot root)
     {
         await rootsRepository.CreateAsync(root);
+    }
+
+    private async Task ExtendFileWithTagsAsync(FileSystemNode fileSystemNode)
+    {
+        if (fileSystemNode == null)
+        {
+            return;
+        }
+        if (fileSystemNode.Type == NodeType.Directory)
+        {
+            return;
+        }
+
+        fileSystemNode.Tags = await tagsRepository.TryReadAsync(fileSystemNode.Id);
     }
 }

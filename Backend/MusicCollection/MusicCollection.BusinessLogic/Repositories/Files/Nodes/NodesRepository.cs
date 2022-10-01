@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Repositories.Database;
 
-namespace MusicCollection.BusinessLogic.Repositories.Files;
+namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
 public class NodesRepository : INodesRepository
 {
@@ -52,8 +51,7 @@ public class NodesRepository : INodesRepository
         {
             Id = node.Id,
             ParentId = node.ParentId,
-            Type = node.Type,
-            Tags = node.Tags
+            Type = node.Type
         };
     }
 
@@ -63,8 +61,7 @@ public class NodesRepository : INodesRepository
         {
             Id = node.Id,
             ParentId = node.ParentId,
-            Type = node.Type,
-            Tags = node.Tags
+            Type = node.Type
         };
     }
 }

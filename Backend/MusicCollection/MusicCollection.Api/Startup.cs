@@ -5,6 +5,9 @@ using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using MusicCollection.BusinessLogic.Repositories.Files;
+using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
+using MusicCollection.BusinessLogic.Repositories.Files.Roots;
+using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.BusinessLogic.Services.FilesService;
 using MusicCollection.BusinessLogic.Services.UsersService;
 using MusicCollection.Middlewares;
@@ -34,13 +37,12 @@ public class Startup
         services.AddTransient<IUsersRepository, UsersRepository>();
         services.AddTransient<IRootsRepository, RootsRepository>();
         services.AddTransient<INodesRepository, NodesRepository>();
+        services.AddTransient<ITagsRepository, TagsRepository>();
 
         // add services
         services.AddTransient<IUsersService, UsersService>();
         services.AddTransient<IFilesService, FilesService>();
 
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {

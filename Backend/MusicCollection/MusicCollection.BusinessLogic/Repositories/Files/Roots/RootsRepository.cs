@@ -3,7 +3,7 @@ using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Repositories.Database;
 
-namespace MusicCollection.BusinessLogic.Repositories.Files;
+namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
 public class RootsRepository : IRootsRepository
 {

@@ -1,6 +1,6 @@
 ﻿using MusicCollection.Api.Dto.FileSystem;
 
-namespace MusicCollection.BusinessLogic.Repositories.Files;
+namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
 public interface INodesRepository
 {

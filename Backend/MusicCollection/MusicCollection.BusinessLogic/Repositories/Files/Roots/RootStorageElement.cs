@@ -1,4 +1,4 @@
-﻿namespace MusicCollection.BusinessLogic.Repositories.Files;
+﻿namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
 public class RootStorageElement
 {
