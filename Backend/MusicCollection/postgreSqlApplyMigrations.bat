@@ -1,1 +1,1 @@
-dotnet ef database update
+dotnet ef database update --project MusicCollection.BusinessLogic --startup-project MusicCollection.Api
