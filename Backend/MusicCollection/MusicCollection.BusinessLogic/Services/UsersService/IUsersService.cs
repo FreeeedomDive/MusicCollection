@@ -1,7 +1,6 @@
 ﻿using MusicCollection.Api.Dto.Auth;
-using MusicCollection.BusinessLogic.Repositories.Auth;
 
-namespace MusicCollection.BusinessLogic.Services.AuthService;
+namespace MusicCollection.BusinessLogic.Services.UsersService;
 
 public interface IUsersService
 {

@@ -7,15 +7,25 @@ namespace MusicCollection.BusinessLogic.Repositories.Database;
 
 public class DatabaseContext : DbContext
 {
-    private readonly DatabaseOptions options;
-    
+    public DatabaseOptions Options { get; }
+
     public DatabaseContext(
         DbContextOptions<DatabaseContext> options,
         IOptions<DatabaseOptions> dbOptionsAccessor
-        ) : base(options)
+    ) : base(options)
     {
-        this.options = dbOptionsAccessor.Value;
+        Options = dbOptionsAccessor.Value;
         Database.EnsureCreated();
+    }
+        
+    public DatabaseContext()
+    {
+        Database.EnsureCreated();
+    }
+        
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql(Options.ConnectionString);
     }
 
     public DbSet<NodeStorageElement> NodesStorage { get; set; }
