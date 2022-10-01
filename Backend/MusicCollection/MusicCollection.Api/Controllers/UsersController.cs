@@ -26,7 +26,7 @@ public class UsersController : Controller
         }
         catch (UserNotFoundException exception)
         {
-            return NotFound(exception);
+            return NotFound();
         }
     }
 

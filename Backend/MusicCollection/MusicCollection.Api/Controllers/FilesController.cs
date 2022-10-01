@@ -26,12 +26,12 @@ public class FilesController : Controller
         }
         catch (FileSystemNodeNotFoundException exception)
         {
-            return NotFound(exception);
+            return NotFound();
         }
     }
 
     [HttpGet("{rootId:guid}/{parentId:guid}")]
-    public async Task<ActionResult<FileSystemNode[]>> GetAllFiles([FromRoute] Guid parentId)
+    public async Task<ActionResult<FileSystemNode[]>> GetAllFiles([FromRoute] Guid rootId, [FromRoute] Guid parentId)
     {
         try
         {
@@ -39,18 +39,18 @@ public class FilesController : Controller
         }
         catch (FileSystemNodeNotFoundException exception)
         {
-            return NotFound(exception);
+            return NotFound();
         }
         catch (ReadFilesFromNonDirectoryException exception)
         {
-            return Conflict(exception);
+            return Conflict();
         }
     }
     
     [HttpGet]
-    public async Task<ActionResult> GetAllRoots()
+    public async Task<ActionResult<FileSystemRoot[]>> GetAllRoots()
     {
-        return Ok(await filesService.ReadAllRoots());
+        return await filesService.ReadAllRoots();
     }
     
     [HttpGet("{id:guid}")]
@@ -62,7 +62,7 @@ public class FilesController : Controller
         }
         catch (RootNotFoundException exception)
         {
-            return NotFound(exception);
+            return NotFound();
         }
     }
 }

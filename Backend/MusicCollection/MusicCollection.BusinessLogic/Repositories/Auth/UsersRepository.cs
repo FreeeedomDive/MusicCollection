@@ -40,6 +40,7 @@ public class UsersRepository : IUsersRepository
     {
         return new User
         {
+            Id = user.Id,
             Login = user.Login,
         };
     }

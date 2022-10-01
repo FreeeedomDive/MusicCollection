@@ -22,6 +22,6 @@ public class UsersService : IUsersService
 
     public async Task CreateAsync(AuthCredentials authCredentials)
     {
-        await usersRepository.CreateAsync(authCredentials.Login, authCredentials.Password);
+        await usersRepository.CreateAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password));
     }
 }
