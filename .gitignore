@@ -4,3 +4,4 @@ bin
 obj
 Bin
 Obj
+Backend/MusicCollection/MusicCollection.Api/appsettings.Production.json

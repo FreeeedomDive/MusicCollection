@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicCollection.BusinessLogic.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221001155258_Initial")]
+    [Migration("20221002125018_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,6 +52,10 @@ namespace MusicCollection.BusinessLogic.Migrations
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");

@@ -8,10 +8,6 @@ namespace MusicCollection.BusinessLogic.Services.FilesService;
 
 public class FilesService : IFilesService
 {
-    private readonly INodesRepository nodesRepository;
-    private readonly IRootsRepository rootsRepository;
-    private readonly ITagsRepository tagsRepository;
-
     public FilesService(
         INodesRepository nodesRepository,
         IRootsRepository rootsRepository,
@@ -23,11 +19,16 @@ public class FilesService : IFilesService
         this.tagsRepository = tagsRepository;
     }
 
-    public async Task<FileSystemNode[]> ReadAllFiles(Guid parentId)
+    public async Task<FileSystemNode[]> ReadDirectoryAsync(Guid directoryId)
     {
-        var nodes = await nodesRepository.ReadAllFilesAsync(parentId);
-        var extendTasks = nodes.Select(x => x.ExtendAsync(ExtendFileWithTagsAsync));
-        return await Task.WhenAll(extendTasks);
+        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId);
+        var extendedNodesTasks = nodes.Select(x => x.ExtendAsync(ExtendFileWithTagsAsync));
+        return await Task.WhenAll(extendedNodesTasks);
+    }
+
+    public async Task<Guid[]> ReadAllFilesFromDirectoryAsync(Guid directoryId)
+    {
+        return await CollectFilesFromDirectoryAsync(directoryId);
     }
 
     public async Task<FileSystemRoot[]> ReadAllRoots()
@@ -70,4 +71,21 @@ public class FilesService : IFilesService
 
         fileSystemNode.Tags = await tagsRepository.TryReadAsync(fileSystemNode.Id);
     }
+
+    private async Task<Guid[]> CollectFilesFromDirectoryAsync(Guid directoryId)
+    {
+        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId);
+        var collectFilesInSubDirectoriesTasks = nodes
+            .Where(x => x.Type == NodeType.Directory)
+            .Select(x => CollectFilesFromDirectoryAsync(x.Id));
+        return nodes
+            .Where(x => x.Type == NodeType.File)
+            .Select(x => x.Id)
+            .Concat((await Task.WhenAll(collectFilesInSubDirectoriesTasks)).SelectMany(x => x))
+            .ToArray();
+    }
+
+    private readonly INodesRepository nodesRepository;
+    private readonly IRootsRepository rootsRepository;
+    private readonly ITagsRepository tagsRepository;
 }

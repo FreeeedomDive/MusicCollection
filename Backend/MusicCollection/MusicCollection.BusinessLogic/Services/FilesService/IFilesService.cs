@@ -4,7 +4,8 @@ namespace MusicCollection.BusinessLogic.Services.FilesService;
 
 public interface IFilesService
 {
-    Task<FileSystemNode[]> ReadAllFiles(Guid parentId);
+    Task<FileSystemNode[]> ReadDirectoryAsync(Guid directoryId);
+    Task<Guid[]> ReadAllFilesFromDirectoryAsync(Guid directoryId);
     Task<FileSystemRoot[]> ReadAllRoots();
     Task<FileSystemNode> ReadNodeAsync(Guid id);
     Task<FileSystemNode?> TryReadNodeAsync(Guid id);

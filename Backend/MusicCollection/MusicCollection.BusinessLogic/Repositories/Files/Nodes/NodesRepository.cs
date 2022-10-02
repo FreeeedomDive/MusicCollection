@@ -28,7 +28,10 @@ public class NodesRepository : INodesRepository
             throw new ReadFilesFromNonDirectoryException(parentId);
         }
         var requiredNodes = await databaseContext.NodesStorage
-            .Where(node => node.ParentId == parentId).ToArrayAsync();
+            .Where(node => node.ParentId == parentId)
+            .OrderBy(x => x.Type)
+            .ThenBy(x => x.Path)
+            .ToArrayAsync();
 
         return requiredNodes.Select(ToModel).ToArray();
     }
@@ -51,7 +54,8 @@ public class NodesRepository : INodesRepository
         {
             Id = node.Id,
             ParentId = node.ParentId,
-            Type = node.Type
+            Type = node.Type,
+            Path = node.Path
         };
     }
 
@@ -61,7 +65,8 @@ public class NodesRepository : INodesRepository
         {
             Id = node.Id,
             ParentId = node.ParentId,
-            Type = node.Type
+            Type = node.Type,
+            Path = node.Path
         };
     }
 }
