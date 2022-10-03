@@ -25,15 +25,17 @@ public class UsersRepository : IUsersRepository
         return ToModel( await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
     }
 
-    public async Task CreateAsync(string login, string encryptedPassword)
+    public async Task<User> CreateAsync(string login, string encryptedPassword)
     {
-        await databaseContext.UsersStorage.AddAsync(new UserStorageElement()
+        var newUser = new UserStorageElement
         {
             Id = new Guid(),
             Login = login,
             Password = encryptedPassword
-        });
+        };
+        await databaseContext.UsersStorage.AddAsync(newUser);
         await databaseContext.SaveChangesAsync();
+        return ToModel(newUser);
     }
 
     private static User ToModel(UserStorageElement user)

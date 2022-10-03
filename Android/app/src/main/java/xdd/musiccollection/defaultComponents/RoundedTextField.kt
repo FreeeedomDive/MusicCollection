@@ -25,7 +25,7 @@ fun RoundedTextField(
     label: @Composable () -> Unit,
     backgroundColor: Color = Color.White,
     position: RoundedTextFieldPosition = RoundedTextFieldPosition.Middle,
-    isPasswordInput: Boolean = true
+    isPasswordInput: Boolean = false
 ) {
     val roundCornerValue = 16.dp
     TextField(

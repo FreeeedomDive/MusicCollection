@@ -20,8 +20,8 @@ public class UsersService : IUsersService
         );
     }
 
-    public async Task CreateAsync(AuthCredentials authCredentials)
+    public async Task<User> CreateAsync(AuthCredentials authCredentials)
     {
-        await usersRepository.CreateAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password));
+        return await usersRepository.CreateAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password));
     }
 }

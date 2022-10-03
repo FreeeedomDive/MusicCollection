@@ -6,5 +6,5 @@ public interface IUsersRepository
 {
     Task<User> FindAsync(string login, string encryptedPassword);
     Task<User?> TryReadAsync(Guid id);
-    Task CreateAsync(string login, string encryptedPassword);
+    Task<User> CreateAsync(string login, string encryptedPassword);
 }

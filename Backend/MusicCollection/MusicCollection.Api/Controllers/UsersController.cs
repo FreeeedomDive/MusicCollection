@@ -31,9 +31,8 @@ public class UsersController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> RegisterUser([FromBody] AuthCredentials authCredentials)
+    public async Task<ActionResult<User>> RegisterUser([FromBody] AuthCredentials authCredentials)
     {
-        await usersService.CreateAsync(authCredentials);
-        return Ok();
+        return await usersService.CreateAsync(authCredentials);
     }
 }

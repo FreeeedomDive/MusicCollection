@@ -5,5 +5,5 @@ namespace MusicCollection.BusinessLogic.Services.UsersService;
 public interface IUsersService
 {
     Task<User> FindAsync(AuthCredentials authCredentials);
-    Task CreateAsync(AuthCredentials authCredentials);
+    Task<User> CreateAsync(AuthCredentials authCredentials);
 }
