@@ -1,7 +1,8 @@
 using MusicCollection.Api.Dto.Music;
-using TagExtractor.Extensions;
+using MusicCollection.Common.TagsService;
+using MusicCollection.Common.TagsService.Extensions;
 
-namespace TagExtractor;
+namespace MusicCollection.Common.TagsService;
 
 public class TagsExtractor : ITagsExtractor
 {

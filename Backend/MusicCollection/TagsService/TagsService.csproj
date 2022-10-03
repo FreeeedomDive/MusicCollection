@@ -4,7 +4,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>TagExtractor</RootNamespace>
+        <RootNamespace>MusicCollection.Common.TagsService</RootNamespace>
+        <AssemblyName>MusicCollection.Common.TagsService</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

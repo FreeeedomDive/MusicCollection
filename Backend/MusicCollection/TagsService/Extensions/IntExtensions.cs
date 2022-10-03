@@ -1,4 +1,4 @@
-namespace TagExtractor.Extensions;
+namespace MusicCollection.Common.TagsService.Extensions;
 
 public static class IntExtensions
 {

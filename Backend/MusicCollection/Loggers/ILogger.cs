@@ -1,4 +1,4 @@
-namespace Loggers;
+namespace MusicCollection.Common.Loggers;
 
 public interface ILogger
 {

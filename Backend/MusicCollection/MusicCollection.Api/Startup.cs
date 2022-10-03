@@ -1,4 +1,3 @@
-using Loggers.NLog;
 using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
@@ -6,9 +5,10 @@ using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Services.FilesService;
 using MusicCollection.BusinessLogic.Services.UsersService;
+using MusicCollection.Common.Loggers.NLog;
+using MusicCollection.Common.TagsService;
 using MusicCollection.Middlewares;
-using TagExtractor;
-using ILogger = Loggers.ILogger;
+using ILogger = MusicCollection.Common.Loggers.ILogger;
 
 namespace MusicCollection;
 

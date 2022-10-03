@@ -1,9 +1,9 @@
-﻿using Loggers;
-using MusicCollection.Api.Dto.FileSystem;
+﻿using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Extensions;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
-using TagExtractor;
+using MusicCollection.Common.Loggers;
+using MusicCollection.Common.TagsService;
 using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
 
 namespace MusicCollection.BusinessLogic.Services.FilesService;

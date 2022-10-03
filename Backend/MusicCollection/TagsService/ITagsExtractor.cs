@@ -1,6 +1,6 @@
 using MusicCollection.Api.Dto.Music;
 
-namespace TagExtractor;
+namespace MusicCollection.Common.TagsService;
 
 public interface ITagsExtractor
 {

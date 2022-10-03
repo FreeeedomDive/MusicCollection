@@ -1,6 +1,7 @@
 using NLog;
+using ILogger = MusicCollection.Common.Loggers.ILogger;
 
-namespace Loggers.NLog;
+namespace MusicCollection.Common.Loggers.NLog;
 
 public class NLogLogger : ILogger
 {
