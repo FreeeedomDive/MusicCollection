@@ -2,7 +2,6 @@
 
 public class AudioFileTags
 {
-    public Guid Id { get; set; }
     public string? Artist { get; set; }
     public string? Album { get; set; }
     public string? TrackName { get; set; } // in ms

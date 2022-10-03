@@ -14,23 +14,32 @@ public class NodesRepository : INodesRepository
         this.databaseContext = databaseContext;
     }
 
-
     public async Task CreateAsync(FileSystemNode node)
     {
         await databaseContext.NodesStorage.AddAsync(ToStorageElement(node));
         await databaseContext.SaveChangesAsync();
     }
-    
-    public async Task<FileSystemNode[]> ReadAllFilesAsync(Guid parentId)
+
+    public async Task CreateManyAsync(FileSystemNode[] nodes)
+    {
+        var storageElements = nodes.Select(ToStorageElement);
+        await databaseContext.NodesStorage.AddRangeAsync(storageElements);
+        await databaseContext.SaveChangesAsync();
+    }
+
+    public async Task<FileSystemNode[]> ReadAllFilesAsync(Guid parentId, int skip = 0, int take = 50)
     {
         if ((await ReadAsync(parentId)).Type == NodeType.File)
         {
             throw new ReadFilesFromNonDirectoryException(parentId);
         }
+
         var requiredNodes = await databaseContext.NodesStorage
             .Where(node => node.ParentId == parentId)
             .OrderBy(x => x.Type)
             .ThenBy(x => x.Path)
+            .Skip(skip)
+            .Take(take)
             .ToArrayAsync();
 
         return requiredNodes.Select(ToModel).ToArray();
@@ -48,9 +57,9 @@ public class NodesRepository : INodesRepository
         return ToModel(await databaseContext.NodesStorage.FirstAsync(node => node.Id == id));
     }
 
-    private FileSystemNode ToModel(NodeStorageElement node)
+    private static FileSystemNode ToModel(NodeStorageElement node)
     {
-        return new FileSystemNode()
+        return new FileSystemNode
         {
             Id = node.Id,
             ParentId = node.ParentId,
@@ -59,9 +68,9 @@ public class NodesRepository : INodesRepository
         };
     }
 
-    private NodeStorageElement ToStorageElement(FileSystemNode node)
+    private static NodeStorageElement ToStorageElement(FileSystemNode node)
     {
-        return new NodeStorageElement()
+        return new NodeStorageElement
         {
             Id = node.Id,
             ParentId = node.ParentId,

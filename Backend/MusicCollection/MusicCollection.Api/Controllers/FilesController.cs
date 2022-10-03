@@ -47,11 +47,11 @@ public class FilesController : Controller
     }
 
     [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/ReadChildren")]
-    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid rootId, [FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
         try
         {
-            return await filesService.ReadDirectoryAsync(nodeId);
+            return await filesService.ReadDirectoryAsync(nodeId, skip, take);
         }
         catch (FileSystemNodeNotFoundException)
         {

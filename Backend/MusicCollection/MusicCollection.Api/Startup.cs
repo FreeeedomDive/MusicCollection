@@ -1,16 +1,13 @@
-using Loggers;
 using Loggers.NLog;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
-using MusicCollection.BusinessLogic.Repositories.Files;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
-using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.BusinessLogic.Services.FilesService;
 using MusicCollection.BusinessLogic.Services.UsersService;
 using MusicCollection.Middlewares;
+using TagExtractor;
 using ILogger = Loggers.ILogger;
 
 namespace MusicCollection;
@@ -28,18 +25,20 @@ public class Startup
     {
         var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
-        services.AddDbContext<DatabaseContext>(ServiceLifetime.Singleton, ServiceLifetime.Singleton);
+        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
 
         // add default logger
         services.AddSingleton<ILogger>(NLogLogger.Build("Default"));
+        
+        // add services without dependencies
+        services.AddTransient<ITagsExtractor, TagsExtractor>();
 
         // add repositories
         services.AddTransient<IUsersRepository, UsersRepository>();
         services.AddTransient<IRootsRepository, RootsRepository>();
         services.AddTransient<INodesRepository, NodesRepository>();
-        services.AddTransient<ITagsRepository, TagsRepository>();
 
-        // add services
+        // add logic services
         services.AddTransient<IUsersService, UsersService>();
         services.AddTransient<IFilesService, FilesService>();
 

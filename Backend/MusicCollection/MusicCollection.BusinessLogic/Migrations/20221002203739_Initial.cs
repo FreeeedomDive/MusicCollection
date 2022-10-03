@@ -12,25 +12,6 @@ namespace MusicCollection.BusinessLogic.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AudioFileTagsStorage",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Artist = table.Column<string>(type: "text", nullable: true),
-                    Album = table.Column<string>(type: "text", nullable: true),
-                    TrackName = table.Column<string>(type: "text", nullable: true),
-                    Duration = table.Column<string>(type: "text", nullable: true),
-                    Format = table.Column<string>(type: "text", nullable: true),
-                    SampleFrequency = table.Column<string>(type: "text", nullable: true),
-                    BitRate = table.Column<string>(type: "text", nullable: true),
-                    BitDepth = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AudioFileTagsStorage", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NodesStorage",
                 columns: table => new
                 {
@@ -68,14 +49,16 @@ namespace MusicCollection.BusinessLogic.Migrations
                 {
                     table.PrimaryKey("PK_UsersStorage", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NodesStorage_Id_Path",
+                table: "NodesStorage",
+                columns: new[] { "Id", "Path" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AudioFileTagsStorage");
-
             migrationBuilder.DropTable(
                 name: "NodesStorage");
 
