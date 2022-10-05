@@ -1,6 +1,5 @@
-package xdd.musiccollection.apiClient
+package xdd.musiccollection.apiClient.retrofit
 
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -10,16 +9,16 @@ import java.util.*
 
 interface IFilesApiClient {
     @GET("roots")
-    suspend fun readAllRoots(): Call<Array<FileSystemRootDto>>
+    suspend fun readAllRoots(): Array<FileSystemRootDto>
 
     @GET("roots/{rootId}")
-    suspend fun readRoot(@Path("rootId") id: UUID): Call<FileSystemRootDto>
+    suspend fun readRoot(@Path("rootId") id: UUID): FileSystemRootDto
 
     @GET("roots/{rootId}/nodes/{nodeId}")
     suspend fun readNode(
         @Path("rootId") rootId: UUID,
         @Path("nodeId") nodeId: UUID
-    ): Call<FileSystemNodeDto>
+    ): FileSystemNodeDto
 
     @GET("roots/{rootId}/nodes/{nodeId}/ReadChildren")
     suspend fun readNodeAsDirectory(
@@ -27,11 +26,11 @@ interface IFilesApiClient {
         @Path("nodeId") nodeId: UUID,
         @Query("skip") skip: Int = 0,
         @Query("take") take: Int = 50
-    ): Call<Array<FileSystemNodeDto>>
+    ): Array<FileSystemNodeDto>
 
     @GET("roots/{rootId}/nodes/{nodeId}/ReadAll")
     suspend fun readAllFilesInNode(
         @Path("rootId") rootId: UUID,
         @Path("nodeId") nodeId: UUID
-    ): Call<Array<UUID>>
+    ): Array<UUID>
 }

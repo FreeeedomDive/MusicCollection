@@ -1,4 +1,4 @@
-package xdd.musiccollection.apiClient
+package xdd.musiccollection.apiClient.retrofit
 
 import okhttp3.OkHttpClient
 import java.security.SecureRandom

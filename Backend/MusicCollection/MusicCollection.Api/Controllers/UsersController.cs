@@ -17,12 +17,12 @@ public class UsersController : Controller
         this.usersService = usersService;
     }
 
-    [HttpPost("find")]
-    public async Task<ActionResult<User>> FindUser([FromBody] AuthCredentials authCredentials)
+    [HttpPost("login")]
+    public async Task<ActionResult<User>> Login([FromBody] AuthCredentials authCredentials)
     {
         try
         {
-            return await usersService.FindAsync(authCredentials);
+            return await usersService.LoginAsync(authCredentials);
         }
         catch (UserNotFoundException exception)
         {
@@ -31,8 +31,15 @@ public class UsersController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<User>> RegisterUser([FromBody] AuthCredentials authCredentials)
+    public async Task<ActionResult<User>> Register([FromBody] AuthCredentials authCredentials)
     {
-        return await usersService.CreateAsync(authCredentials);
+        try
+        {
+            return await usersService.RegisterAsync(authCredentials);
+        }
+        catch (UserWithLoginAlreadyExistsException)
+        {
+            return Conflict();
+        }
     }
 }

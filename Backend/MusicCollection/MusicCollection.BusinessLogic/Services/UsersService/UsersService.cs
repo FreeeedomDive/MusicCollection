@@ -1,4 +1,5 @@
 ﻿using MusicCollection.Api.Dto.Auth;
+using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 
 namespace MusicCollection.BusinessLogic.Services.UsersService;
@@ -12,16 +13,21 @@ public class UsersService : IUsersService
         this.usersRepository = usersRepository;
     }
 
-    public async Task<User> FindAsync(AuthCredentials authCredentials)
+    public async Task<User> LoginAsync(AuthCredentials authCredentials)
     {
         return await usersRepository.FindAsync(
             authCredentials.Login,
             CryptoService.Encrypt(authCredentials.Password)
-        );
+        ) ?? throw new UserNotFoundException();
     }
 
-    public async Task<User> CreateAsync(AuthCredentials authCredentials)
+    public async Task<User> RegisterAsync(AuthCredentials authCredentials)
     {
+        var userWithLogin = await usersRepository.FindAsync(authCredentials.Login);
+        if (userWithLogin != null)
+        {
+            throw new UserWithLoginAlreadyExistsException(authCredentials.Login);
+        }
         return await usersRepository.CreateAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password));
     }
 }

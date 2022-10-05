@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -13,21 +12,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import xdd.musiccollection.R
-import xdd.musiccollection.apiClient.IUsersApiClient
-import xdd.musiccollection.apiClient.RetrofitClient
+import xdd.musiccollection.apiClient.UsersApiClient
+import xdd.musiccollection.apiClient.retrofit.IUsersApiClient
+import xdd.musiccollection.apiClient.retrofit.RetrofitClient
 import xdd.musiccollection.apiDto.users.AuthCredentialsDto
-import xdd.musiccollection.apiDto.users.UserDto
 import xdd.musiccollection.defaultComponents.RoundedCornerOutlinedButton
 import xdd.musiccollection.defaultComponents.RoundedTextField
 import xdd.musiccollection.defaultComponents.RoundedTextFieldPosition
@@ -41,7 +35,7 @@ fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit) {
     val (isLoading, setLoading) = remember { mutableStateOf(false) }
     val currentContext = LocalContext.current
     val composableScope = rememberCoroutineScope()
-    val authClient = RetrofitClient.getClient().create(IUsersApiClient::class.java)
+    val authClient = UsersApiClient()
 
     Surface {
         Column(
@@ -102,25 +96,23 @@ fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit) {
                         }
                         composableScope.launch {
                             setLoading(true)
-                            try {
-                                val user = authClient.register(AuthCredentialsDto(loginValue, passwordValue))
-                                Log.i(
-                                    "Register",
-                                    "Registered as user ${user.id} (${user.login})"
-                                )
-                                showMainPage()
-                            } catch (e: HttpException) {
-                                Toast
-                                    .makeText(
-                                        currentContext,
-                                        "Register unsuccessful with code ${e.code()}",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                                Log.e("Register", "Register unsuccessful with code ${e.code()}")
-                            } finally {
-                                setLoading(false)
+                            val registerResult = authClient.register(loginValue, passwordValue)
+                            when(registerResult.statusCode){
+                                200 -> {
+                                    Log.i("Register", "Successful register as ${registerResult.value?.login}")
+                                    showMainPage()
+                                }
+                                409 -> {
+                                    Log.e("Register", "")
+                                    Toast.makeText(currentContext, "This login is unavailable", Toast.LENGTH_LONG).show()
+                                }
+                                else -> {
+                                    Log.e("Register", "Unexpected error")
+                                    Toast.makeText(currentContext, "Unexpected error", Toast.LENGTH_LONG).show()
+                                }
                             }
+                            Log.i("Register", "Register try finished")
+                            setLoading(false)
                         }
                     },
                     modifier = Modifier

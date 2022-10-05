@@ -1,4 +1,4 @@
-package xdd.musiccollection.apiClient
+package xdd.musiccollection.apiClient.retrofit
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -11,6 +11,6 @@ interface IUsersApiClient {
     @POST("users/register")
     suspend fun register(@Body authCredentialsDto: AuthCredentialsDto): UserDto
 
-    @POST("users/find")
-    suspend fun find(@Body authCredentialsDto: AuthCredentialsDto): UserDto
+    @POST("users/login")
+    suspend fun login(@Body authCredentialsDto: AuthCredentialsDto): UserDto
 }

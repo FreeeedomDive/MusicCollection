@@ -14,15 +14,22 @@ public class UsersRepository : IUsersRepository
         this.databaseContext = databaseContext;
     }
 
-    public async Task<User> FindAsync(string login, string encryptedPassword)
+    public async Task<User?> FindAsync(string login)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user => user.Login == login
-            && user.Password == encryptedPassword) ?? throw new UserNotFoundException());
+        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user => user.Login == login));
+    }
+
+    public async Task<User?> FindAsync(string login, string encryptedPassword)
+    {
+        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user =>
+            user.Login == login
+            && user.Password == encryptedPassword)
+        );
     }
 
     public async Task<User?> TryReadAsync(Guid id)
     {
-        return ToModel( await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
+        return ToModel(await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
     }
 
     public async Task<User> CreateAsync(string login, string encryptedPassword)
@@ -35,15 +42,17 @@ public class UsersRepository : IUsersRepository
         };
         await databaseContext.UsersStorage.AddAsync(newUser);
         await databaseContext.SaveChangesAsync();
-        return ToModel(newUser);
+        return ToModel(newUser)!;
     }
 
-    private static User ToModel(UserStorageElement user)
+    private static User? ToModel(UserStorageElement? user)
     {
-        return new User
-        {
-            Id = user.Id,
-            Login = user.Login,
-        };
+        return user == null
+            ? null
+            : new User
+            {
+                Id = user.Id,
+                Login = user.Login,
+            };
     }
 }

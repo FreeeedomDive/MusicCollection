@@ -1,4 +1,4 @@
-package xdd.musiccollection.helpers
+package xdd.musiccollection.defaultComponents
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size

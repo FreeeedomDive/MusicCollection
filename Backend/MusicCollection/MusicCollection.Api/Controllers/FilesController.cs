@@ -38,7 +38,8 @@ public class FilesController : Controller
     {
         try
         {
-            return await filesService.ReadNodeAsync(nodeId);
+            var result = await filesService.ReadNodeAsync(nodeId);
+            return result;
         }
         catch (FileSystemNodeNotFoundException)
         {
