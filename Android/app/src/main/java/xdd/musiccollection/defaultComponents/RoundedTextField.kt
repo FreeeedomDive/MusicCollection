@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -31,18 +32,15 @@ fun RoundedTextField(
     TextField(
         value = value,
         onValueChange = onValueChange,
-        
         label = label,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = backgroundColor,
-            unfocusedIndicatorColor = if (position == RoundedTextFieldPosition.Bottom)
-                Color.Transparent
-            else
-                MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.UnfocusedIndicatorLineOpacity),
-            focusedIndicatorColor = if (position == RoundedTextFieldPosition.Bottom)
-                Color.Transparent
-            else
-                MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high)
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedLabelColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            textColor = Color.Black,
+            cursorColor = Color.Black
         ),
         visualTransformation = if (isPasswordInput)
             PasswordVisualTransformation()
@@ -51,7 +49,7 @@ fun RoundedTextField(
         keyboardOptions = if (isPasswordInput)
             KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Password)
         else
-            KeyboardOptions.Default,
+            KeyboardOptions(autoCorrect = false, capitalization = KeyboardCapitalization.None),
         shape = when (position) {
             RoundedTextFieldPosition.Top -> RoundedCornerShape(roundCornerValue, roundCornerValue, 0.dp, 0.dp)
             RoundedTextFieldPosition.Middle -> RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp)

@@ -1,6 +1,7 @@
 package xdd.musiccollection.mainPage.viewModels
 
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -10,9 +11,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import xdd.musiccollection.apiClient.FilesApiClient
 import xdd.musiccollection.apiDto.Result
-import xdd.musiccollection.apiDto.files.convertToModel
+import xdd.musiccollection.extensions.convertToModel
 import xdd.musiccollection.apiDto.music.AudioFileTagsDto
-import xdd.musiccollection.mainPage.FileSystemPageState
 import xdd.musiccollection.models.MainWindowViewState
 import xdd.musiccollection.models.NodeModel
 import xdd.musiccollection.models.NodeType
@@ -20,8 +20,6 @@ import java.util.*
 
 class FileSystemPageViewModel : ViewModel() {
     var currentViewState by mutableStateOf(MainWindowViewState.Browse)
-        private set
-    var isListLoading by mutableStateOf(false)
         private set
     var isErrorLoading by mutableStateOf(false)
         private set
@@ -33,12 +31,25 @@ class FileSystemPageViewModel : ViewModel() {
         private set
     var searchQuery by mutableStateOf("")
         private set
+    var lazyListState by mutableStateOf(LazyListState())
+
+    private var currentSkipValue by mutableStateOf(0)
+    private var canLoadMore by mutableStateOf(true)
+    private val take = 50
 
     private val filesApiClient = FilesApiClient()
     private val openedNodes: Stack<NodeModel> = Stack()
 
     init {
         loadRoots {}
+    }
+
+    fun search(query: String) {
+        searchQuery = query
+    }
+
+    fun setOpenedSearch(value: Boolean) {
+        isSearchOpened = value
     }
 
     suspend fun loadFileTags(node: NodeModel): Result<AudioFileTagsDto?> {
@@ -57,7 +68,10 @@ class FileSystemPageViewModel : ViewModel() {
         currentViewState = viewState
     }
 
-    fun loadNextDirectory(nextNode: NodeModel, disableSelectedElementLoading: () -> Unit) {
+    fun loadNextDirectory(
+        nextNode: NodeModel,
+        disableSelectedElementLoading: () -> Unit
+    ) {
         if (nextNode.type == NodeType.Root) {
             currentRoot = nextNode
         }
@@ -65,7 +79,9 @@ class FileSystemPageViewModel : ViewModel() {
         loadNode(nextNode, disableSelectedElementLoading)
     }
 
-    fun loadPrevDirectory(disableSelectedElementLoading: () -> Unit) {
+    fun loadPrevDirectory(
+        disableSelectedElementLoading: () -> Unit = {}
+    ) {
         if (openedNodes.empty()) {
             loadRoots(disableSelectedElementLoading)
         }
@@ -80,7 +96,6 @@ class FileSystemPageViewModel : ViewModel() {
     private fun loadRoots(disableSelectedElementLoading: () -> Unit) {
         Log.i("MainPage", "Start load roots")
         viewModelScope.launch {
-            isListLoading = true
             val rootsResult = filesApiClient.readAllRoots()
             if (rootsResult.isSuccess) {
                 isErrorLoading = false
@@ -88,45 +103,67 @@ class FileSystemPageViewModel : ViewModel() {
             } else {
                 isErrorLoading = true
             }
-            isListLoading = false
+            lazyListState.scrollToItem(0)
             disableSelectedElementLoading()
         }
     }
 
-    private fun loadNode(parent: NodeModel, disableSelectedElementLoading: () -> Unit) {
-        val elementsStackTrace = openedNodes.map { x -> "${x.id}      ${x.path}" }
-        val str = elementsStackTrace.joinToString("\n")
-        Log.i("FileSystemPageVM", "Current stack state: \n${str}")
+    fun loadMore() {
         viewModelScope.launch {
-            val apiResult = filesApiClient.readNodeAsDirectory(currentRoot!!.id, parent.id)
-            when (apiResult.statusCode) {
-                200 -> {
-                    val nodes = apiResult.value!!.map { x -> x.convertToModel(parent) }
-                    filesList = listOf(
-                        NodeModel(
-                            parent.id,
-                            parent.parent,
-                            parent.path,
-                            NodeType.Back,
-                            parent.tags
-                        )
-                    ) + nodes
-                }
-                // actually impossible scenarios
-                404 -> {
-                    Log.e("FileSystemPage", "Node not found")
-                    // showErrorToast("Can't find this element")
-                }
-                409 -> {
-                    Log.e("FileSystemPage", "Node not found")
-                    // showErrorToast("You are trying to open file as a directory")
-                }
-                else -> {
-                    Log.e("FileSystemPage", "Load node failed")
-                    // showErrorToast()
-                }
+            if (!canLoadMore || openedNodes.empty()) {
+                return@launch
             }
-            disableSelectedElementLoading()
+            currentSkipValue += take
+            val nextNodes = loadItems(openedNodes.peek())
+            canLoadMore = nextNodes.isNotEmpty()
+            filesList = filesList + nextNodes
         }
+    }
+
+    private fun loadNode(
+        parent: NodeModel,
+        disableSelectedElementLoading: () -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            currentSkipValue = 0
+            canLoadMore = true
+            isErrorLoading = false
+            val nodes = loadItems(parent)
+            disableSelectedElementLoading()
+            filesList = listOf(
+                NodeModel(
+                    parent.id,
+                    parent.parent,
+                    parent.path,
+                    NodeType.Back,
+                    parent.directoryData,
+                    parent.tags
+                )
+            ) + nodes
+            lazyListState.scrollToItem(0)
+        }
+    }
+
+    private suspend fun loadItems(parent: NodeModel): List<NodeModel> {
+        val apiResult = filesApiClient.readNodeAsDirectory(currentRoot!!.id, parent.id, currentSkipValue, take)
+        when (apiResult.statusCode) {
+            200 -> {
+                return apiResult.value!!.map { x -> x.convertToModel(parent) }
+            }
+            // actually impossible scenarios
+            404 -> {
+                isErrorLoading = true
+                Log.e("FileSystemPage", "Node not found")
+            }
+            409 -> {
+                isErrorLoading = true
+                Log.e("FileSystemPage", "Node not found")
+            }
+            else -> {
+                isErrorLoading = true
+                Log.e("FileSystemPage", "Load node failed")
+            }
+        }
+        return listOf()
     }
 }

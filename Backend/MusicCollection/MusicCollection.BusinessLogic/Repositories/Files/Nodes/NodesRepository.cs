@@ -27,22 +27,30 @@ public class NodesRepository : INodesRepository
         await databaseContext.SaveChangesAsync();
     }
 
-    public async Task<FileSystemNode[]> ReadAllFilesAsync(Guid parentId, int skip = 0, int take = 50)
+    public async Task<FileSystemNode[]> ReadAllFilesAsync(
+        Guid parentId,
+        bool withPages = true,
+        int skip = 0,
+        int take = 50
+    )
     {
         if ((await ReadAsync(parentId)).Type == NodeType.File)
         {
             throw new ReadFilesFromNonDirectoryException(parentId);
         }
 
-        var requiredNodes = await databaseContext.NodesStorage
+        var requiredNodesQueryable = databaseContext.NodesStorage
             .Where(node => node.ParentId == parentId)
-            .OrderBy(x => x.Type)
-            .ThenBy(x => x.Path)
-            .Skip(skip)
-            .Take(take)
-            .ToArrayAsync();
+            .OrderByDescending(x => x.Type)
+            .ThenBy(x => x.Path);
+        var result = withPages
+            ? await requiredNodesQueryable
+                .Skip(skip)
+                .Take(take)
+                .ToArrayAsync()
+            : await requiredNodesQueryable.ToArrayAsync();
 
-        return requiredNodes.Select(ToModel).ToArray();
+        return result.Select(ToModel).ToArray();
     }
 
     public async Task<FileSystemNode> ReadAsync(Guid id)

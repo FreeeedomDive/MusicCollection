@@ -6,7 +6,7 @@ data class AudioFileTagsDto(
     var trackName: String?,
     var duration: String?,
     var format: String?,
-    var sampleFrequency: String?,
-    var bitRate: String?,
-    var bitDepth: String?,
+    var sampleFrequency: Int?,
+    var bitRate: Int?,
+    var bitDepth: Int?,
 )

@@ -8,5 +8,6 @@ data class FileSystemNodeDto(
     var parentId: UUID?,
     var type: NodeTypeDto,
     var path: String,
+    var directoryData: DirectoryData?,
     var tags: AudioFileTagsDto?
 )

@@ -24,6 +24,7 @@ fun RoundedCornerOutlinedButton(
         modifier = modifier,
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(
+            contentColor = Color.Black,
             backgroundColor = backgroundColor
         )
     )

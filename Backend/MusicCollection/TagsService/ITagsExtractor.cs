@@ -4,5 +4,5 @@ namespace MusicCollection.Common.TagsService;
 
 public interface ITagsExtractor
 {
-    public AudioFileTags? ExtractTags(string path);
+    public AudioFileTags? TryExtractTags(string path);
 }

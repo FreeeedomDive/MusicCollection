@@ -6,7 +6,7 @@ namespace MusicCollection.Common.TagsService;
 
 public class TagsExtractor : ITagsExtractor
 {
-    public AudioFileTags? ExtractTags(string path)
+    public AudioFileTags? TryExtractTags(string path)
     {
         try
         {
@@ -19,9 +19,9 @@ public class TagsExtractor : ITagsExtractor
                 Album = tagFile.Tag.Album,
                 Duration = $"{duration.Minutes}:{duration.Seconds.NormalizeToLength(2)}",
                 Format = path.GetFileExtension(),
-                BitRate = tagFile.Properties.AudioBitrate.ToString(),
-                BitDepth = tagFile.Properties.BitsPerSample.ToString(),
-                SampleFrequency = tagFile.Properties.AudioSampleRate.ToString()
+                BitRate = tagFile.Properties.AudioBitrate,
+                BitDepth = tagFile.Properties.BitsPerSample,
+                SampleFrequency = tagFile.Properties.AudioSampleRate
             };
         }
         catch

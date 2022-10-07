@@ -5,21 +5,15 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.Divider
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import xdd.musiccollection.defaultComponents.BackPressHandler
 import xdd.musiccollection.defaultComponents.SearchComponent
@@ -33,31 +27,25 @@ import xdd.musiccollection.ui.theme.BlueColorPalette3
 import xdd.musiccollection.ui.theme.BlueColorPalette4
 
 @Composable
-fun FileSystemPage(viewModel: FileSystemPageViewModel = FileSystemPageViewModel()) {
-    val currentContext = LocalContext.current
+fun FileSystemPage(viewModel: FileSystemPageViewModel) {
     val composableScope = rememberCoroutineScope()
-    val (filteredCurrentItems, setFilteredItems) = remember { mutableStateOf(listOf<NodeModel>()) }
-    val lazyListState: LazyListState = rememberLazyListState()
-    val (isSearchOpened, setSearchOpened) = remember { mutableStateOf(false) }
-    val (searchQuery, setSearchQuery) = remember { mutableStateOf("") }
+    val scaffoldState = rememberScaffoldState()
+    val currentContext = LocalContext.current
 
     fun handleItemClick(element: NodeModel, disableSelectedElementLoading: () -> Unit) {
         when (element.type) {
             NodeType.File -> {
                 composableScope.launch {
                     val tags = viewModel.loadFileTags(element)
+                    disableSelectedElementLoading()
                     if (!tags.isSuccess) {
                         when (tags.statusCode) {
-                            404 -> Toast.makeText(currentContext, "File not found", Toast.LENGTH_LONG).show()
-                            409 -> Toast.makeText(
-                                currentContext,
-                                "You are trying to get tags from directory",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            500 -> Toast.makeText(currentContext, "Failed request!", Toast.LENGTH_LONG).show()
+                            404 -> scaffoldState.snackbarHostState.showSnackbar(message = "File not found")
+                            409 -> scaffoldState.snackbarHostState.showSnackbar(message = "You are trying to get tags from directory")
+                            500 -> scaffoldState.snackbarHostState.showSnackbar(message = "Internal server is unavailable")
                         }
-                    } else if (tags.value == null){
-                        Toast.makeText(currentContext, "No tags for this file", Toast.LENGTH_LONG).show()
+                    } else if (tags.value == null) {
+                        scaffoldState.snackbarHostState.showSnackbar(message = "No tags for this file")
                     } else {
                         val textLines = arrayOf(
                             "Artist: ${tags.value.artist}",
@@ -69,9 +57,8 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel = FileSystemPageViewModel(
                             "Sample frequency: ${tags.value.sampleFrequency} Hz",
                             "Bits per sample: ${tags.value.bitDepth}",
                         )
-                        Toast.makeText(currentContext, textLines.joinToString("\n"), Toast.LENGTH_LONG).show()
+                        scaffoldState.snackbarHostState.showSnackbar(message = textLines.joinToString("\n"))
                     }
-                    disableSelectedElementLoading()
                 }
             }
             NodeType.Back -> {
@@ -80,6 +67,14 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel = FileSystemPageViewModel(
             else -> {
                 viewModel.loadNextDirectory(element, disableSelectedElementLoading)
             }
+        }
+    }
+
+    if (viewModel.isErrorLoading) {
+        LaunchedEffect(scaffoldState.snackbarHostState) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = "Internal server is unavailable"
+            )
         }
     }
 
@@ -101,75 +96,67 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel = FileSystemPageViewModel(
             viewModel.setCurrentWindowViewState(MainWindowViewState.Browse)
         }
     }
-    Surface {
-        Scaffold(
-            topBar =
-            {
-                TopAppBar(
-                    backgroundColor = BlueColorPalette1,
-                    contentColor = Color.White
-                ) {
-                    if (isSearchOpened) {
-                        SearchComponent(
-                            searchQuery = searchQuery,
-                            setSearchQuery = { query ->
-                                Log.i("Search", "Query has changed to $query")
-                                setSearchQuery(query)
-                                setFilteredItems(viewModel.filesList.filter {
-                                    if (query.isEmpty())
-                                        true
-                                    else it.path.contains(query, ignoreCase = true)
-                                } as MutableList<NodeModel>)
-                            },
-                            onClose = { setSearchOpened(false) }
-                        )
-                    } else {
-                        TopAppBarSearchButton(onClick = { setSearchOpened(true) })
-                    }
-                }
-            })
+
+    viewModel.lazyListState.OnBottomReached {
+        viewModel.loadMore()
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar =
         {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                BlueColorPalette4,
-                                BlueColorPalette3,
-                            )
+            TopAppBar(
+                backgroundColor = BlueColorPalette1,
+                contentColor = Color.White
+            ) {
+                if (viewModel.isSearchOpened) {
+                    SearchComponent(
+                        searchQuery = viewModel.searchQuery,
+                        setSearchQuery = { query ->
+                            Log.i("Search", "Query has changed to $query")
+                            viewModel.search(query)
+                        },
+                        onClose = { viewModel.setOpenedSearch(false) }
+                    )
+                } else {
+                    TopAppBarSearchButton(onClick = { viewModel.setOpenedSearch(true) })
+                }
+            }
+        })
+    {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            BlueColorPalette4,
+                            BlueColorPalette3,
                         )
                     )
-            )
-            {
-                if (viewModel.filesList.isEmpty()) {
-                    Column(
-                        Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "The folder is empty...",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                } else {
-                    LazyColumn(
-                        state = lazyListState
-                    ) {
-                        if (viewModel.isSearchOpened && viewModel.searchQuery.isNotEmpty()) {
-                            itemsIndexed(filteredCurrentItems) { _, item ->
-                                FileSystemListElement(element = item, handleItem = ::handleItemClick)
-                                Divider(color = Color.Black)
-                            }
-                        } else {
-                            itemsIndexed(viewModel.filesList) { _, item ->
-                                FileSystemListElement(element = item, handleItem = ::handleItemClick)
-                                Divider(color = Color.Black)
-                            }
-                        }
+                )
+        )
+        {
+            if (viewModel.filesList.isEmpty()) {
+                Column(
+                    Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "The folder is empty...",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = viewModel.lazyListState
+                ) {
+                    itemsIndexed(viewModel.filesList) { _, item ->
+                        FileSystemListElement(element = item, handleItem = ::handleItemClick)
+                        Divider(color = Color.Black)
                     }
                 }
             }

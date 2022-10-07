@@ -25,18 +25,13 @@ public class FilesService : IFilesService
 
     public async Task<FileSystemNode[]> ReadDirectoryAsync(Guid directoryId, int skip = 0, int take = 50)
     {
-        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId, skip, take);
-        return nodes.Select(node =>
+        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId, true, skip, take);
+        foreach (var node in nodes)
         {
-            if (node.Type == NodeType.Directory)
-            {
-                return node;
-            }
+            await ExtendNodeAsync(node);
+        }
 
-            node.Tags = tagsExtractor.ExtractTags(node.Path);
-
-            return node;
-        }).ToArray();
+        return nodes;
     }
 
     public async Task<Guid[]> ReadAllFilesFromDirectoryAsync(Guid directoryId)
@@ -52,7 +47,7 @@ public class FilesService : IFilesService
     public async Task<FileSystemNode> ReadNodeAsync(Guid id)
     {
         var node = await nodesRepository.ReadAsync(id);
-        node.Tags = node.Type == NodeType.File ? tagsExtractor.ExtractTags(node.Path) : null;
+        await ExtendNodeAsync(node);
         return node;
     }
 
@@ -63,7 +58,7 @@ public class FilesService : IFilesService
         {
             return null;
         }
-        node.Tags = node.Type == NodeType.File ? tagsExtractor.ExtractTags(node.Path) : null;
+        await ExtendNodeAsync(node);
         return node;
     }
 
@@ -135,6 +130,23 @@ public class FilesService : IFilesService
             Path = x,
             Type = type
         }).ToArray();
+    }
+
+    private async Task ExtendNodeAsync(FileSystemNode node)
+    {
+        if (node.Type == NodeType.Directory)
+        {
+            var innerData = await nodesRepository.ReadAllFilesAsync(node.Id, false);
+            node.DirectoryData = new DirectoryData
+            {
+                Directories = innerData.Count(x => x.Type == NodeType.Directory),
+                Files = innerData.Count(x => x.Type == NodeType.File)
+            };
+        }
+        else
+        {
+            node.Tags = tagsExtractor.TryExtractTags(node.Path);
+        }
     }
 
     private readonly INodesRepository nodesRepository;
