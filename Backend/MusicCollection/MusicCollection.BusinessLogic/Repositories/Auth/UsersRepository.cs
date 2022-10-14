@@ -1,47 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DatabaseCore.Repository;
 using MusicCollection.Api.Dto.Auth;
-using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.BusinessLogic.Repositories.Database;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository : SqlRepository<UserStorageElement>, IUsersRepository
 {
-    private readonly DatabaseContext databaseContext;
-
-    public UsersRepository(DatabaseContext databaseContext)
+    public UsersRepository(DatabaseContext databaseContext): base(databaseContext, databaseContext.UsersStorage)
     {
-        this.databaseContext = databaseContext;
     }
 
     public async Task<User?> FindAsync(string login)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user => user.Login == login));
+        var results = await FindAsync(user => user.Login == login);
+        return ToModel(results.FirstOrDefault());
     }
 
     public async Task<User?> FindAsync(string login, string encryptedPassword)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user =>
-            user.Login == login
-            && user.Password == encryptedPassword)
-        );
+        var results = await FindAsync(user => user.Login == login && user.Password == encryptedPassword);
+        return ToModel(results.FirstOrDefault());
     }
 
-    public async Task<User?> TryReadAsync(Guid id)
+    public new async Task<User?> TryReadAsync(Guid id)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
+        var result = await base.TryReadAsync(id);
+        return ToModel(result);
     }
 
     public async Task<User> CreateAsync(string login, string encryptedPassword)
     {
         var newUser = new UserStorageElement
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Login = login,
             Password = encryptedPassword
         };
-        await databaseContext.UsersStorage.AddAsync(newUser);
-        await databaseContext.SaveChangesAsync();
+        await CreateAsync(newUser);
         return ToModel(newUser)!;
     }
 

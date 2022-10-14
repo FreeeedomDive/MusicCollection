@@ -2,5 +2,7 @@
 
 public class MusicCollectionApiExceptionBase : Exception
 {
-    
+    protected MusicCollectionApiExceptionBase(string message): base(message)
+    {
+    }
 }

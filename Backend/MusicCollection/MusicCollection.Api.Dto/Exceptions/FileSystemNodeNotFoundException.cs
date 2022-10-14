@@ -2,10 +2,7 @@
 
 public class FileSystemNodeNotFoundException : MusicCollectionApiExceptionBase
 {
-    public Guid Id { get; set; }
-
-    public FileSystemNodeNotFoundException(Guid id)
+    public FileSystemNodeNotFoundException(Guid id) : base($"Node {id} not found")
     {
-        Id = id;
     }
 }

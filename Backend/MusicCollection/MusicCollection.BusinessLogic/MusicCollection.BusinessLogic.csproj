@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DatabaseCore\DatabaseCore.csproj" />
       <ProjectReference Include="..\Loggers\Loggers.csproj" />
       <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
       <ProjectReference Include="..\TagsService\TagsService.csproj" />
