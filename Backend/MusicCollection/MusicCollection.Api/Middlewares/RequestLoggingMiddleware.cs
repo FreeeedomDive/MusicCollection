@@ -1,5 +1,5 @@
-using Loggers.NLog;
-using ILogger = Loggers.ILogger;
+using MusicCollection.Common.Loggers.NLog;
+using ILogger = MusicCollection.Common.Loggers.ILogger;
 
 namespace MusicCollection.Middlewares;
 

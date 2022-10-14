@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
-using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 
 namespace MusicCollection.BusinessLogic.Repositories.Database;
 
@@ -28,5 +27,4 @@ public class DatabaseContext : DbContext
     public DbSet<NodeStorageElement> NodesStorage { get; set; }
     public DbSet<RootStorageElement> RootsStorage { get; set; }
     public DbSet<UserStorageElement> UsersStorage { get; set; }
-    public DbSet<AudioFileTagsStorageElement> AudioFileTagsStorage { get; set; }
 }

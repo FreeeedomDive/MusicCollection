@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.Api.Dto.Music;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
+[Index(nameof(Id), nameof(Path))]
 public class NodeStorageElement
 {
     [Key]

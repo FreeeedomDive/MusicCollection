@@ -59,6 +59,8 @@ namespace MusicCollection.BusinessLogic.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id", "Path");
+
                     b.ToTable("NodesStorage");
                 });
 
@@ -75,41 +77,6 @@ namespace MusicCollection.BusinessLogic.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RootsStorage");
-                });
-
-            modelBuilder.Entity("MusicCollection.BusinessLogic.Repositories.Files.Tags.AudioFileTagsStorageElement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Album")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Artist")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BitDepth")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BitRate")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Duration")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Format")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SampleFrequency")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TrackName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AudioFileTagsStorage");
                 });
 #pragma warning restore 612, 618
         }

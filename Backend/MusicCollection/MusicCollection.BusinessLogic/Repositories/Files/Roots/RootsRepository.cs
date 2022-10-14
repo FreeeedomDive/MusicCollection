@@ -23,7 +23,8 @@ public class RootsRepository : IRootsRepository
 
     public async Task<FileSystemRoot[]> ReadAllAsync()
     {
-        return await databaseContext.RootsStorage.Select(root => ToModel(root)).ToArrayAsync();
+        var result = await databaseContext.RootsStorage.ToArrayAsync();
+        return result.Select(ToModel).ToArray();
     }
 
     public async Task CreateAsync(FileSystemRoot root)
@@ -32,7 +33,7 @@ public class RootsRepository : IRootsRepository
         await databaseContext.SaveChangesAsync();
     }
 
-    private FileSystemRoot ToModel(RootStorageElement root)
+    private static FileSystemRoot ToModel(RootStorageElement root)
     {
         return new FileSystemRoot()
         {
@@ -41,7 +42,7 @@ public class RootsRepository : IRootsRepository
         };
     }
 
-    private RootStorageElement ToStorageElement(FileSystemRoot root)
+    private static RootStorageElement ToStorageElement(FileSystemRoot root)
     {
         return new RootStorageElement()
         {

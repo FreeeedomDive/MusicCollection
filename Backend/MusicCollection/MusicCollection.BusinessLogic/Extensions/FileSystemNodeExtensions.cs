@@ -4,12 +4,12 @@ namespace MusicCollection.BusinessLogic.Extensions;
 
 public static class FileSystemNodeExtensions
 {
-    public static async Task<FileSystemNode> ExtendAsync(
+    public static FileSystemNode Extend(
         this FileSystemNode fileSystemNode,
-        Func<FileSystemNode, Task> extendAction
+        Action<FileSystemNode> extendAction
     )
     {
-        await extendAction(fileSystemNode);
+        extendAction(fileSystemNode);
         return fileSystemNode;
     }
 }
