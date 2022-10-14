@@ -1,3 +1,5 @@
+using DatabaseCore.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
@@ -25,7 +27,11 @@ public class Startup
     {
         var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
+        services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
+        services.AddTransient<ISqlRepository<UserStorageElement>, SqlRepository<UserStorageElement>>();
+        services.AddTransient<ISqlRepository<RootStorageElement>, SqlRepository<RootStorageElement>>();
+        services.AddTransient<ISqlRepository<NodeStorageElement>, SqlRepository<NodeStorageElement>>();
 
         // add default logger
         services.AddSingleton<ILogger>(NLogLogger.Build("Default"));

@@ -3,24 +3,24 @@ using DatabaseCore.Repository;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.BusinessLogic.Repositories.Database;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
-public class NodesRepository : SqlRepository<NodeStorageElement>, INodesRepository
+public class NodesRepository : INodesRepository
 {
-    public NodesRepository(DatabaseContext databaseContext): base(databaseContext, databaseContext.NodesStorage)
+    public NodesRepository(ISqlRepository<NodeStorageElement> sqlRepository)
     {
+        this.sqlRepository = sqlRepository;
     }
 
     public async Task CreateAsync(FileSystemNode node)
     {
-        await CreateAsync(ToStorageElement(node));
+        await sqlRepository.CreateAsync(ToStorageElement(node));
     }
 
     public async Task CreateManyAsync(FileSystemNode[] nodes)
     {
-        await CreateManyAsync(nodes.Select(ToStorageElement));
+        await sqlRepository.CreateManyAsync(nodes.Select(ToStorageElement));
     }
 
     public async Task<FileSystemNode[]> ReadAllFilesAsync(
@@ -35,7 +35,8 @@ public class NodesRepository : SqlRepository<NodeStorageElement>, INodesReposito
             throw new ReadFilesFromNonDirectoryException(parentId);
         }
 
-        var requiredNodesQueryable = BuildCustomQuery()
+        var requiredNodesQueryable = sqlRepository
+            .BuildCustomQuery()
             .Where(node => node.ParentId == parentId)
             .OrderByDescending(x => x.Type)
             .ThenBy(x => x.Path);
@@ -49,11 +50,11 @@ public class NodesRepository : SqlRepository<NodeStorageElement>, INodesReposito
         return result.Select(ToModel).ToArray()!;
     }
 
-    public new async Task<FileSystemNode> ReadAsync(Guid id)
+    public async Task<FileSystemNode> ReadAsync(Guid id)
     {
         try
         {
-            var result = await base.ReadAsync(id);
+            var result = await sqlRepository.ReadAsync(id);
             return ToModel(result)!;
         }
         catch (SqlEntityNotFoundException)
@@ -62,9 +63,9 @@ public class NodesRepository : SqlRepository<NodeStorageElement>, INodesReposito
         }
     }
 
-    public new async Task<FileSystemNode?> TryReadAsync(Guid id)
+    public async Task<FileSystemNode?> TryReadAsync(Guid id)
     {
-        var result = await base.TryReadAsync(id);
+        var result = await sqlRepository.TryReadAsync(id);
         return ToModel(result);
     }
 
@@ -94,4 +95,6 @@ public class NodesRepository : SqlRepository<NodeStorageElement>, INodesReposito
             Path = node.Path
         };
     }
+
+    private readonly ISqlRepository<NodeStorageElement> sqlRepository;
 }

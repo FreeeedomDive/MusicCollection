@@ -2,21 +2,21 @@
 using DatabaseCore.Repository;
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.BusinessLogic.Repositories.Database;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
-public class RootsRepository : SqlRepository<RootStorageElement>, IRootsRepository
+public class RootsRepository : IRootsRepository
 {
-    public RootsRepository(DatabaseContext databaseContext) : base(databaseContext, databaseContext.RootsStorage)
+    public RootsRepository(ISqlRepository<RootStorageElement> sqlRepository)
     {
+        this.sqlRepository = sqlRepository;
     }
 
-    public new async Task<FileSystemRoot> ReadAsync(Guid id)
+    public async Task<FileSystemRoot> ReadAsync(Guid id)
     {
         try
         {
-            var result = await base.ReadAsync(id);
+            var result = await sqlRepository.ReadAsync(id);
             return ToModel(result);
         }
         catch (SqlEntityNotFoundException)
@@ -25,15 +25,15 @@ public class RootsRepository : SqlRepository<RootStorageElement>, IRootsReposito
         }
     }
 
-    public new async Task<FileSystemRoot[]> ReadAllAsync()
+    public async Task<FileSystemRoot[]> ReadAllAsync()
     {
-        var result = await base.ReadAllAsync();
+        var result = await sqlRepository.ReadAllAsync();
         return result.Select(ToModel).ToArray();
     }
 
     public async Task CreateAsync(FileSystemRoot root)
     {
-        await CreateAsync(ToStorageElement(root));
+        await sqlRepository.CreateAsync(ToStorageElement(root));
     }
 
     private static FileSystemRoot ToModel(RootStorageElement root)
@@ -53,4 +53,6 @@ public class RootsRepository : SqlRepository<RootStorageElement>, IRootsReposito
             Path = root.Path
         };
     }
+
+    private readonly ISqlRepository<RootStorageElement> sqlRepository;
 }

@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseCore.Repository;
 
-public abstract class SqlRepository<TStorageElement> where TStorageElement : SqlStorageElement
+public class SqlRepository<TStorageElement> : ISqlRepository<TStorageElement> where TStorageElement : SqlStorageElement
 {
-    protected SqlRepository(DbContext databaseContext, DbSet<TStorageElement> storage)
+    public SqlRepository(DbContext databaseContext)
     {
         this.databaseContext = databaseContext;
-        this.storage = storage;
+        storage = databaseContext.Set<TStorageElement>();
     }
 
     public async Task<TStorageElement[]> ReadAllAsync()
