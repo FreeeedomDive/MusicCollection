@@ -56,6 +56,17 @@ public class SqlRepository<TStorageElement> : ISqlRepository<TStorageElement> wh
         await databaseContext.SaveChangesAsync();
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var @object = await TryReadAsync(id);
+        if (@object is null)
+        {
+            return;
+        }
+        storage.Remove(@object);
+        await databaseContext.SaveChangesAsync();
+    }
+
     private readonly DbContext databaseContext;
     private readonly DbSet<TStorageElement> storage;
 }
