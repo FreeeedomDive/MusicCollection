@@ -1,47 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DatabaseCore.Repository;
 using MusicCollection.Api.Dto.Auth;
-using MusicCollection.Api.Dto.Exceptions;
-using MusicCollection.BusinessLogic.Repositories.Database;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 
 public class UsersRepository : IUsersRepository
 {
-    private readonly DatabaseContext databaseContext;
-
-    public UsersRepository(DatabaseContext databaseContext)
+    public UsersRepository(ISqlRepository<UserStorageElement> sqlRepository)
     {
-        this.databaseContext = databaseContext;
+        this.sqlRepository = sqlRepository;
     }
 
     public async Task<User?> FindAsync(string login)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user => user.Login == login));
+        var results = await sqlRepository.FindAsync(user => user.Login == login);
+        return ToModel(results.FirstOrDefault());
     }
 
     public async Task<User?> FindAsync(string login, string encryptedPassword)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstOrDefaultAsync(user =>
-            user.Login == login
-            && user.Password == encryptedPassword)
-        );
+        var results = await sqlRepository.FindAsync(user => user.Login == login && user.Password == encryptedPassword);
+        return ToModel(results.FirstOrDefault());
     }
 
     public async Task<User?> TryReadAsync(Guid id)
     {
-        return ToModel(await databaseContext.UsersStorage.FirstAsync(user => user.Id == id));
+        var result = await sqlRepository.TryReadAsync(id);
+        return ToModel(result);
     }
 
     public async Task<User> CreateAsync(string login, string encryptedPassword)
     {
         var newUser = new UserStorageElement
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Login = login,
             Password = encryptedPassword
         };
-        await databaseContext.UsersStorage.AddAsync(newUser);
-        await databaseContext.SaveChangesAsync();
+        await sqlRepository.CreateAsync(newUser);
         return ToModel(newUser)!;
     }
 
@@ -55,4 +50,6 @@ public class UsersRepository : IUsersRepository
                 Login = user.Login,
             };
     }
+    
+    private readonly ISqlRepository<UserStorageElement> sqlRepository;
 }

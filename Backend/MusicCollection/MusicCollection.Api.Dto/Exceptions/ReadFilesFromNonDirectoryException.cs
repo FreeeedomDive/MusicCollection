@@ -2,10 +2,10 @@
 
 public class ReadFilesFromNonDirectoryException : MusicCollectionApiExceptionBase
 {
-    public Guid ParentId { get; set; }
-
-    public ReadFilesFromNonDirectoryException(Guid parentId)
+    public ReadFilesFromNonDirectoryException(Guid parentId) : base
+    (
+        $"Forbidden try to read files from non-directory {parentId}"
+    )
     {
-        ParentId = parentId;
     }
 }

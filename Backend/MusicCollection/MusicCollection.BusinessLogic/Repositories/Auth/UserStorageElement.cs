@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DatabaseCore.Models;
 using MusicCollection.Api.Dto.Auth;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 
-public class UserStorageElement 
+public class UserStorageElement : SqlStorageElement
 {
-    [Key]
-    public Guid Id { get; set; }
     public string Login { get; set; }
     public string Password { get; set; }
 }

@@ -1,41 +1,44 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DatabaseCore.Exceptions;
+using DatabaseCore.Repository;
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.BusinessLogic.Repositories.Database;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
 public class RootsRepository : IRootsRepository
 {
-    private readonly DatabaseContext databaseContext;
-
-    public RootsRepository(DatabaseContext databaseContext)
+    public RootsRepository(ISqlRepository<RootStorageElement> sqlRepository)
     {
-        this.databaseContext = databaseContext;
+        this.sqlRepository = sqlRepository;
     }
 
     public async Task<FileSystemRoot> ReadAsync(Guid id)
     {
-        var requiredRoot = await databaseContext.RootsStorage.FirstAsync(root => root.Id == id);
-        if (requiredRoot is null) throw new RootNotFoundException();
-        return ToModel(requiredRoot);
+        try
+        {
+            var result = await sqlRepository.ReadAsync(id);
+            return ToModel(result);
+        }
+        catch (SqlEntityNotFoundException)
+        {
+            throw new RootNotFoundException(id);
+        }
     }
 
     public async Task<FileSystemRoot[]> ReadAllAsync()
     {
-        var result = await databaseContext.RootsStorage.ToArrayAsync();
+        var result = await sqlRepository.ReadAllAsync();
         return result.Select(ToModel).ToArray();
     }
 
     public async Task CreateAsync(FileSystemRoot root)
     {
-        await databaseContext.RootsStorage.AddAsync(ToStorageElement(root));
-        await databaseContext.SaveChangesAsync();
+        await sqlRepository.CreateAsync(ToStorageElement(root));
     }
 
     private static FileSystemRoot ToModel(RootStorageElement root)
     {
-        return new FileSystemRoot()
+        return new FileSystemRoot
         {
             Id = root.Id,
             Path = root.Path
@@ -44,10 +47,12 @@ public class RootsRepository : IRootsRepository
 
     private static RootStorageElement ToStorageElement(FileSystemRoot root)
     {
-        return new RootStorageElement()
+        return new RootStorageElement
         {
             Id = root.Id,
             Path = root.Path
         };
     }
+
+    private readonly ISqlRepository<RootStorageElement> sqlRepository;
 }

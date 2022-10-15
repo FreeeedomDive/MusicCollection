@@ -15,10 +15,8 @@ public class UsersService : IUsersService
 
     public async Task<User> LoginAsync(AuthCredentials authCredentials)
     {
-        return await usersRepository.FindAsync(
-            authCredentials.Login,
-            CryptoService.Encrypt(authCredentials.Password)
-        ) ?? throw new UserNotFoundException();
+        return await usersRepository.FindAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password))
+               ?? throw new UserNotFoundException(authCredentials.Login);
     }
 
     public async Task<User> RegisterAsync(AuthCredentials authCredentials)
@@ -28,6 +26,8 @@ public class UsersService : IUsersService
         {
             throw new UserWithLoginAlreadyExistsException(authCredentials.Login);
         }
-        return await usersRepository.CreateAsync(authCredentials.Login, CryptoService.Encrypt(authCredentials.Password));
+
+        return await usersRepository.CreateAsync(authCredentials.Login,
+            CryptoService.Encrypt(authCredentials.Password));
     }
 }

@@ -29,6 +29,16 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
+    "MusicCollection.RemoteDb": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://*:7078;http://*:5184",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "RemoteDb"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

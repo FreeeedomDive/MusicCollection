@@ -2,14 +2,11 @@
 
 public class UserNotFoundException : MusicCollectionApiExceptionBase
 {
-    public Guid Id { get; }
-    public UserNotFoundException() 
+    public UserNotFoundException(Guid id) : base($"User {id} not found")
     {
-        
     }
-
-    public UserNotFoundException(Guid id)
+    
+    public UserNotFoundException(string login) : base($"User {login} not found")
     {
-        Id = id;
     }
 }

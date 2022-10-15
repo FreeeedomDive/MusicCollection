@@ -5,3 +5,4 @@ obj
 Bin
 Obj
 Backend/MusicCollection/MusicCollection.Api/appsettings.Production.json
+Backend/MusicCollection/MusicCollection.Api/appsettings.RemoteDb.json
