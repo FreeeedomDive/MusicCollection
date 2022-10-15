@@ -12,4 +12,5 @@ public interface ISqlRepository<TStorageElement> where TStorageElement : SqlStor
     IQueryable<TStorageElement> BuildCustomQuery();
     Task CreateAsync(TStorageElement storageElement);
     Task CreateManyAsync(IEnumerable<TStorageElement> storageElements);
+    Task DeleteAsync(Guid id);
 }

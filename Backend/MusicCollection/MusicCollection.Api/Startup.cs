@@ -1,3 +1,5 @@
+using ApiUtils;
+using ApiUtils.Middlewares;
 using DatabaseCore.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -9,7 +11,6 @@ using MusicCollection.BusinessLogic.Services.FilesService;
 using MusicCollection.BusinessLogic.Services.UsersService;
 using MusicCollection.Common.Loggers.NLog;
 using MusicCollection.Common.TagsService;
-using MusicCollection.Middlewares;
 using ILogger = MusicCollection.Common.Loggers.ILogger;
 
 namespace MusicCollection;
@@ -25,29 +26,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
-        services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
-        services.AddTransient<DbContext, DatabaseContext>();
-        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
-        services.AddTransient<ISqlRepository<UserStorageElement>, SqlRepository<UserStorageElement>>();
-        services.AddTransient<ISqlRepository<RootStorageElement>, SqlRepository<RootStorageElement>>();
-        services.AddTransient<ISqlRepository<NodeStorageElement>, SqlRepository<NodeStorageElement>>();
-
-        // add default logger
-        services.AddSingleton<ILogger>(NLogLogger.Build("Default"));
-        
-        // add services without dependencies
-        services.AddTransient<ITagsExtractor, TagsExtractor>();
-
-        // add repositories
-        services.AddTransient<IUsersRepository, UsersRepository>();
-        services.AddTransient<IRootsRepository, RootsRepository>();
-        services.AddTransient<INodesRepository, NodesRepository>();
-
-        // add logic services
-        services.AddTransient<IUsersService, UsersService>();
-        services.AddTransient<IFilesService, FilesService>();
-
+        StartupContainerConfiguration.ConfigureContainer(Configuration, services);
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {

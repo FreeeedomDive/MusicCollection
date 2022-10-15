@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Http;
 using MusicCollection.Common.Loggers.NLog;
+
 using ILogger = MusicCollection.Common.Loggers.ILogger;
 
-namespace MusicCollection.Middlewares;
+namespace ApiUtils.Middlewares;
 
 public class RequestLoggingMiddleware
 {

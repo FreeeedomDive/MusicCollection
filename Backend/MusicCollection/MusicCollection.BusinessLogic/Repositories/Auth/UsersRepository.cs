@@ -10,6 +10,12 @@ public class UsersRepository : IUsersRepository
         this.sqlRepository = sqlRepository;
     }
 
+    public async Task<User[]> ReadAllAsync()
+    {
+        var results = await sqlRepository.ReadAllAsync();
+        return results.Select(ToModel).ToArray()!;
+    }
+
     public async Task<User?> FindAsync(string login)
     {
         var results = await sqlRepository.FindAsync(user => user.Login == login);
@@ -38,6 +44,11 @@ public class UsersRepository : IUsersRepository
         };
         await sqlRepository.CreateAsync(newUser);
         return ToModel(newUser)!;
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await sqlRepository.DeleteAsync(id);
     }
 
     private static User? ToModel(UserStorageElement? user)
