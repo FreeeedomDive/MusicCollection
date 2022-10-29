@@ -2,7 +2,7 @@
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
-public interface INodesRepository
+public interface INodesRepository : IMusicCollectionRepository
 {
     Task CreateAsync(FileSystemNode node);
     Task CreateManyAsync(FileSystemNode[] nodes);

@@ -20,7 +20,7 @@ public class UsersController : Controller
     }
     
     [HttpDelete("{userId:guid}/ban")]
-    public async Task Ban(Guid userId)
+    public async Task Ban([FromRoute] Guid userId)
     {
         await usersRepository.DeleteAsync(userId);
     }

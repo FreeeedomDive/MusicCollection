@@ -2,7 +2,7 @@
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 
-public interface IUsersRepository
+public interface IUsersRepository : IMusicCollectionRepository
 {
     Task<User[]> ReadAllAsync();
     Task<User?> FindAsync(string login);

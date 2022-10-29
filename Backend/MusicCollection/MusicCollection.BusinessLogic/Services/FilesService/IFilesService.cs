@@ -2,7 +2,7 @@
 
 namespace MusicCollection.BusinessLogic.Services.FilesService;
 
-public interface IFilesService
+public interface IFilesService : IMusicCollectionLogicService
 {
     Task<FileSystemNode[]> ReadDirectoryAsync(Guid directoryId, int skip = 0, int take = 50);
     Task<Guid[]> ReadAllFilesFromDirectoryAsync(Guid directoryId);

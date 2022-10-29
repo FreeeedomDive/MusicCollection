@@ -1,4 +1,5 @@
 using ApiUtils;
+using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
 
 namespace MusicCollection.AdminApi;
@@ -14,7 +15,18 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        StartupContainerConfiguration.ConfigureContainer(Configuration, services);
+        services.ConfigureLogger()
+            .ConfigurePostgreSql(Configuration)
+            .ConfigureTagsExtractor()
+            .ConfigureLogicServices();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(CorsConfigurationName, policy =>
+            {
+                policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            });
+        });
 
         services.AddControllers();
     }
@@ -25,7 +37,10 @@ public class Startup
 
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseRouting();
+        app.UseCors(CorsConfigurationName);
         app.UseWebSockets();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
+
+    private const string CorsConfigurationName = "AllowOrigins";
 }
