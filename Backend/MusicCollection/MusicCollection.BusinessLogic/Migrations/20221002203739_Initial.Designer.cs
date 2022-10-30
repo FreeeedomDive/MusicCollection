@@ -73,6 +73,10 @@ namespace MusicCollection.BusinessLogic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
