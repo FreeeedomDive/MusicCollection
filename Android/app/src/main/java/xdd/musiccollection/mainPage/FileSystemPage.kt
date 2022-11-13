@@ -1,7 +1,6 @@
 package xdd.musiccollection.mainPage
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.launch
 import xdd.musiccollection.defaultComponents.BackPressHandler
@@ -30,7 +28,6 @@ import xdd.musiccollection.ui.theme.BlueColorPalette4
 fun FileSystemPage(viewModel: FileSystemPageViewModel) {
     val composableScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    val currentContext = LocalContext.current
 
     fun handleItemClick(element: NodeModel, disableSelectedElementLoading: () -> Unit) {
         when (element.type) {
@@ -109,6 +106,11 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                     TopAppBarSearchButton(onClick = { viewModel.setOpenedSearch(true) })
                 }
             }
+        },
+        bottomBar = {
+            if (viewModel.songViewModel.currentSelectedTrack != null) {
+                CurrentPlayingSongCard(viewModel.songViewModel)
+            }
         })
     {
         Column(
@@ -146,9 +148,6 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                         Divider(color = Color.Black)
                     }
                 }
-            }
-            if (viewModel.songViewModel.currentSelectedTrack != null) {
-                CurrentPlayingSongCard(viewModel.songViewModel)
             }
         }
     }

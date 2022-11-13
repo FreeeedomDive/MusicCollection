@@ -16,13 +16,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import xdd.musiccollection.R
+import xdd.musiccollection.extensions.shorten
 import xdd.musiccollection.mainPage.viewModels.SongViewModel
 
 @Composable
 fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
-    Card( // Icon and button holder
+    Card(
         modifier = Modifier
             .padding(8.dp)
+            .height(50.dp)
             .clip(RoundedCornerShape(8.dp))
             .fillMaxWidth()
     ) {
@@ -32,39 +34,45 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.sound),
-                contentDescription = "audio icon"
-            )
             Row(
                 modifier = Modifier.padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.padding(all = 8.dp)
                 ) {
-                    Text(
-                        text = songViewModel.currentSelectedTrack?.tags?.trackName ?: "No track selected"
-                    )
-                    Text(
-                        text = songViewModel.currentSelectedTrack?.tags?.artist ?: "",
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
+                    if (songViewModel.currentSelectedTrack == null) {
+                        Text(
+                            text = "No selected track"
+                        )
+                    } else if (songViewModel.currentSelectedTrack!!.tags == null) {
+                        Text(
+                            text = songViewModel.currentSelectedTrack!!.fileName().shorten(25)
+                        )
+                    } else {
+                        Text(
+                            text = songViewModel.currentSelectedTrack!!.tags!!.trackName ?: ""
+                        )
+                        Text(
+                            text = songViewModel.currentSelectedTrack?.tags?.artist ?: "",
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
+                    }
                 }
             }
-
             Row(
-                modifier = Modifier.padding(vertical = 4.dp),
+                modifier = Modifier.padding(vertical = 4.dp).fillMaxHeight(),
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                Icon(
-                    painter = painterResource(id = R.drawable.previous),
-                    contentDescription = "back button"
-                )
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.previous),
+                        contentDescription = "back button"
+                    )
+                }
                 IconButton(onClick = {
                     if (songViewModel.isPlaying) {
                         songViewModel.stopPlaying()
@@ -81,11 +89,12 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                         contentDescription = "play/pause button"
                     )
                 }
-
-                Icon(
-                    painter = painterResource(id = R.drawable.next),
-                    contentDescription = "next button"
-                )
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.next),
+                        contentDescription = "next button"
+                    )
+                }
             }
         }
     }

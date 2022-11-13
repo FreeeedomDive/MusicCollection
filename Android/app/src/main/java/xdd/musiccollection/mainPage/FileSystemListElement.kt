@@ -97,9 +97,9 @@ fun FileSystemListElement(
             }
             NodeType.File -> Column {
                 if (element.tags == null) {
-                    FileSystemListElementText(element.path.split("\\").last(), 20)
+                    FileSystemListElementText(element.fileName(), 20)
                 } else if (element.tags.artist == null || element.tags.trackName == null || element.tags.album == null) {
-                    FileSystemListElementText(element.path.split("\\").last(), 20)
+                    FileSystemListElementText(element.fileName(), 20)
                 } else {
                     FileSystemListElementText(element.tags.trackName!!, 18)
                     FileSystemListElementText("${element.tags.artist!!} - ${element.tags.album!!}", 16)

@@ -13,3 +13,8 @@ data class NodeModel(
     val directoryData: DirectoryData?,
     val tags: AudioFileTagsDto?
 )
+{
+    fun fileName(): String {
+        return path.split("\\").last();
+    }
+}
