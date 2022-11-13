@@ -2,7 +2,7 @@
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
-public interface IRootsRepository
+public interface IRootsRepository : IMusicCollectionRepository
 {
     Task<FileSystemRoot> ReadAsync(Guid id);
     Task<FileSystemRoot[]> ReadAllAsync();

@@ -1,0 +1,10 @@
+.usersTable {
+    margin: 8px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.usersHeader {
+    margin: 8px;
+    font-size: 20px;
+}

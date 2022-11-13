@@ -1,4 +1,5 @@
 using ApiUtils;
+using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
 using DatabaseCore.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        StartupContainerConfiguration.ConfigureContainer(Configuration, services);
+        services.ConfigureLogger()
+            .ConfigurePostgreSql(Configuration)
+            .ConfigureTagsExtractor()
+            .ConfigureLogicServices();
+
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {

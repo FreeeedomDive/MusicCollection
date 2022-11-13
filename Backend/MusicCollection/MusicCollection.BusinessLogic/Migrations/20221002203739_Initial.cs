@@ -30,6 +30,7 @@ namespace MusicCollection.BusinessLogic.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Path = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>

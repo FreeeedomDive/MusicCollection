@@ -1,0 +1,10 @@
+.tableRow:hover {
+    background: white;
+}
+
+.tableElement {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+}

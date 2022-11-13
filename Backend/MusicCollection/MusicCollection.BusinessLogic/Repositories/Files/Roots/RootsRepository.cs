@@ -41,6 +41,7 @@ public class RootsRepository : IRootsRepository
         return new FileSystemRoot
         {
             Id = root.Id,
+            Name = root.Name,
             Path = root.Path
         };
     }
@@ -50,6 +51,7 @@ public class RootsRepository : IRootsRepository
         return new RootStorageElement
         {
             Id = root.Id,
+            Name = root.Name,
             Path = root.Path
         };
     }

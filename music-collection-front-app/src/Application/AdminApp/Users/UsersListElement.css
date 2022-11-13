@@ -1,0 +1,19 @@
+.tableRow:hover {
+    background: white;
+}
+
+.tableElement {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.banButton {
+    border-radius: 4px;
+    color: white;
+    background: darkred;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}

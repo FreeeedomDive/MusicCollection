@@ -1,0 +1,12 @@
+.adminAppElement {
+    margin: 4px;
+    border-radius: 4px;
+    background-color: #a3b5ff;
+    padding: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.adminAppElement:hover {
+    background-color: #ffffff;
+}

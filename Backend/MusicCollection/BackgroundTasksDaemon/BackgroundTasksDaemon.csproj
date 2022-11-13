@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+    </ItemGroup>
+
 </Project>

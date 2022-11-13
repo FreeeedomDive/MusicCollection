@@ -67,7 +67,7 @@ public class FilesService : IFilesService
         return await rootsRepository.ReadAsync(id);
     }
 
-    public async Task<Guid> CreateRootWithIndexAsync(string path)
+    public async Task<Guid> CreateRootWithIndexAsync(string name, string path)
     {
         if (!Directory.Exists(path))
         {
@@ -78,6 +78,7 @@ public class FilesService : IFilesService
         await rootsRepository.CreateAsync(new FileSystemRoot
         {
             Id = rootId,
+            Name = name,
             Path = path
         });
         await nodesRepository.CreateAsync(new FileSystemNode

@@ -2,12 +2,13 @@
 
 public class AudioFileTags
 {
+    public Guid Id { get; set; }
     public string? Artist { get; set; }
     public string? Album { get; set; }
-    public string? TrackName { get; set; } // in ms
+    public string? TrackName { get; set; }
     public string? Duration { get; set; }  
-    public string? Format { get; set; }  // mp3 or flac
-    public int? SampleFrequency { get; set; } // Hz
-    public int? BitRate { get; set; }  // kbps
-    public int? BitDepth { get; set; } // bit
+    public string? Format { get; set; }
+    public int? SampleFrequency { get; set; }
+    public int? BitRate { get; set; }
+    public int? BitDepth { get; set; }
 }
