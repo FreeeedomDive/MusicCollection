@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Admin;
+using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Services.FilesService;
 using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
 
@@ -17,11 +18,11 @@ public class AdminController : Controller
     }
 
     [HttpPost("roots/create")]
-    public async Task<ActionResult<Guid>> CreateNode([FromBody] CreateRootRequest request)
+    public async Task<ActionResult<Guid>> CreateRoot([FromBody] CreateRootRequest request)
     {
         try
         {
-            return await filesService.CreateRootWithIndexAsync(request.Path);
+            return await filesService.CreateRootWithIndexAsync(request.Name, request.Path);
         }
         catch(DirectoryNotFoundException)
         {

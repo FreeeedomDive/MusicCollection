@@ -1,0 +1,24 @@
+.rootsTable {
+    margin: 8px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.rootsHeader {
+    margin: 8px;
+    display: flex;
+    font-size: 20px;
+}
+
+.rootsTitle {
+    width: 80%;
+}
+
+.rootsCreateButton {
+    border-radius: 4px;
+    background: darkgreen;
+    color: white;
+    text-align: center;
+    width: 20%;
+    cursor: pointer;
+}

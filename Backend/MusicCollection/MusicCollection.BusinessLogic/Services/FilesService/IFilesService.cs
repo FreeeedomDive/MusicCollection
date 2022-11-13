@@ -10,5 +10,5 @@ public interface IFilesService : IMusicCollectionLogicService
     Task<FileSystemNode> ReadNodeAsync(Guid id);
     Task<FileSystemNode?> TryReadNodeAsync(Guid id);
     Task<FileSystemRoot> ReadRootAsync(Guid id);
-    Task<Guid> CreateRootWithIndexAsync(string path);
+    Task<Guid> CreateRootWithIndexAsync(string name, string path);
 }

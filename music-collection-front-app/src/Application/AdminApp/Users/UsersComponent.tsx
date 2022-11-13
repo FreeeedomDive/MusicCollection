@@ -4,7 +4,7 @@ import UsersListElement from "./UsersListElement";
 import UserDto from "../Dto/UserDto";
 import "./UsersComponent.css"
 
-export default function UsersComponent(): JSX.Element {
+export default function UsersComponent(): React.ReactElement {
     const [usersList, setUsers] = useState<UserDto[]>([])
 
     async function updateList(): Promise<void> {
@@ -18,8 +18,8 @@ export default function UsersComponent(): JSX.Element {
 
     return (
         <div>
-            <h2>Users</h2>
-            <table>
+            <div className="usersHeader"><b>Users</b></div>
+            <table className="usersTable">
                 <tr>
                     <th>Id</th>
                     <th>Username</th>

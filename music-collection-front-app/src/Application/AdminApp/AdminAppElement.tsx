@@ -7,7 +7,7 @@ interface Props {
     redirectLink: string
 }
 
-export default function AdminAppElement(props: Props): JSX.Element {
+export default function AdminAppElement(props: Props): React.ReactElement {
     const navigate = useNavigate();
     return (
         <div className="adminAppElement">
