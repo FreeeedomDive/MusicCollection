@@ -40,6 +40,25 @@ namespace MusicCollection.BusinessLogic.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TagsStorage",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Artist = table.Column<string>(type: "text", nullable: true),
+                    Album = table.Column<string>(type: "text", nullable: true),
+                    TrackName = table.Column<string>(type: "text", nullable: true),
+                    Duration = table.Column<string>(type: "text", nullable: true),
+                    Format = table.Column<string>(type: "text", nullable: true),
+                    SampleFrequency = table.Column<int>(type: "integer", nullable: true),
+                    BitRate = table.Column<int>(type: "integer", nullable: true),
+                    BitDepth = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagsStorage", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UsersStorage",
                 columns: table => new
                 {
@@ -66,6 +85,9 @@ namespace MusicCollection.BusinessLogic.Migrations
 
             migrationBuilder.DropTable(
                 name: "RootsStorage");
+
+            migrationBuilder.DropTable(
+                name: "TagsStorage");
 
             migrationBuilder.DropTable(
                 name: "UsersStorage");
