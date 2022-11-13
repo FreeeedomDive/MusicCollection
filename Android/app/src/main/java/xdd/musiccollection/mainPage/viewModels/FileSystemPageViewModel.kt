@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,6 +31,8 @@ class FileSystemPageViewModel : ViewModel() {
     var searchQuery by mutableStateOf("")
         private set
     var lazyListState by mutableStateOf(LazyListState())
+
+    val songViewModel = SongViewModel()
 
     private var currentSkipValue by mutableStateOf(0)
     private var canLoadMore by mutableStateOf(true)
@@ -134,6 +135,7 @@ class FileSystemPageViewModel : ViewModel() {
                 NodeModel(
                     parent.id,
                     parent.parent,
+                    parent.rootName,
                     parent.path,
                     NodeType.Back,
                     parent.directoryData,

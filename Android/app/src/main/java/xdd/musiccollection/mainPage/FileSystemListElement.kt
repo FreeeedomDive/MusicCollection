@@ -89,7 +89,7 @@ fun FileSystemListElement(
             }
         }
         when (element.type) {
-            NodeType.Root -> FileSystemListElementText(element.path, 20)
+            NodeType.Root -> FileSystemListElementText(element.rootName ?: element.path, 20)
             NodeType.Back -> FileSystemListElementText("..", 20)
             NodeType.Directory -> Column {
                 FileSystemListElementText(element.path.split("\\").last(), 20)

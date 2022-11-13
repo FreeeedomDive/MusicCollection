@@ -44,21 +44,8 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                             409 -> scaffoldState.snackbarHostState.showSnackbar(message = "You are trying to get tags from directory")
                             500 -> scaffoldState.snackbarHostState.showSnackbar(message = "Internal server is unavailable")
                         }
-                    } else if (tags.value == null) {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "No tags for this file")
-                    } else {
-                        val textLines = arrayOf(
-                            "Artist: ${tags.value.artist}",
-                            "Title: ${tags.value.trackName}",
-                            "Album: ${tags.value.album}",
-                            "Duration: ${tags.value.duration}",
-                            "Format: ${tags.value.format}",
-                            "Bit rate: ${tags.value.bitRate} kbps",
-                            "Sample frequency: ${tags.value.sampleFrequency} Hz",
-                            "Bits per sample: ${tags.value.bitDepth}",
-                        )
-                        scaffoldState.snackbarHostState.showSnackbar(message = textLines.joinToString("\n"))
                     }
+                    viewModel.songViewModel.setCurrentTrack(element)
                 }
             }
             NodeType.Back -> {
@@ -159,6 +146,9 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                         Divider(color = Color.Black)
                     }
                 }
+            }
+            if (viewModel.songViewModel.currentSelectedTrack != null) {
+                CurrentPlayingSongCard(viewModel.songViewModel)
             }
         }
     }
