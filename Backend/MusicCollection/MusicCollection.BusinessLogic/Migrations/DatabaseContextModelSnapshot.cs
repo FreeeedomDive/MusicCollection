@@ -47,6 +47,9 @@ namespace MusicCollection.BusinessLogic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Hidden")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
 

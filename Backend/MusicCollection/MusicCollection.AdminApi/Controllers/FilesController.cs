@@ -33,6 +33,20 @@ public class FilesController : Controller
             return NotFound();
         }
     }
+    
+    [HttpPost("nodes/{nodeId:guid}")]
+    public async Task<ActionResult> HideNode(Guid nodeId)
+    {
+        try
+        {
+            await filesService.HideNodeAsync(nodeId);
+            return Ok();
+        }
+        catch(DirectoryNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 
     private readonly IFilesService filesService;
 }

@@ -92,6 +92,11 @@ public class FilesService : IFilesService
         return rootId;
     }
 
+    public async Task HideNodeAsync(Guid id)
+    {
+        await nodesRepository.HideNodeAsync(id);
+    }
+
     private async Task<Guid[]> CollectFilesFromDirectoryAsync(Guid directoryId)
     {
         var nodes = await nodesRepository.ReadAllFilesAsync(directoryId);

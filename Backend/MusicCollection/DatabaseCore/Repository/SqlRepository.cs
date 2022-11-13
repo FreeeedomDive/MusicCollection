@@ -56,6 +56,18 @@ public class SqlRepository<TStorageElement> : ISqlRepository<TStorageElement> wh
         await databaseContext.SaveChangesAsync();
     }
 
+    public async Task UpdateAsync(Guid id, Action<TStorageElement> updateAction)
+    {
+        var @object = await TryReadAsync(id);
+        if (@object == null)
+        {
+            throw new SqlEntityNotFoundException(id);
+        }
+
+        updateAction(@object);
+        await databaseContext.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync(Guid id)
     {
         var @object = await TryReadAsync(id);

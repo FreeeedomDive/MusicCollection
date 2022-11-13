@@ -27,7 +27,8 @@ public class NodesRepository : INodesRepository
         Guid parentId,
         bool withPages = true,
         int skip = 0,
-        int take = 50
+        int take = 50,
+        bool includeHidden = false
     )
     {
         if ((await ReadAsync(parentId)).Type == NodeType.File)
@@ -37,7 +38,7 @@ public class NodesRepository : INodesRepository
 
         var requiredNodesQueryable = sqlRepository
             .BuildCustomQuery()
-            .Where(node => node.ParentId == parentId)
+            .Where(node => !(includeHidden && node.Hidden) && node.ParentId == parentId)
             .OrderByDescending(x => x.Type)
             .ThenBy(x => x.Path);
         var result = withPages
@@ -69,6 +70,11 @@ public class NodesRepository : INodesRepository
         return ToModel(result);
     }
 
+    public async Task HideNodeAsync(Guid id)
+    {
+        await sqlRepository.UpdateAsync(id, x => x.Hidden = true);
+    }
+
     private static FileSystemNode? ToModel(NodeStorageElement? node)
     {
         if (node == null)
@@ -81,7 +87,8 @@ public class NodesRepository : INodesRepository
             Id = node.Id,
             ParentId = node.ParentId,
             Type = node.Type,
-            Path = node.Path
+            Path = node.Path,
+            Hidden = node.Hidden
         };
     }
 
@@ -92,7 +99,8 @@ public class NodesRepository : INodesRepository
             Id = node.Id,
             ParentId = node.ParentId,
             Type = node.Type,
-            Path = node.Path
+            Path = node.Path,
+            Hidden = node.Hidden
         };
     }
 

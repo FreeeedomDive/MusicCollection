@@ -10,4 +10,5 @@ public class FileSystemNode
     public string Path { get; set; }
     public DirectoryData? DirectoryData { get; set; }
     public AudioFileTags? Tags { get; set; }
+    public bool Hidden { get; set; }
 }

@@ -18,7 +18,8 @@ namespace MusicCollection.BusinessLogic.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: true),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    Path = table.Column<string>(type: "text", nullable: false)
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    Hidden = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
