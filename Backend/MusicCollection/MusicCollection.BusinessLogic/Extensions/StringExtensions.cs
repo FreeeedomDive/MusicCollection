@@ -13,7 +13,7 @@ public static class StringExtensions
         return Extensions.Contains(extension);
     }
 
-    private static readonly string[] Extensions = new[] { "mp3", "flac" }
+    private static readonly string[] Extensions = new[] { "mp3", "flac", "alac" }
         .SelectMany(x => new[] { x, $".{x}" })
         .ToArray();
 }

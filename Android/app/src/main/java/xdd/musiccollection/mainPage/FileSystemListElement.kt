@@ -51,6 +51,18 @@ fun FileSystemListElement(
         ).filterNotNull().joinToString("  |  ").ifEmpty { "Empty folder" }
     }
 
+    fun buildNameString(): String {
+        return element.tags?.trackName ?: element.fileName()
+    }
+
+    fun buildArtistAlbumString(): String {
+        if (element.tags == null){
+            return ""
+        }
+
+        return "${element.tags.artist} - ${element.tags.album}"
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -88,26 +100,19 @@ fun FileSystemListElement(
                 )
             }
         }
-        when (element.type) {
-            NodeType.Root -> FileSystemListElementText(element.rootName ?: element.path, 20)
-            NodeType.Back -> FileSystemListElementText("..", 20)
-            NodeType.Directory -> Column {
-                FileSystemListElementText(element.path.split("\\").last(), 20)
-                FileSystemListElementText(text = buildDirectoryDataString(), textSize = 14)
-            }
-            NodeType.File -> Column {
-                if (element.tags == null) {
-                    FileSystemListElementText(element.fileName(), 20)
-                } else if (element.tags.artist == null || element.tags.trackName == null || element.tags.album == null) {
-                    FileSystemListElementText(element.fileName(), 20)
-                } else {
-                    FileSystemListElementText(element.tags.trackName!!, 18)
-                    FileSystemListElementText("${element.tags.artist!!} - ${element.tags.album!!}", 16)
-                }
-                if (element.tags != null) {
-                    FileSystemListElementText(buildTagsString(), 14)
-                }
-            }
-        }
+        FileSystemListElementText(element.path, 20)
+        //when (element.type) {
+        //    NodeType.Root -> FileSystemListElementText(element.path, 20)
+        //    NodeType.Back -> FileSystemListElementText("..", 20)
+        //    NodeType.Directory -> Column {
+        //        FileSystemListElementText(element.path.split("\\").last(), 20)
+        //        FileSystemListElementText(buildDirectoryDataString(), 14)
+        //    }
+        //    NodeType.File -> Column {
+        //        FileSystemListElementText(buildNameString(), 20)
+        //        FileSystemListElementText(buildArtistAlbumString(), 16)
+        //        FileSystemListElementText(buildTagsString(), 14)
+        //    }
+        //}
     }
 }

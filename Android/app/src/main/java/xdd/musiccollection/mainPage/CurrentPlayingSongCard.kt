@@ -51,19 +51,23 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                             text = songViewModel.currentSelectedTrack!!.fileName().shorten(25)
                         )
                     } else {
-                        Text(
-                            text = songViewModel.currentSelectedTrack!!.tags!!.trackName ?: ""
-                        )
-                        Text(
-                            text = songViewModel.currentSelectedTrack?.tags?.artist ?: "",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
+                        Column {
+                            Text(
+                                text = songViewModel.currentSelectedTrack!!.tags!!.trackName?.shorten(25) ?: ""
+                            )
+                            Text(
+                                text = songViewModel.currentSelectedTrack!!.tags!!.artist?.shorten(25) ?: "",
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
             Row(
-                modifier = Modifier.padding(vertical = 4.dp).fillMaxHeight(),
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .fillMaxHeight(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {

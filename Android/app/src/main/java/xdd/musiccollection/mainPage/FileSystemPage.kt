@@ -2,6 +2,7 @@ package xdd.musiccollection.mainPage
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.launch
 import xdd.musiccollection.defaultComponents.BackPressHandler
@@ -111,8 +113,8 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
             if (viewModel.songViewModel.currentSelectedTrack != null) {
                 CurrentPlayingSongCard(viewModel.songViewModel)
             }
-        })
-    {
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,6 +146,7 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                     state = viewModel.lazyListState
                 ) {
                     itemsIndexed(viewModel.filesList) { _, item ->
+                        // Text(text = item.path, Modifier.clickable { handleItemClick(item) {} })
                         FileSystemListElement(element = item, handleItem = ::handleItemClick)
                         Divider(color = Color.Black)
                     }

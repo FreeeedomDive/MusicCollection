@@ -2,6 +2,7 @@
 using MusicCollection.BusinessLogic.Extensions;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
+using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.Common.Loggers;
 using MusicCollection.Common.TagsService;
 using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
@@ -13,12 +14,14 @@ public class FilesService : IFilesService
     public FilesService(
         INodesRepository nodesRepository,
         IRootsRepository rootsRepository,
+        ITagsRepository tagsRepository,
         ITagsExtractor tagsExtractor,
         ILogger logger
     )
     {
         this.nodesRepository = nodesRepository;
         this.rootsRepository = rootsRepository;
+        this.tagsRepository = tagsRepository;
         this.tagsExtractor = tagsExtractor;
         this.logger = logger;
     }
@@ -117,6 +120,16 @@ public class FilesService : IFilesService
         var directories = CreateNodes(Directory.GetDirectories(path), parentId, NodeType.Directory);
         var files = CreateNodes(Directory.GetFiles(path).Where(x => x.IsSupportedExtension()), parentId, NodeType.File);
 
+        foreach (var file in files)
+        {
+            var tags = tagsExtractor.TryExtractTags(file.Path);
+            if (tags != null)
+            {
+                tags.Id = file.Id;
+                await tagsRepository.CreateAsync(tags);
+            }
+        }
+
         logger.Info($"Directories in {path}\n{string.Join("\n", directories.Select(x => x.Path))}");
         logger.Info($"Files in {path}\n{string.Join("\n", files.Select(x => x.Path))}");
         await nodesRepository.CreateManyAsync(files.Concat(directories).ToArray());
@@ -151,12 +164,13 @@ public class FilesService : IFilesService
         }
         else
         {
-            node.Tags = tagsExtractor.TryExtractTags(node.Path);
+            node.Tags = await tagsRepository.TryReadAsync(node.Id);
         }
     }
 
     private readonly INodesRepository nodesRepository;
     private readonly IRootsRepository rootsRepository;
+    private readonly ITagsRepository tagsRepository;
     private readonly ITagsExtractor tagsExtractor;
     private readonly ILogger logger;
 }
