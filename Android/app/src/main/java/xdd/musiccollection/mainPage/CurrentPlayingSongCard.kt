@@ -24,7 +24,7 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .height(50.dp)
+            .height(65.dp)
             .clip(RoundedCornerShape(8.dp))
             .fillMaxWidth()
     ) {

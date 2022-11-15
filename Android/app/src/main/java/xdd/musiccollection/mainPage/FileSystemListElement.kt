@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import xdd.musiccollection.R
 import xdd.musiccollection.extensions.pluralize
 import xdd.musiccollection.models.NodeModel
@@ -29,10 +31,8 @@ fun FileSystemListElement(
             return ""
         }
         return arrayOf(
-            if (element.tags.duration != null)
-                element.tags.duration else null,
-            if (element.tags.format != null)
-                element.tags.format else null,
+            element.tags.duration,
+            element.tags.format,
             if (element.tags.bitRate != null && element.tags.bitRate != 0)
                 "${element.tags.bitRate} kbps" else null,
             if (element.tags.sampleFrequency != null && element.tags.sampleFrequency != 0)
@@ -100,19 +100,22 @@ fun FileSystemListElement(
                 )
             }
         }
-        FileSystemListElementText(element.path, 20)
-        //when (element.type) {
-        //    NodeType.Root -> FileSystemListElementText(element.path, 20)
-        //    NodeType.Back -> FileSystemListElementText("..", 20)
-        //    NodeType.Directory -> Column {
-        //        FileSystemListElementText(element.path.split("\\").last(), 20)
-        //        FileSystemListElementText(buildDirectoryDataString(), 14)
-        //    }
-        //    NodeType.File -> Column {
-        //        FileSystemListElementText(buildNameString(), 20)
-        //        FileSystemListElementText(buildArtistAlbumString(), 16)
-        //        FileSystemListElementText(buildTagsString(), 14)
-        //    }
-        //}
+        when (element.type) {
+            NodeType.Root -> Column{
+                FileSystemListElementText(element.path, 20)
+            }
+            NodeType.Back -> Column {
+                FileSystemListElementText("..", 20)
+            }
+            NodeType.Directory -> Column {
+                FileSystemListElementText(element.path.split("\\").last(), 20)
+                FileSystemListElementText(buildDirectoryDataString(), 14)
+            }
+            NodeType.File -> Column {
+                FileSystemListElementText(buildNameString(), 20)
+                FileSystemListElementText(buildArtistAlbumString(), 16)
+                FileSystemListElementText(buildTagsString(), 14)
+            }
+        }
     }
 }

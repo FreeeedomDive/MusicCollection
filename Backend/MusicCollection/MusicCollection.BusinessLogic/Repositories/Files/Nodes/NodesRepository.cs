@@ -38,7 +38,7 @@ public class NodesRepository : INodesRepository
 
         var requiredNodesQueryable = sqlRepository
             .BuildCustomQuery()
-            .Where(node => !(includeHidden && node.Hidden) && node.ParentId == parentId)
+            .Where(node => node.ParentId == parentId && !node.Hidden)
             .OrderByDescending(x => x.Type)
             .ThenBy(x => x.Path);
         var result = withPages

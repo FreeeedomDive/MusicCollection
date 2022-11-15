@@ -34,7 +34,7 @@ public class FilesController : Controller
         }
     }
     
-    [HttpPost("nodes/{nodeId:guid}")]
+    [HttpPost("nodes/{nodeId:guid}/hide")]
     public async Task<ActionResult> HideNode(Guid nodeId)
     {
         try
