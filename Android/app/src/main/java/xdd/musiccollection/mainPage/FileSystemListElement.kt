@@ -102,7 +102,7 @@ fun FileSystemListElement(
         }
         when (element.type) {
             NodeType.Root -> Column{
-                FileSystemListElementText(element.path, 20)
+                FileSystemListElementText(element.rootName!!, 20)
             }
             NodeType.Back -> Column {
                 FileSystemListElementText("..", 20)
