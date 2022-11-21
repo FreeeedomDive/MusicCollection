@@ -81,5 +81,21 @@ public class FilesController : Controller
         }
     }
 
+    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/Download")]
+    public async Task<byte[]> DownloadFileContent([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    {
+        var result = await filesService.ReadFileContentAsync(nodeId);
+        return result;
+    }
+
+    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/DownloadStream")]
+    public async Task<IActionResult> DownloadFileContentAsStream([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    {
+        var (stream, mimeType) = await filesService.ReadFileContentAsStreamAsync(nodeId);
+        var result = File(stream, mimeType);
+        result.EnableRangeProcessing = true;
+        return result;
+    }
+
     private readonly IFilesService filesService;
 }

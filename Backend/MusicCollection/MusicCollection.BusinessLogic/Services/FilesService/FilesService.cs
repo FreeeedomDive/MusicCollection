@@ -1,8 +1,10 @@
 ﻿using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Extensions;
+using MusicCollection.BusinessLogic.Repositories.Files.Music;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
+using MusicCollection.BusinessLogic.Utils;
 using MusicCollection.Common.Loggers;
 using MusicCollection.Common.TagsService;
 using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
@@ -14,6 +16,7 @@ public class FilesService : IFilesService
     public FilesService(
         INodesRepository nodesRepository,
         IRootsRepository rootsRepository,
+        IMusicFilesRepository musicFilesRepository,
         ITagsRepository tagsRepository,
         ITagsExtractor tagsExtractor,
         ILogger logger
@@ -21,6 +24,7 @@ public class FilesService : IFilesService
     {
         this.nodesRepository = nodesRepository;
         this.rootsRepository = rootsRepository;
+        this.musicFilesRepository = musicFilesRepository;
         this.tagsRepository = tagsRepository;
         this.tagsExtractor = tagsExtractor;
         this.logger = logger;
@@ -93,6 +97,22 @@ public class FilesService : IFilesService
         await ProcessDirectoryAsync(rootId, path);
 
         return rootId;
+    }
+
+    public async Task<byte[]> ReadFileContentAsync(Guid id)
+    {
+        var node = await nodesRepository.ReadAsync(id);
+        return await musicFilesRepository.ReadFileAsync(node.Path);
+    }
+
+    public async Task<(FileStream, string)> ReadFileContentAsStreamAsync(Guid id)
+    {
+        var node = await nodesRepository.ReadAsync(id);
+        var stream = musicFilesRepository.ReadFileAsStream(node.Path);
+        var extension = node.Path.GetFileExtension();
+        var extensionsToMimeTypes = MusicFileExtensions.ExtensionToMimeType();
+        var mimeType = extensionsToMimeTypes.TryGetValue(extension, out var t) ? t : "";
+        return (stream, mimeType);
     }
 
     public async Task HideNodeAsync(Guid id)
@@ -170,6 +190,7 @@ public class FilesService : IFilesService
 
     private readonly INodesRepository nodesRepository;
     private readonly IRootsRepository rootsRepository;
+    private readonly IMusicFilesRepository musicFilesRepository;
     private readonly ITagsRepository tagsRepository;
     private readonly ITagsExtractor tagsExtractor;
     private readonly ILogger logger;
