@@ -1,10 +1,8 @@
 using DatabaseCore.Models;
 using DatabaseCore.Repository;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusicCollection.BusinessLogic.Repositories;
-using MusicCollection.BusinessLogic.Repositories.Database;
 using MusicCollection.BusinessLogic.Services;
 using MusicCollection.Common.Loggers;
 using MusicCollection.Common.Loggers.NLog;
@@ -25,10 +23,10 @@ public static class ServiceCollectionExtensions
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
 
-        var postgreSqlConfigurationSection = configuration.GetSection("PostgreSql");
+        /*var postgreSqlConfigurationSection = configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
         services.AddTransient<DbContext, DatabaseContext>();
-        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
+        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);*/
 
         var sqlStorageElementTypes = allTypes
             .Where(p => typeof(SqlStorageElement).IsAssignableFrom(p))

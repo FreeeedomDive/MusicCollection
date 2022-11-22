@@ -27,6 +27,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
+        services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
+        services.AddTransient<DbContext, DatabaseContext>();
+        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
+        
         services.ConfigureLogger()
             .ConfigurePostgreSql(Configuration)
             .ConfigureTagsExtractor()
