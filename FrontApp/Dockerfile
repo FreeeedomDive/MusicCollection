@@ -2,6 +2,7 @@ FROM node:19.2-alpine as build
 
 ENV NODE_ENV=production
 COPY public public
+COPY src src
 COPY package-lock.json .
 COPY package.json .
 RUN npm install --production
