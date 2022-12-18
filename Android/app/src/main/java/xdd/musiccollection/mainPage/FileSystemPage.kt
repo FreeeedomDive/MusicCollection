@@ -64,19 +64,19 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
         }
     }
 
+    Log.i("Current ViewState", viewModel.currentViewState.toString())
     when (viewModel.currentViewState) {
         MainWindowViewState.Settings -> BackPressHandler(true) {
             viewModel.setCurrentWindowViewState(MainWindowViewState.Browse)
         }
-        MainWindowViewState.Browse -> if (viewModel.canGoBack()) {
-            BackPressHandler(false) {}
-        } else {
-            BackPressHandler(true) {
-                viewModel.loadPrevDirectory {}
-            }
+        MainWindowViewState.Browse -> BackPressHandler(true) {
+            viewModel.loadPrevDirectory {}
         }
         MainWindowViewState.Player -> BackPressHandler(true) {
             viewModel.setCurrentWindowViewState(MainWindowViewState.Browse)
+        }
+        MainWindowViewState.Queue -> BackPressHandler(true) {
+            viewModel.setCurrentWindowViewState(MainWindowViewState.Player)
         }
         else -> {
             viewModel.setCurrentWindowViewState(MainWindowViewState.Browse)

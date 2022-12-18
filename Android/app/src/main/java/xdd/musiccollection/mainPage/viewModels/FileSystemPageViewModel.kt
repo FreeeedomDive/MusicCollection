@@ -61,10 +61,6 @@ class FileSystemPageViewModel : ViewModel() {
         return Result.fail(apiResult.statusCode)
     }
 
-    fun canGoBack(): Boolean {
-        return !openedNodes.empty()
-    }
-
     fun setCurrentWindowViewState(viewState: MainWindowViewState) {
         currentViewState = viewState
     }
@@ -85,6 +81,7 @@ class FileSystemPageViewModel : ViewModel() {
     ) {
         if (openedNodes.empty()) {
             loadRoots(disableSelectedElementLoading)
+            return
         }
         val lastOpenedNode = openedNodes.pop()
         if (lastOpenedNode.type == NodeType.Root || lastOpenedNode.parent == null) {
