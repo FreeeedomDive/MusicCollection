@@ -64,6 +64,8 @@ public class CreateRootTask : IBackgroundTask
             await FetchDirectories();
             await CreateNodesAsync();
             await CreateTagsAsync();
+            state = CreateRootTaskState.Done;
+            Progress = 100;
         }
         catch(Exception e)
         {
