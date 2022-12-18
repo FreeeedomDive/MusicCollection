@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import UsersApiClient from "../Api/Users/UsersApiClient";
+import UsersApiClient from "../Api/UsersApiClient";
 import UsersListElement from "./UsersListElement";
 import UserDto from "../Dto/UserDto";
 import "./UsersComponent.css"

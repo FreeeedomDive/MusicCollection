@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {RootDto} from "../Dto/RootDto";
-import FilesApiClient from "../Api/Users/FilesApiClient";
+import FilesApiClient from "../Api/FilesApiClient";
 import "./RootsComponent.css"
 import RootsListElement from "./RootsListElement";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField} from "@mui/material";
