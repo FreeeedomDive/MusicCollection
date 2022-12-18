@@ -179,6 +179,7 @@ public class CreateRootTask : IBackgroundTask
 
     public Guid Id { get; }
     public string CurrentState => state.ToString();
+    public string TaskType => BackgroundTaskType.CreateRoot.ToString();
     public int Progress { get; private set; }
 
     private CreateRootTaskState state;

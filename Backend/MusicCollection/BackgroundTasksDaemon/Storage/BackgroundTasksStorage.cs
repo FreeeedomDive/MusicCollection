@@ -54,22 +54,24 @@ public class BackgroundTasksStorage : IBackgroundTasksStorage
         return removedTasks.Any() ? TryGetNextTask() : task;
     }
 
-    public TaskStateDto[] GetTasks(Guid id)
+    public TaskDto[] GetTasks()
     {
-        return tasks.Values.Select(x => new TaskStateDto
+        return tasks.Values.Select(x => new TaskDto
         {
+            Id = x.Id,
+            Type = x.TaskType,
             Progress = x.Progress,
             State = x.CurrentState
         }).ToArray();
     }
 
-    public TaskStateDto GetTaskState(Guid id)
+    public TaskDto GetTaskState(Guid id)
     {
         var task = tasks.TryGetValue(id, out var t)
             ? t
             : throw new InvalidOperationException($"Task {id} was not found");
 
-        return new TaskStateDto
+        return new TaskDto
         {
             Progress = task.Progress,
             State = task.CurrentState
