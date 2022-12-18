@@ -4,6 +4,6 @@ WORKDIR /src
 COPY package-lock.json .
 COPY package.json .
 RUN npm install --silent
-RUN npm build
+RUN npm run build
 COPY . .
 CMD ["serve", "-s", "build", "-l", "4567"]
