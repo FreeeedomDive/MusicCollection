@@ -1,3 +1,6 @@
+using BackgroundTasksDaemon;
+using BackgroundTasksDaemon.Storage;
+using BackgroundTasksDaemon.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Admin;
 using MusicCollection.Api.Dto.FileSystem;
@@ -10,30 +13,27 @@ namespace MusicCollection.AdminApi.Controllers;
 [Route("files")]
 public class FilesController : Controller
 {
-    public FilesController(IFilesService filesService)
+    public FilesController(
+        IFilesService filesService,
+        IBackgroundTasksStorage backgroundTasksStorage
+    )
     {
         this.filesService = filesService;
+        this.backgroundTasksStorage = backgroundTasksStorage;
     }
-    
+
     [HttpGet("roots")]
     public async Task<ActionResult<FileSystemRoot[]>> GetAllRoots()
     {
         return await filesService.ReadAllRoots();
     }
-    
+
     [HttpPost("roots/create")]
     public async Task<ActionResult<Guid>> CreateRoot([FromBody] CreateRootRequest request)
     {
-        try
-        {
-            return await filesService.CreateRootWithIndexAsync(request.Name, request.Path);
-        }
-        catch(DirectoryNotFoundException)
-        {
-            return NotFound();
-        }
+        return await backgroundTasksStorage.AddTask(BackgroundTaskType.CreateRoot, new[] { request.Name, request.Path });
     }
-    
+
     [HttpPost("nodes/{nodeId:guid}/hide")]
     public async Task<ActionResult> HideNode(Guid nodeId)
     {
@@ -42,11 +42,12 @@ public class FilesController : Controller
             await filesService.HideNodeAsync(nodeId);
             return Ok();
         }
-        catch(DirectoryNotFoundException)
+        catch (DirectoryNotFoundException)
         {
             return NotFound();
         }
     }
 
     private readonly IFilesService filesService;
+    private readonly IBackgroundTasksStorage backgroundTasksStorage;
 }

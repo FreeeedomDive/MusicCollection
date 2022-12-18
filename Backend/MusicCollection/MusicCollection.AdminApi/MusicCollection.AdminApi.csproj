@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ApiUtils\ApiUtils.csproj" />
+      <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
       <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
     </ItemGroup>
 

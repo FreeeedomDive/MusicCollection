@@ -6,5 +6,6 @@ public interface IBackgroundTask
     string CurrentState { get; }
     int Progress { get; }
 
+    Task InitializeAsync(string[]? args = null);
     Task ExecuteAsync();
 }

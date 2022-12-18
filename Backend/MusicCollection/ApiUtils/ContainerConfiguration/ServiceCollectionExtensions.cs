@@ -1,3 +1,6 @@
+using BackgroundTasksDaemon;
+using BackgroundTasksDaemon.Builder;
+using BackgroundTasksDaemon.Storage;
 using DatabaseCore.Models;
 using DatabaseCore.Repository;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +25,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigurePostgreSql(this IServiceCollection services, IConfiguration configuration)
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
-
-        /*var postgreSqlConfigurationSection = configuration.GetSection("PostgreSql");
-        services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
-        services.AddTransient<DbContext, DatabaseContext>();
-        services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);*/
 
         var sqlStorageElementTypes = allTypes
             .Where(p => typeof(SqlStorageElement).IsAssignableFrom(p))
@@ -73,6 +71,15 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigureTagsExtractor(this IServiceCollection services)
     {
         services.AddTransient<ITagsExtractor, TagsExtractor>();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureTasksWorker(this IServiceCollection services)
+    {
+        services.AddTransient<IBackgroundTaskBuilder, BackgroundTaskBuilder>();
+        services.AddSingleton<IBackgroundTasksStorage, BackgroundTasksStorage>();
+        services.AddTransient<ITasksDaemon, TasksDaemon>();
 
         return services;
     }

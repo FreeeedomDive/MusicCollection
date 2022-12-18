@@ -1,6 +1,6 @@
-using ApiUtils;
 using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
+using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
 
@@ -21,18 +21,17 @@ public class Startup
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
         services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
-        
+
         services.ConfigureLogger()
             .ConfigurePostgreSql(Configuration)
             .ConfigureTagsExtractor()
-            .ConfigureLogicServices();
+            .ConfigureLogicServices()
+            .ConfigureTasksWorker();
 
         services.AddCors(options =>
         {
-            options.AddPolicy(CorsConfigurationName, policy =>
-            {
-                policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            });
+            options.AddPolicy(CorsConfigurationName,
+                policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
 
         services.AddControllers();
@@ -47,6 +46,9 @@ public class Startup
         app.UseCors(CorsConfigurationName);
         app.UseWebSockets();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+        var taskDaemon = app.ApplicationServices.GetService<ITasksDaemon>();
+        taskDaemon?.Start();
     }
 
     private const string CorsConfigurationName = "AllowOrigins";
