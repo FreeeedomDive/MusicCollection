@@ -1,5 +1,5 @@
 import UserDto from "../Dto/UserDto";
-import UsersApiClient from "../Api/Users/UsersApiClient";
+import UsersApiClient from "../Api/UsersApiClient";
 import "./UsersListElement.css"
 import React from "react";
 
