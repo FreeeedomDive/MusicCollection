@@ -69,6 +69,7 @@ public class CreateRootTask : IBackgroundTask
         {
             logger.Error(e, $"Unhandled exception happened in state {state}");
             state = CreateRootTaskState.Fatal;
+            throw;
         }
     }
 
