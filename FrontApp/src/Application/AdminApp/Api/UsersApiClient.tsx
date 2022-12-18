@@ -1,5 +1,5 @@
 import axios from "axios";
-import UserDto from "../../Dto/UserDto";
+import UserDto from "../Dto/UserDto";
 import {Guid} from "guid-typescript";
 
 export default class UsersApiClient {

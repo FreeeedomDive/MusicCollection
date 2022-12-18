@@ -1,5 +1,5 @@
 import axios from "axios";
-import {RootDto} from "../../Dto/RootDto";
+import {RootDto} from "../Dto/RootDto";
 
 export default class FilesApiClient {
     static init = () => {
