@@ -82,13 +82,10 @@ public class FilesController : Controller
     }
 
     [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/Download")]
-    public async Task<FileBytes> DownloadFileContent([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task DownloadFileContent([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
     {
         var result = await filesService.ReadFileContentAsync(nodeId);
-        return new FileBytes
-        {
-            Content = result
-        };
+        await Response.Body.WriteAsync(result);
     }
 
     [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/DownloadStream")]
