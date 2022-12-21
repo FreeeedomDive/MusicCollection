@@ -2,7 +2,6 @@ package xdd.musiccollection.mainPage
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -12,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.launch
 import xdd.musiccollection.defaultComponents.BackPressHandler
@@ -36,7 +34,6 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
             NodeType.File -> {
                 composableScope.launch {
                     val tags = viewModel.loadFileTags(element)
-                    disableSelectedElementLoading()
                     if (!tags.isSuccess) {
                         when (tags.statusCode) {
                             404 -> scaffoldState.snackbarHostState.showSnackbar(message = "File not found")
@@ -44,7 +41,8 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                             500 -> scaffoldState.snackbarHostState.showSnackbar(message = "Internal server is unavailable")
                         }
                     }
-                    viewModel.songViewModel.setCurrentTrack(element)
+                    viewModel.songViewModel.setCurrentTrack(viewModel.currentRoot!!.id, element)
+                    disableSelectedElementLoading()
                 }
             }
             NodeType.Back -> {
@@ -77,9 +75,6 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
         }
         MainWindowViewState.Queue -> BackPressHandler(true) {
             viewModel.setCurrentWindowViewState(MainWindowViewState.Player)
-        }
-        else -> {
-            viewModel.setCurrentWindowViewState(MainWindowViewState.Browse)
         }
     }
 

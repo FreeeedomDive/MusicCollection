@@ -6,3 +6,4 @@ Bin
 Obj
 appsettings.Production.json
 appsettings.RemoteDb.json
+Android/app/release

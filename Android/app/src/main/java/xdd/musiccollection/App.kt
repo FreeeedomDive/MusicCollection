@@ -3,6 +3,7 @@ package xdd.musiccollection
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import xdd.musiccollection.auth.AuthenticationPage
 import xdd.musiccollection.mainPage.FileSystemPage
 import xdd.musiccollection.mainPage.viewModels.FileSystemPageViewModel
@@ -20,6 +21,6 @@ fun App() {
         AuthenticationPage { setCurrentState(CurrentState.MainPage) }
     }
     if (currentState == CurrentState.MainPage){
-        FileSystemPage(FileSystemPageViewModel())
+        FileSystemPage(FileSystemPageViewModel(LocalContext.current.cacheDir))
     }
 }

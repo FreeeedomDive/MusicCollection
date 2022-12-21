@@ -1,5 +1,6 @@
 package xdd.musiccollection.apiClient
 
+import okhttp3.ResponseBody
 import xdd.musiccollection.apiClient.retrofit.IFilesApiClient
 import xdd.musiccollection.apiClient.retrofit.RetrofitClient
 import xdd.musiccollection.apiDto.Result
@@ -10,10 +11,6 @@ import java.util.*
 class FilesApiClient {
     suspend fun readAllRoots(): Result<Array<FileSystemRootDto>> {
         return ApiClient.performRequest { client.readAllRoots() }
-    }
-
-    suspend fun readRoot(id: UUID): Result<FileSystemRootDto> {
-        return ApiClient.performRequest { client.readRoot(id) }
     }
 
     suspend fun readNode(rootId: UUID, nodeId: UUID): Result<FileSystemNodeDto> {
@@ -29,8 +26,8 @@ class FilesApiClient {
         return ApiClient.performRequest { client.readNodeAsDirectory(rootId, nodeId, skip, take) }
     }
 
-    suspend fun readAllFilesInNode(rootId: UUID, nodeId: UUID): Result<Array<UUID>> {
-        return ApiClient.performRequest { client.readAllFilesInNode(rootId, nodeId) }
+    suspend fun download(rootId: UUID, nodeId: UUID): Result<ResponseBody?> {
+        return ApiClient.performRequest { client.download(rootId, nodeId).body() }
     }
 
     private val client: IFilesApiClient =

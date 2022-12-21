@@ -15,9 +15,10 @@ import xdd.musiccollection.apiDto.music.AudioFileTagsDto
 import xdd.musiccollection.models.MainWindowViewState
 import xdd.musiccollection.models.NodeModel
 import xdd.musiccollection.models.NodeType
+import java.io.File
 import java.util.*
 
-class FileSystemPageViewModel : ViewModel() {
+class FileSystemPageViewModel(cacheDir: File) : ViewModel() {
     var currentViewState by mutableStateOf(MainWindowViewState.Browse)
         private set
     var isErrorLoading by mutableStateOf(false)
@@ -32,7 +33,7 @@ class FileSystemPageViewModel : ViewModel() {
         private set
     var lazyListState by mutableStateOf(LazyListState())
 
-    val songViewModel = SongViewModel()
+    val songViewModel = SongViewModel(cacheDir)
 
     private var currentSkipValue by mutableStateOf(0)
     private var canLoadMore by mutableStateOf(true)
