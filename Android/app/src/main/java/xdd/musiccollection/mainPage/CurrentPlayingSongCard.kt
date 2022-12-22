@@ -2,10 +2,7 @@ package xdd.musiccollection.mainPage
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +14,7 @@ import androidx.compose.ui.unit.sp
 
 import xdd.musiccollection.R
 import xdd.musiccollection.extensions.shorten
+import xdd.musiccollection.mainPage.viewModels.PlayingState
 import xdd.musiccollection.mainPage.viewModels.SongViewModel
 
 @Composable
@@ -77,22 +75,38 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                         contentDescription = "back button"
                     )
                 }
-                IconButton(onClick = {
-                    if (songViewModel.isPlaying) {
-                        songViewModel.stopPlaying()
-                        // sampleSong.pause()
-                    } else {
-                        songViewModel.resumePlaying()
-                        // sampleSong.start()
-                    }
-                }) {
-                    Icon(
-                        painter = painterResource(
-                            id = if (songViewModel.isPlaying) R.drawable.pause else R.drawable.play
-                        ),
-                        contentDescription = "play/pause button"
+                if (songViewModel.playingState == PlayingState.Loading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
                     )
+                } else {
+                    IconButton(onClick = {
+                        when (songViewModel.playingState) {
+                            PlayingState.Loading -> {
+                                return@IconButton
+                            }
+                            PlayingState.Play -> {
+                                songViewModel.stopPlaying()
+                            }
+                            else -> {
+                                songViewModel.resumePlaying()
+                            }
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (songViewModel.playingState == PlayingState.Pause)
+                                    R.drawable.play
+                                else R.drawable.pause
+                            ),
+                            contentDescription = "play/pause button"
+                        )
+                    }
                 }
+
                 IconButton(onClick = {}) {
                     Icon(
                         painter = painterResource(id = R.drawable.next),

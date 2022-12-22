@@ -18,7 +18,7 @@ import xdd.musiccollection.models.NodeType
 import java.io.File
 import java.util.*
 
-class FileSystemPageViewModel(cacheDir: File) : ViewModel() {
+class FileSystemPageViewModel() : ViewModel() {
     var currentViewState by mutableStateOf(MainWindowViewState.Browse)
         private set
     var isErrorLoading by mutableStateOf(false)
@@ -33,7 +33,7 @@ class FileSystemPageViewModel(cacheDir: File) : ViewModel() {
         private set
     var lazyListState by mutableStateOf(LazyListState())
 
-    val songViewModel = SongViewModel(cacheDir)
+    val songViewModel = SongViewModel()
 
     private var currentSkipValue by mutableStateOf(0)
     private var canLoadMore by mutableStateOf(true)

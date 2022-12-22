@@ -21,6 +21,6 @@ fun App() {
         AuthenticationPage { setCurrentState(CurrentState.MainPage) }
     }
     if (currentState == CurrentState.MainPage){
-        FileSystemPage(FileSystemPageViewModel(LocalContext.current.cacheDir))
+        FileSystemPage(FileSystemPageViewModel())
     }
 }
