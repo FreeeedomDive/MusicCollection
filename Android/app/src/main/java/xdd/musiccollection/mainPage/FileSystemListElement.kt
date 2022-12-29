@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import xdd.musiccollection.R
 import xdd.musiccollection.extensions.pluralize
 import xdd.musiccollection.models.NodeModel
@@ -77,6 +75,7 @@ fun FileSystemListElement(
             NodeType.Directory -> painterResource(R.drawable.folder)
             NodeType.Root -> painterResource(R.drawable.folder)
             NodeType.Back -> painterResource(R.drawable.folder_up)
+            else -> throw IllegalArgumentException()
         }
         Box(
             Modifier
@@ -116,6 +115,7 @@ fun FileSystemListElement(
                 FileSystemListElementText(buildArtistAlbumString(), 16)
                 FileSystemListElementText(buildTagsString(), 14)
             }
+            else -> throw IllegalArgumentException()
         }
     }
 }

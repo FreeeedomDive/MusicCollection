@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import xdd.musiccollection.defaultComponents.BackPressHandler
 import xdd.musiccollection.defaultComponents.SearchComponent
@@ -23,9 +24,12 @@ import xdd.musiccollection.models.NodeType
 import xdd.musiccollection.ui.theme.BlueColorPalette1
 import xdd.musiccollection.ui.theme.BlueColorPalette3
 import xdd.musiccollection.ui.theme.BlueColorPalette4
+import java.util.*
 
 @Composable
 fun FileSystemPage(viewModel: FileSystemPageViewModel) {
+    val dummy = NodeModel(UUID.randomUUID(), null, null, "", NodeType.Dummy, null, null)
+
     val composableScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
@@ -105,9 +109,7 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
             }
         },
         bottomBar = {
-            if (viewModel.songViewModel.currentSelectedTrack != null) {
-                CurrentPlayingSongCard(viewModel.songViewModel)
-            }
+            CurrentPlayingSongCard(viewModel.songViewModel)
         }
     ) {
         Column(
@@ -140,10 +142,13 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                 LazyColumn(
                     state = viewModel.lazyListState
                 ) {
-                    itemsIndexed(viewModel.filesList) { _, item ->
-                        // Text(text = item.path, Modifier.clickable { handleItemClick(item) {} })
-                        FileSystemListElement(element = item, handleItem = ::handleItemClick)
-                        Divider(color = Color.Black)
+                    itemsIndexed(viewModel.filesList + listOf(dummy)) { _, item ->
+                        if (item.type == NodeType.Dummy) {
+                            Column(Modifier.height(72.dp)) {}
+                        } else {
+                            FileSystemListElement(element = item, handleItem = ::handleItemClick)
+                            Divider(color = Color.Black)
+                        }
                     }
                 }
             }

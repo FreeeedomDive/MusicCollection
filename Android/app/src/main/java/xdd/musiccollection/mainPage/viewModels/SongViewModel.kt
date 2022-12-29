@@ -2,7 +2,6 @@ package xdd.musiccollection.mainPage.viewModels
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.os.Environment
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +13,10 @@ import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import xdd.musiccollection.apiClient.FilesApiClient
 import xdd.musiccollection.models.NodeModel
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.*
 
 enum class PlayingState {
@@ -23,7 +25,7 @@ enum class PlayingState {
     Loading
 }
 
-class SongViewModel : ViewModel() {
+class SongViewModel(private val cacheDir: File) : ViewModel() {
     var currentSelectedTrack by mutableStateOf<NodeModel?>(null)
         private set
     private var mediaPlayer = MediaPlayer().apply {
@@ -35,6 +37,9 @@ class SongViewModel : ViewModel() {
         )
         setOnPreparedListener {
             resumePlaying()
+        }
+        setOnCompletionListener {
+
         }
     }
 
@@ -63,9 +68,7 @@ class SongViewModel : ViewModel() {
         resetPlaying()
         playingState = PlayingState.Loading
         val coroutineScope = CoroutineScope(Dispatchers.IO)
-        Log.i("Coroutine", "Before")
         coroutineScope.launch {
-            Log.i("Coroutine", "Start")
             val response = FilesApiClient().download(rootId, track.id)
             if (!response.isSuccess) {
                 return@launch
@@ -81,9 +84,7 @@ class SongViewModel : ViewModel() {
                     reset()
                 }
             }
-            Log.i("Coroutine", "End")
         }
-        Log.i("Coroutine", "After")
     }
 
     private fun saveFile(body: ResponseBody?, track: NodeModel): FileInputStream? {
@@ -91,10 +92,9 @@ class SongViewModel : ViewModel() {
             return null
         var input: InputStream? = null
         try {
-            val downloadsDirectory = getDownloadsDirectory()
-            prepareDownloadsDirectory(downloadsDirectory)
+            clearCache(cacheDir)
             input = body.byteStream()
-            val file = File(downloadsDirectory, buildFileName(track))
+            val file = File(cacheDir, buildFileName(track))
             val fos = FileOutputStream(file)
             fos.use { out ->
                 input.copyTo(out)
@@ -108,7 +108,7 @@ class SongViewModel : ViewModel() {
         return null
     }
 
-    private fun getDownloadsDirectory(): File {
+    /*private fun getDownloadsDirectory(): File {
         val path = Environment.DIRECTORY_DOWNLOADS + "/MusicCollectionCache"
         val downloadsDirectory = Environment.getExternalStoragePublicDirectory(path)
         if (!downloadsDirectory.exists()) {
@@ -116,10 +116,11 @@ class SongViewModel : ViewModel() {
         }
 
         return downloadsDirectory
-    }
+    }*/
 
-    private fun prepareDownloadsDirectory(directory: File) {
-        directory.listFiles()?.forEach { it.delete() }
+    private fun clearCache(directory: File) {
+        val filesInCache = directory.listFiles()
+        filesInCache?.forEach { it.delete() }
     }
 
     private fun buildFileName(track: NodeModel): String {

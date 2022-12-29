@@ -20,9 +20,10 @@ import xdd.musiccollection.mainPage.viewModels.SongViewModel
 @Composable
 fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
     Card(
+        backgroundColor = Color.Black,
         modifier = Modifier
             .padding(8.dp)
-            .height(65.dp)
+            .height(64.dp)
             .clip(RoundedCornerShape(8.dp))
             .fillMaxWidth()
     ) {
@@ -40,25 +41,27 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier.padding(all = 8.dp)
                 ) {
+                    val topText: String
+                    val bottomText: String
                     if (songViewModel.currentSelectedTrack == null) {
-                        Text(
-                            text = "No selected track"
-                        )
+                        topText = "No selected track"
+                        bottomText = "0 tracks in queue"
                     } else if (songViewModel.currentSelectedTrack!!.tags == null) {
-                        Text(
-                            text = songViewModel.currentSelectedTrack!!.fileName().shorten(25)
-                        )
+                        topText = songViewModel.currentSelectedTrack!!.fileName().shorten(25)
+                        bottomText = "No tags available"
                     } else {
-                        Column {
-                            Text(
-                                text = songViewModel.currentSelectedTrack!!.tags!!.trackName?.shorten(25) ?: ""
-                            )
-                            Text(
-                                text = songViewModel.currentSelectedTrack!!.tags!!.artist?.shorten(25) ?: "",
-                                fontSize = 12.sp,
-                                color = Color.Gray
-                            )
-                        }
+                        topText = songViewModel.currentSelectedTrack!!.tags!!.trackName?.shorten(25) ?: ""
+                        bottomText = songViewModel.currentSelectedTrack!!.tags!!.artist?.shorten(25) ?: ""
+                    }
+                    Column {
+                        Text(
+                            text = topText
+                        )
+                        Text(
+                            text = bottomText,
+                            fontSize = 12.sp,
+                            color = Color.LightGray
+                        )
                     }
                 }
             }

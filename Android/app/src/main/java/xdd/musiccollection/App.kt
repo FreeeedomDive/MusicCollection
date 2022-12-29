@@ -8,7 +8,7 @@ import xdd.musiccollection.auth.AuthenticationPage
 import xdd.musiccollection.mainPage.FileSystemPage
 import xdd.musiccollection.mainPage.viewModels.FileSystemPageViewModel
 
-enum class CurrentState {
+private enum class CurrentState {
     Authentication,
     MainPage,
 }
@@ -21,6 +21,6 @@ fun App() {
         AuthenticationPage { setCurrentState(CurrentState.MainPage) }
     }
     if (currentState == CurrentState.MainPage){
-        FileSystemPage(FileSystemPageViewModel())
+        FileSystemPage(FileSystemPageViewModel(LocalContext.current.cacheDir))
     }
 }

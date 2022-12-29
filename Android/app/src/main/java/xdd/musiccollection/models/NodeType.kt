@@ -5,4 +5,5 @@ enum class NodeType {
     Back,
     Directory,
     File,
+    Dummy
 }
