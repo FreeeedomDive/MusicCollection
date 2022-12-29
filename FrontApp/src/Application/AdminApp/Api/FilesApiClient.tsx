@@ -1,17 +1,18 @@
 import axios from "axios";
 import {RootDto} from "../Dto/RootDto";
+import ApiConstants from "./ApiConstants";
 
 export default class FilesApiClient {
     static init = () => {
         return axios.create({
-            baseURL: "https://localhost:7039", timeout: 10000, headers: {
+            baseURL: `${ApiConstants.AdminApiBaseRoute}/files`, timeout: 10000, headers: {
                 Accept: "application/json"
             }
         });
     }
 
     static createRoot = async (name: string, path: string): Promise<void> => {
-        const result = await FilesApiClient.init().post("/files/roots/create", {
+        const result = await FilesApiClient.init().post("/roots/create", {
             name: name,
             path: path
         });
@@ -19,7 +20,7 @@ export default class FilesApiClient {
     }
 
     static getAllRoots = async (): Promise<RootDto[]> => {
-        const result = await FilesApiClient.init().get<RootDto[]>(`/files/roots`);
+        const result = await FilesApiClient.init().get<RootDto[]>(`/roots`);
         return result.data;
     }
 }
