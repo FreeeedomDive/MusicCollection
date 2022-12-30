@@ -18,7 +18,7 @@ export default function UsersListElement(props: Props): React.ReactElement {
         <tr className="tableRow">
             <td className="tableElement">{props.user.id.toString()}</td>
             <td className="tableElement">{props.user.login}</td>
-            <td className="tableElement"><div className="banButton" onClick={banUser}>БАН НАХУЙ</div></td>
+            <td className="tableElement"><div className="banButton" onClick={banUser}>Ban</div></td>
         </tr>
     )
 }

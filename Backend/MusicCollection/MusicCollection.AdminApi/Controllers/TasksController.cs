@@ -18,6 +18,12 @@ public class TasksController : Controller
     {
         return backgroundTasksStorage.GetTasks();
     }
+
+    [HttpDelete]
+    public void RemoveFromQueue(Guid id)
+    {
+        backgroundTasksStorage.RemoveTask(id);
+    }
     
     private readonly IBackgroundTasksStorage backgroundTasksStorage;
 }

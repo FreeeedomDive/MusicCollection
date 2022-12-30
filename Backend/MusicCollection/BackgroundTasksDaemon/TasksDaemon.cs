@@ -19,7 +19,7 @@ public class TasksDaemon : ITasksDaemon
         logger.Info("{Daemon} has started", nameof(TasksDaemon));
         while (true)
         {
-            const int secondsToSleep = 30;
+            const int secondsToSleep = 10;
             await Task.Delay(secondsToSleep * 1000);
             var nextTask = backgroundTasksStorage.TryGetNextTask();
 

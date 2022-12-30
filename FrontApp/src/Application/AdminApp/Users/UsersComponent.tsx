@@ -23,7 +23,7 @@ export default function UsersComponent(): React.ReactElement {
                 <tr>
                     <th>Id</th>
                     <th>Username</th>
-                    <th>Ban</th>
+                    <th></th>
                 </tr>
                 {
                     usersList.map(x => <UsersListElement user={x} updateList={updateList}/>)
