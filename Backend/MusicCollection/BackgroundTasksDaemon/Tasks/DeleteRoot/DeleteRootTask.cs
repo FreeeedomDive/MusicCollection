@@ -86,8 +86,9 @@ public class DeleteRootTask : IBackgroundTask
     private async Task DeleteNodesAsync()
     {
         state = DeleteRootTaskState.Deleting;
-        await rootsRepository.DeleteAsync(rootId);
         await ProcessNodeAsync(rootId, DeleteNodesAsync);
+        await nodesRepository.DeleteAsync(rootId);
+        await rootsRepository.DeleteAsync(rootId);
     }
 
     private async Task DeleteNodesAsync(FileSystemNode[] nodes)
