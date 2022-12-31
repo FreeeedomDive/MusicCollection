@@ -19,8 +19,8 @@ public class TasksController : Controller
         return backgroundTasksStorage.GetTasks();
     }
 
-    [HttpDelete]
-    public void Delete(Guid id)
+    [HttpDelete("{id:guid}")]
+    public void Delete([FromRoute] Guid id)
     {
         backgroundTasksStorage.RemoveTask(id);
     }
