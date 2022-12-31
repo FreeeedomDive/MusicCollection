@@ -31,7 +31,7 @@ public class CreateRootTask : IBackgroundTask
         rootPath = "";
     }
 
-    public Task InitializeAsync(string[]? args = null)
+    public Task InitializeWithArgsAsync(string[]? args = null)
     {
         if (args is null || args.Length != 2)
         {
@@ -69,7 +69,7 @@ public class CreateRootTask : IBackgroundTask
         }
         catch(Exception e)
         {
-            logger.Error(e, $"Unhandled exception happened in state {state}");
+            logger.Error(e, "Unhandled exception happened in task {task} in state {state}", nameof(CreateRootTask), state);
             state = CreateRootTaskState.Fatal;
             throw;
         }
@@ -161,11 +161,8 @@ public class CreateRootTask : IBackgroundTask
         foreach (var node in allFileNodes)
         {
             var tags = tagsExtractor.TryExtractTags(node.Path);
-            if (tags != null)
-            {
-                tags.Id = node.Id;
-                await tagsRepository.CreateAsync(tags);
-            }
+            tags.Id = node.Id;
+            await tagsRepository.CreateAsync(tags);
 
             current++;
             Progress = current * 100 / allFileNodes.Count;
@@ -193,12 +190,11 @@ public class CreateRootTask : IBackgroundTask
     private readonly ITagsRepository tagsRepository;
     private readonly ILogger logger;
 
-    private int processedDirectories;
-    private int processedFiles;
-
     private string rootName;
     private string rootPath;
 
+    private int processedDirectories;
+    private int processedFiles;
     private int totalDirectories;
     private int totalFiles;
 

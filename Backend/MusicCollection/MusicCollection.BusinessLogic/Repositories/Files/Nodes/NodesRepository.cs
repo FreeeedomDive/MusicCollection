@@ -64,6 +64,11 @@ public class NodesRepository : INodesRepository
         }
     }
 
+    public async Task<FileSystemNode[]> ReadManyAsync(Guid[] ids)
+    {
+        return (await sqlRepository.ReadManyAsync(ids)).Select(ToModel).ToArray()!;
+    }
+
     public async Task<FileSystemNode?> TryReadAsync(Guid id)
     {
         var result = await sqlRepository.TryReadAsync(id);
@@ -73,6 +78,16 @@ public class NodesRepository : INodesRepository
     public async Task HideNodeAsync(Guid id)
     {
         await sqlRepository.UpdateAsync(id, x => x.Hidden = true);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await sqlRepository.DeleteAsync(id);
+    }
+
+    public async Task DeleteManyAsync(Guid[] ids)
+    {
+        await sqlRepository.DeleteManyAsync(ids);
     }
 
     private static FileSystemNode? ToModel(NodeStorageElement? node)

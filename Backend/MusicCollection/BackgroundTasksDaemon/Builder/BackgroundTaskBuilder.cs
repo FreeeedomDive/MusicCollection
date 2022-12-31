@@ -1,5 +1,6 @@
 using BackgroundTasksDaemon.Tasks;
 using BackgroundTasksDaemon.Tasks.CreateRoot;
+using BackgroundTasksDaemon.Tasks.DeleteRoot;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
@@ -41,15 +42,17 @@ public class BackgroundTaskBuilder : IBackgroundTaskBuilder
 
     public async Task<IBackgroundTask> BuildAsync()
     {
-        switch (Type)
+        IBackgroundTask task = Type switch
         {
-            case BackgroundTaskType.CreateRoot:
-                var task = new CreateRootTask(rootsRepository, nodesRepository, tagsExtractor, tagsRepository, logger);
-                await task.InitializeAsync(Args);
-                return task;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+            BackgroundTaskType.CreateRoot => 
+                new CreateRootTask(rootsRepository, nodesRepository, tagsExtractor, tagsRepository, logger),
+            BackgroundTaskType.DeleteRoot => 
+                new DeleteRootTask(rootsRepository, nodesRepository, tagsRepository, logger),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        await task.InitializeWithArgsAsync(Args);
+        return task;
     }
 
     private BackgroundTaskType Type { get; set; }

@@ -7,6 +7,7 @@ public interface ISqlRepository<TStorageElement> where TStorageElement : SqlStor
 {
     Task<TStorageElement[]> ReadAllAsync();
     Task<TStorageElement> ReadAsync(Guid id);
+    Task<TStorageElement[]> ReadManyAsync(Guid[] ids);
     Task<TStorageElement?> TryReadAsync(Guid id);
     Task<TStorageElement[]> FindAsync(Expression<Func<TStorageElement, bool>> predicate);
     IQueryable<TStorageElement> BuildCustomQuery();
@@ -14,4 +15,5 @@ public interface ISqlRepository<TStorageElement> where TStorageElement : SqlStor
     Task CreateManyAsync(IEnumerable<TStorageElement> storageElements);
     Task UpdateAsync(Guid id, Action<TStorageElement> updateAction);
     Task DeleteAsync(Guid id);
+    Task DeleteManyAsync(Guid[] ids);
 }

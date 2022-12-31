@@ -22,6 +22,11 @@ public class TagsRepository : ITagsRepository
         await sqlRepository.CreateAsync(ToStorageElement(audioFileTags));
     }
 
+    public async Task DeleteManyAsync(Guid[] ids)
+    {
+        await sqlRepository.DeleteManyAsync(ids);
+    }
+
     private static AudioFileTags? ToModel(AudioFileTagsStorageElement? storageElement)
     {
         return storageElement == null

@@ -20,7 +20,7 @@ public class TasksController : Controller
     }
 
     [HttpDelete]
-    public void RemoveFromQueue(Guid id)
+    public void Delete(Guid id)
     {
         backgroundTasksStorage.RemoveTask(id);
     }

@@ -1,4 +1,3 @@
-using BackgroundTasksDaemon;
 using BackgroundTasksDaemon.Storage;
 using BackgroundTasksDaemon.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +31,12 @@ public class FilesController : Controller
     public async Task<ActionResult<Guid>> CreateRoot([FromBody] CreateRootRequest request)
     {
         return await backgroundTasksStorage.AddTask(BackgroundTaskType.CreateRoot, new[] { request.Name, request.Path });
+    }
+
+    [HttpDelete("roots/{rootId:guid}")]
+    public async Task<ActionResult<Guid>> DeleteRoot([FromRoute] Guid rootId)
+    {
+        return await backgroundTasksStorage.AddTask(BackgroundTaskType.DeleteRoot, new[] { rootId.ToString() });
     }
 
     [HttpPost("nodes/{nodeId:guid}/hide")]

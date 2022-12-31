@@ -11,7 +11,11 @@ public interface INodesRepository : IMusicCollectionRepository
         bool includeHidden = false);
 
     Task<FileSystemNode> ReadAsync(Guid id);
+    Task<FileSystemNode[]> ReadManyAsync(Guid[] ids);
     Task<FileSystemNode?> TryReadAsync(Guid id);
 
     Task HideNodeAsync(Guid id);
+
+    Task DeleteAsync(Guid id);
+    Task DeleteManyAsync(Guid[] ids);
 }

@@ -6,7 +6,7 @@ namespace MusicCollection.Common.TagsService;
 
 public class TagsExtractor : ITagsExtractor
 {
-    public AudioFileTags? TryExtractTags(string path)
+    public AudioFileTags TryExtractTags(string path)
     {
         try
         {
@@ -26,7 +26,10 @@ public class TagsExtractor : ITagsExtractor
         }
         catch
         {
-            return null;
+            return new AudioFileTags
+            {
+                Format = path.GetFileExtension(),
+            };
         }
     }
 }

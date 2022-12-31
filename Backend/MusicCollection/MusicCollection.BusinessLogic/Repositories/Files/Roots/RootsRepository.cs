@@ -36,6 +36,11 @@ public class RootsRepository : IRootsRepository
         await sqlRepository.CreateAsync(ToStorageElement(root));
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        await sqlRepository.DeleteAsync(id);
+    }
+
     private static FileSystemRoot ToModel(RootStorageElement root)
     {
         return new FileSystemRoot

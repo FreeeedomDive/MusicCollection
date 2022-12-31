@@ -1,6 +1,7 @@
 import axios from "axios";
 import {RootDto} from "../Dto/RootDto";
 import ApiConstants from "./ApiConstants";
+import {Guid} from "guid-typescript";
 
 export default class FilesApiClient {
     static init = () => {
@@ -19,8 +20,13 @@ export default class FilesApiClient {
         return result.data;
     }
 
+    static deleteRoot = async (id: Guid): Promise<void> => {
+        const result = await FilesApiClient.init().delete(`/roots/${id}`);
+        return result.data;
+    }
+
     static getAllRoots = async (): Promise<RootDto[]> => {
-        const result = await FilesApiClient.init().get<RootDto[]>(`/roots`);
+        const result = await FilesApiClient.init().get<RootDto[]>("/roots");
         return result.data;
     }
 }
