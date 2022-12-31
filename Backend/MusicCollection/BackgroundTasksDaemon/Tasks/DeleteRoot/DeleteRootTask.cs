@@ -21,7 +21,7 @@ public class DeleteRootTask : IBackgroundTask
         this.tagsRepository = tagsRepository;
         this.logger = logger;
 
-        Id = new Guid();
+        Id = Guid.NewGuid();
         state = DeleteRootTaskState.Pending;
     }
 
@@ -95,14 +95,15 @@ public class DeleteRootTask : IBackgroundTask
         var directoryIds = nodes.Where(x => x.Type == NodeType.Directory).Select(x => x.Id).ToArray();
         var fileIds = nodes.Where(x => x.Type == NodeType.File).Select(x => x.Id).ToArray();
 
-        await nodesRepository.DeleteManyAsync(nodes.Select(x => x.Id).ToArray());
-        await tagsRepository.DeleteManyAsync(fileIds);
-        UpdateProgress(() => processedDirectories++);
-
+        // по дереву идем и удаляем все ноды снизу вверх
         foreach (var directoryId in directoryIds)
         {
             await ProcessNodeAsync(directoryId, DeleteNodesAsync);
         }
+
+        await tagsRepository.DeleteManyAsync(fileIds);
+        await nodesRepository.DeleteManyAsync(nodes.Select(x => x.Id).ToArray());
+        UpdateProgress(() => processedDirectories++);
     }
 
     private async Task ProcessNodeAsync(Guid nodeId, Func<FileSystemNode[], Task> func)

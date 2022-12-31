@@ -18,9 +18,12 @@ export default function TasksListElement(props: Props): React.ReactElement {
             <td className="tableElement">{props.task.type}</td>
             <td className="tableElement">{props.task.state}</td>
             <td className="tableElement">{props.task.progress}</td>
-            {(props.task.state === "Pending" || props.task.state === "Done") && <td className="tableElement">
-                <div className="deleteTask" onClick={banUser}>Delete</div>
-            </td>}
+            {
+                (props.task.state === "Pending" || props.task.state === "Done" || props.task.state === "Fatal")
+                && <td className="tableElement">
+                    <div className="deleteTask" onClick={banUser}>Delete</div>
+                </td>
+            }
         </tr>
     )
 }
