@@ -1,15 +1,14 @@
 using BackgroundTasksDaemon;
 using BackgroundTasksDaemon.Builder;
 using BackgroundTasksDaemon.Storage;
-using DatabaseCore.Models;
-using DatabaseCore.Repository;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusicCollection.BusinessLogic.Repositories;
 using MusicCollection.BusinessLogic.Services;
 using MusicCollection.Common.Loggers;
 using MusicCollection.Common.Loggers.NLog;
 using MusicCollection.Common.TagsService;
+using SqlRepositoryBase.Core.Models;
+using SqlRepositoryBase.Core.Repository;
 
 namespace ApiUtils.ContainerConfiguration;
 
@@ -22,7 +21,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigurePostgreSql(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureBusinessLogicRepositories(this IServiceCollection services)
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
 
@@ -50,7 +49,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureLogicServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureBusinessLogicServices(this IServiceCollection services)
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
 

@@ -1,8 +1,8 @@
-﻿using DatabaseCore.Exceptions;
-using DatabaseCore.Repository;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
+using SqlRepositoryBase.Core.Exceptions;
+using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 
@@ -20,7 +20,7 @@ public class NodesRepository : INodesRepository
 
     public async Task CreateManyAsync(FileSystemNode[] nodes)
     {
-        await sqlRepository.CreateManyAsync(nodes.Select(ToStorageElement));
+        await sqlRepository.CreateAsync(nodes.Select(ToStorageElement));
     }
 
     public async Task<FileSystemNode[]> ReadAllFilesAsync(
@@ -66,7 +66,7 @@ public class NodesRepository : INodesRepository
 
     public async Task<FileSystemNode[]> ReadManyAsync(Guid[] ids)
     {
-        return (await sqlRepository.ReadManyAsync(ids)).Select(ToModel).ToArray()!;
+        return (await sqlRepository.ReadAsync(ids)).Select(ToModel).ToArray()!;
     }
 
     public async Task<FileSystemNode?> TryReadAsync(Guid id)
@@ -87,7 +87,7 @@ public class NodesRepository : INodesRepository
 
     public async Task DeleteManyAsync(Guid[] ids)
     {
-        await sqlRepository.DeleteManyAsync(ids);
+        await sqlRepository.DeleteAsync(ids);
     }
 
     private static FileSystemNode? ToModel(NodeStorageElement? node)

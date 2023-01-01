@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using DatabaseCore.Models;
-using MusicCollection.Api.Dto.Auth;
+﻿using SqlRepositoryBase.Core.Models;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 

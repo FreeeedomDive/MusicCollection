@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using DatabaseCore.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.FileSystem;
+using SqlRepositoryBase.Core.Models;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 

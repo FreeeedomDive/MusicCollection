@@ -1,5 +1,5 @@
-﻿using DatabaseCore.Repository;
-using MusicCollection.Api.Dto.Auth;
+﻿using MusicCollection.Api.Dto.Auth;
+using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
 

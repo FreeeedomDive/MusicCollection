@@ -3,6 +3,7 @@ using ApiUtils.Middlewares;
 using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
+using SqlRepositoryBase.Configuration.Extensions;
 
 namespace MusicCollection.AdminApi;
 
@@ -23,9 +24,10 @@ public class Startup
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
 
         services.ConfigureLogger()
-            .ConfigurePostgreSql(Configuration)
+            .ConfigurePostgreSql()
+            .ConfigureBusinessLogicRepositories()
             .ConfigureTagsExtractor()
-            .ConfigureLogicServices()
+            .ConfigureBusinessLogicServices()
             .ConfigureTasksWorker();
 
         services.AddCors(options =>

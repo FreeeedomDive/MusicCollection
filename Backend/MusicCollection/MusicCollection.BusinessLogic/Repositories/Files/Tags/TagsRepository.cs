@@ -1,5 +1,5 @@
-using DatabaseCore.Repository;
 using MusicCollection.Api.Dto.Music;
+using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Tags;
 
@@ -24,7 +24,7 @@ public class TagsRepository : ITagsRepository
 
     public async Task DeleteManyAsync(Guid[] ids)
     {
-        await sqlRepository.DeleteManyAsync(ids);
+        await sqlRepository.DeleteAsync(ids);
     }
 
     private static AudioFileTags? ToModel(AudioFileTagsStorageElement? storageElement)

@@ -1,7 +1,6 @@
 using ApiUtils;
 using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
-using DatabaseCore.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Auth;
@@ -12,6 +11,7 @@ using MusicCollection.BusinessLogic.Services.FilesService;
 using MusicCollection.BusinessLogic.Services.UsersService;
 using MusicCollection.Common.Loggers.NLog;
 using MusicCollection.Common.TagsService;
+using SqlRepositoryBase.Configuration.Extensions;
 using ILogger = MusicCollection.Common.Loggers.ILogger;
 
 namespace MusicCollection;
@@ -33,9 +33,10 @@ public class Startup
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
         
         services.ConfigureLogger()
-            .ConfigurePostgreSql(Configuration)
             .ConfigureTagsExtractor()
-            .ConfigureLogicServices();
+            .ConfigurePostgreSql()
+            .ConfigureBusinessLogicRepositories()
+            .ConfigureBusinessLogicServices();
 
         services.AddControllers();
         services.AddSwaggerGen(c =>

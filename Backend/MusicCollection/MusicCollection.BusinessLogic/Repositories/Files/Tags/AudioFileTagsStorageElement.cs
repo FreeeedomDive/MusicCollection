@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using DatabaseCore.Models;
+using SqlRepositoryBase.Core.Models;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Tags;
 

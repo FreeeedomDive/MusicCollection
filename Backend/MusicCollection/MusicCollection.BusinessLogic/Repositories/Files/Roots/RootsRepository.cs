@@ -1,7 +1,7 @@
-﻿using DatabaseCore.Exceptions;
-using DatabaseCore.Repository;
-using MusicCollection.Api.Dto.Exceptions;
+﻿using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
+using SqlRepositoryBase.Core.Exceptions;
+using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Roots;
 
