@@ -24,4 +24,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.3" />
+    </ItemGroup>
+
 </Project>
