@@ -76,14 +76,15 @@ public class QueuesService : IQueuesService
 
         var queue = await queueListRepository.ReadManyAsync(userId, currentQueuePosition.Value);
         var trackIdToPosition = queue.ToDictionary(x => x.TrackId, x => x.Position);
-        var readNodeTasks = queue.Select(x => nodesRepository.TryReadAsync(x.TrackId));
-        var nodes = (await Task.WhenAll(readNodeTasks)).Where(x => x != null).ToArray();
+        var nodes = await nodesRepository.ReadManyAsync(queue.Select(x => x.TrackId).ToArray());
 
         return nodes.Select(x => new QueueTrack
-        {
-            Position = trackIdToPosition[x!.Id],
-            Track = x
-        }).ToArray();
+            {
+                Position = trackIdToPosition[x.Id],
+                Track = x
+            })
+            .OrderBy(x => x.Position)
+            .ToArray();
     }
 
     public async Task<QueueTrack> MovePreviousAsync(Guid userId)
