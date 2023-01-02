@@ -49,11 +49,11 @@ public class QueuesController : Controller
         }
         catch (QueueNotFoundException queueNotFoundException)
         {
-            return NotFound(queueNotFoundException);
+            return NotFound();
         }
         catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
         {
-            return Conflict(queueIndexOutOfRangeException);
+            return Conflict();
         }
     }
 
@@ -66,11 +66,11 @@ public class QueuesController : Controller
         }
         catch (QueueNotFoundException queueNotFoundException)
         {
-            return NotFound(queueNotFoundException);
+            return NotFound();
         }
         catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
         {
-            return Conflict(queueIndexOutOfRangeException);
+            return Conflict();
         }
     }
 
@@ -83,11 +83,11 @@ public class QueuesController : Controller
         }
         catch (QueueNotFoundException queueNotFoundException)
         {
-            return NotFound(queueNotFoundException);
+            return NotFound();
         }
         catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
         {
-            return Conflict(queueIndexOutOfRangeException);
+            return Conflict();
         }
     }
 
