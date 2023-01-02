@@ -131,7 +131,7 @@ public class FilesService : IFilesService
 
     private async Task<Guid[]> CollectFilesFromDirectoryAsync(Guid directoryId)
     {
-        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId);
+        var nodes = await nodesRepository.ReadAllFilesAsync(directoryId, false);
         var files = nodes.Where(x => x.Type == NodeType.File).Select(x => x.Id);
         var directories = nodes.Where(x => x.Type == NodeType.Directory);
 
