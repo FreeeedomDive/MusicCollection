@@ -29,5 +29,10 @@ public class QueuePointerRepository : IQueuePointerRepository
         return (await sqlRepository.TryReadAsync(userId))?.Current;
     }
 
+    public async Task DeleteAsync(Guid userId)
+    {
+        await sqlRepository.DeleteAsync(userId);
+    }
+
     private readonly ISqlRepository<QueuePointerStorageElement> sqlRepository;
 }

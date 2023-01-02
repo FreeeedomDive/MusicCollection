@@ -29,5 +29,10 @@ public class QueueContextRepository : IQueueContextRepository
         return (await sqlRepository.TryReadAsync(userId))?.ContextId;
     }
 
+    public async Task DeleteAsync(Guid userId)
+    {
+        await sqlRepository.DeleteAsync(userId);
+    }
+
     private readonly ISqlRepository<QueueContextStorageElement> sqlRepository;
 }

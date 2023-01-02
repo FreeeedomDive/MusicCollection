@@ -5,7 +5,6 @@ using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.BusinessLogic.Utils;
-using MusicCollection.Common.Loggers;
 using MusicCollection.Common.TagsService;
 using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
 
@@ -18,8 +17,7 @@ public class FilesService : IFilesService
         IRootsRepository rootsRepository,
         IMusicFilesRepository musicFilesRepository,
         ITagsRepository tagsRepository,
-        ITagsExtractor tagsExtractor,
-        ILogger logger
+        ITagsExtractor tagsExtractor
     )
     {
         this.nodesRepository = nodesRepository;
@@ -27,7 +25,6 @@ public class FilesService : IFilesService
         this.musicFilesRepository = musicFilesRepository;
         this.tagsRepository = tagsRepository;
         this.tagsExtractor = tagsExtractor;
-        this.logger = logger;
     }
 
     public async Task<FileSystemNode[]> ReadDirectoryAsync(Guid directoryId, int skip = 0, int take = 50)
@@ -150,8 +147,6 @@ public class FilesService : IFilesService
             }
         }
 
-        logger.Info($"Directories in {path}\n{string.Join("\n", directories.Select(x => x.Path))}");
-        logger.Info($"Files in {path}\n{string.Join("\n", files.Select(x => x.Path))}");
         await nodesRepository.CreateManyAsync(files.Concat(directories).ToArray());
 
         foreach (var directory in directories)
@@ -193,5 +188,4 @@ public class FilesService : IFilesService
     private readonly IMusicFilesRepository musicFilesRepository;
     private readonly ITagsRepository tagsRepository;
     private readonly ITagsExtractor tagsExtractor;
-    private readonly ILogger logger;
 }

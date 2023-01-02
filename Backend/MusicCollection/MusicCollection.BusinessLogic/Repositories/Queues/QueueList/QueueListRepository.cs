@@ -30,16 +30,22 @@ public class QueueListRepository : IQueueListRepository
         return ToModel(result.First());
     }
 
+    public async Task<QueueListElement[]> ReadManyAsync(Guid userId, int skip = 0, int take = 50)
+    {
+        var result = await sqlRepository
+            .BuildCustomQuery()
+            .Where(x => x.Id == userId)
+            .OrderBy(x => x.Position)
+            .Skip(skip)
+            .Take(take)
+            .ToArrayAsync();
+
+        return result.Select(ToModel).ToArray();
+    }
+
     public async Task<QueueListElement[]> ReadAllAsync(Guid userId)
     {
         return (await sqlRepository.ReadAllAsync(userId)).Select(ToModel).ToArray();
-    }
-
-    public async Task<bool> IsQueueExist(Guid userId)
-    {
-        return await sqlRepository
-            .BuildCustomQuery()
-            .AnyAsync(x => x.Id == userId);
     }
 
     public async Task ClearAsync(Guid userId)

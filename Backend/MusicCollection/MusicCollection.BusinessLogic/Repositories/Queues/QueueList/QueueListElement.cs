@@ -1,4 +1,4 @@
-namespace MusicCollection.Api.Dto.Queues;
+namespace MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
 
 public class QueueListElement
 {
