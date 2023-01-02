@@ -88,28 +88,28 @@ public class QueuesService : IQueuesService
 
     public async Task<QueueTrack> MovePreviousAsync(Guid userId)
     {
-        var currentQueuePosition = await queuePointerRepository.TryReadAsync(userId);
-        if (currentQueuePosition == null)
-        {
-            throw new QueueNotFoundException(userId);
-        }
-
-        return await MoveToPositionAsync(userId, currentQueuePosition.Value - 1);
+        return await MoveToPositionAsync(userId, x => x - 1);
     }
 
     public async Task<QueueTrack> MoveNextAsync(Guid userId)
     {
+        return await MoveToPositionAsync(userId, x => x + 1);
+    }
+
+    public async Task<QueueTrack> MoveToPositionAsync(Guid userId, int nextPosition)
+    {
+        return await MoveToPositionAsync(userId, _ => nextPosition);
+    }
+
+    private async Task<QueueTrack> MoveToPositionAsync(Guid userId, Func<int, int> modifyCurrentPosition)
+    {
         var currentQueuePosition = await queuePointerRepository.TryReadAsync(userId);
         if (currentQueuePosition == null)
         {
             throw new QueueNotFoundException(userId);
         }
 
-        return await MoveToPositionAsync(userId, currentQueuePosition.Value + 1);
-    }
-
-    public async Task<QueueTrack> MoveToPositionAsync(Guid userId, int nextPosition)
-    {
+        var nextPosition = modifyCurrentPosition(currentQueuePosition.Value);
         var nextTrack = await queueListRepository.ReadAsync(userId, nextPosition);
         await queuePointerRepository.CreateOrUpdateAsync(userId, nextPosition);
         var track = await filesService.ReadNodeAsync(nextTrack.TrackId);

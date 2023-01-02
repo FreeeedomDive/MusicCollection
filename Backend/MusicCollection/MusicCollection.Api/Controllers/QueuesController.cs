@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.Queues;
 using MusicCollection.BusinessLogic.Services.QueuesService;
 
@@ -42,19 +43,52 @@ public class QueuesController : Controller
     [HttpPost("move/previous")]
     public async Task<ActionResult<QueueTrack>> MovePreviousAsync([FromRoute] Guid userId)
     {
-        return await queuesService.MovePreviousAsync(userId);
+        try
+        {
+            return await queuesService.MovePreviousAsync(userId);
+        }
+        catch (QueueNotFoundException queueNotFoundException)
+        {
+            return NotFound(queueNotFoundException);
+        }
+        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        {
+            return Conflict(queueIndexOutOfRangeException);
+        }
     }
 
     [HttpPost("move/next")]
     public async Task<ActionResult<QueueTrack>> MoveNextAsync([FromRoute] Guid userId)
     {
-        return await queuesService.MoveNextAsync(userId);
+        try
+        {
+            return await queuesService.MoveNextAsync(userId);
+        }
+        catch (QueueNotFoundException queueNotFoundException)
+        {
+            return NotFound(queueNotFoundException);
+        }
+        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        {
+            return Conflict(queueIndexOutOfRangeException);
+        }
     }
 
     [HttpPost("move/{nextPosition:int}")]
     public async Task<ActionResult<QueueTrack>> MoveToPositionAsync([FromRoute] Guid userId, [FromRoute] int nextPosition)
     {
-        return await queuesService.MoveToPositionAsync(userId, nextPosition);
+        try
+        {
+            return await queuesService.MoveToPositionAsync(userId, nextPosition);
+        }
+        catch (QueueNotFoundException queueNotFoundException)
+        {
+            return NotFound(queueNotFoundException);
+        }
+        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        {
+            return Conflict(queueIndexOutOfRangeException);
+        }
     }
 
     private readonly IQueuesService queuesService;
