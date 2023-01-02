@@ -20,7 +20,6 @@ public class DatabaseContext : DbContext
     ) : base(options)
     {
         Options = dbOptionsAccessor.Value;
-        Database.EnsureCreated();
     }
         
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
