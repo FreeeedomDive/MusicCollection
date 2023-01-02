@@ -55,6 +55,17 @@ public class FilesService : IFilesService
         return node;
     }
 
+    public async Task<FileSystemNode[]> ReadManyNodesAsync(Guid[] ids)
+    {
+        var nodes = await nodesRepository.ReadManyAsync(ids);
+        foreach (var node in nodes)
+        {
+            await ExtendNodeAsync(node);
+        }
+
+        return nodes;
+    }
+
     public async Task<FileSystemNode?> TryReadNodeAsync(Guid id)
     {
         var node = await nodesRepository.TryReadAsync(id);
@@ -62,6 +73,7 @@ public class FilesService : IFilesService
         {
             return null;
         }
+
         await ExtendNodeAsync(node);
         return node;
     }

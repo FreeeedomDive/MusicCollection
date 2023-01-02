@@ -1,6 +1,5 @@
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.Queues;
-using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueContext;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueuePointer;
@@ -14,14 +13,12 @@ public class QueuesService : IQueuesService
         IQueueContextRepository queueContextRepository,
         IQueuePointerRepository queuePointerRepository,
         IQueueListRepository queueListRepository,
-        INodesRepository nodesRepository,
         IFilesService filesService
     )
     {
         this.queueContextRepository = queueContextRepository;
         this.queuePointerRepository = queuePointerRepository;
         this.queueListRepository = queueListRepository;
-        this.nodesRepository = nodesRepository;
         this.filesService = filesService;
     }
 
@@ -76,7 +73,7 @@ public class QueuesService : IQueuesService
 
         var queue = await queueListRepository.ReadManyAsync(userId, currentQueuePosition.Value);
         var trackIdToPosition = queue.ToDictionary(x => x.TrackId, x => x.Position);
-        var nodes = await nodesRepository.ReadManyAsync(queue.Select(x => x.TrackId).ToArray());
+        var nodes = await filesService.ReadManyNodesAsync(queue.Select(x => x.TrackId).ToArray());
 
         return nodes.Select(x => new QueueTrack
             {
@@ -125,6 +122,5 @@ public class QueuesService : IQueuesService
     private readonly IQueueContextRepository queueContextRepository;
     private readonly IQueuePointerRepository queuePointerRepository;
     private readonly IQueueListRepository queueListRepository;
-    private readonly INodesRepository nodesRepository;
     private readonly IFilesService filesService;
 }
