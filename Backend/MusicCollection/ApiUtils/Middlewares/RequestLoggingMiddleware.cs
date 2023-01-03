@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using MusicCollection.Common.Loggers.NLog;
 
@@ -16,8 +17,10 @@ public class RequestLoggingMiddleware
     
     public async Task Invoke(HttpContext context)
     {
+        var stopwatch = new Stopwatch();
         try
         {
+            stopwatch.Start();
             await next(context);
         }
         catch(Exception e)
@@ -27,10 +30,11 @@ public class RequestLoggingMiddleware
         finally
         {
             logger.Info(
-                "Request {method} {url} with response status code {statusCode}",
+                "{method}\t\t{url} => {statusCode} in {ms}ms",
                 context.Request?.Method,
                 context.Request?.Path.Value,
-                context.Response?.StatusCode);
+                context.Response?.StatusCode,
+                stopwatch.ElapsedMilliseconds);
         }
     }
 
