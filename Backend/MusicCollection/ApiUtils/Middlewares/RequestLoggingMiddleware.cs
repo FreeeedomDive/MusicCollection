@@ -30,7 +30,7 @@ public class RequestLoggingMiddleware
         finally
         {
             logger.Info(
-                "{method}\t\t{url} => {statusCode} in {ms}ms",
+                "{method} {url} => {statusCode} in {ms}ms",
                 context.Request?.Method,
                 context.Request?.Path.Value,
                 context.Response?.StatusCode,
