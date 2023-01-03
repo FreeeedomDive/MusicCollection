@@ -8,4 +8,5 @@ COPY . .
 
 FROM nginx:stable-alpine
 COPY --from=build /build /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d
 CMD ["nginx", "-g", "daemon off;"]
