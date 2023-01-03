@@ -91,7 +91,7 @@ public class QueuesService : IQueuesService
                     TrackId = x
                 });
             await queueListRepository.CreateAsync(userId, queueElements);
-            await queuePointerRepository.CreateOrUpdateAsync(userId, currentTrackIndexWithoutShuffle == -1 ? 1 : currentTrackIndexWithoutShuffle);
+            await queuePointerRepository.CreateOrUpdateAsync(userId, currentTrackIndexWithoutShuffle == -1 ? 1 : currentTrackIndexWithoutShuffle + 1);
         }
     }
 
