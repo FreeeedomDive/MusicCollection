@@ -1,7 +1,6 @@
 using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
 using BackgroundTasksDaemon;
-using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
@@ -19,10 +18,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services
-            .AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
-            .AddCertificate();
-        
         var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
         services.AddTransient<DbContext, DatabaseContext>();
@@ -46,7 +41,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseAuthentication();
         app.UseHttpsRedirection();
 
         app.UseMiddleware<RequestLoggingMiddleware>();
