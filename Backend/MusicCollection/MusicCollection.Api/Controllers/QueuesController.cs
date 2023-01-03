@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.Api.Dto.Queues;
 using MusicCollection.BusinessLogic.Services.QueuesService;
 
@@ -21,6 +22,19 @@ public class QueuesController : Controller
         return Ok();
     }
 
+    [HttpGet("context")]
+    public async Task<ActionResult<FileSystemNode>> GetCurrentQueueContext([FromRoute] Guid userId)
+    {
+        try
+        {
+            return await queuesService.GetCurrentContextAsync(userId);
+        }
+        catch (QueueNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
     [HttpDelete]
     public async Task<ActionResult> ClearQueueAsync([FromRoute] Guid userId)
     {
@@ -28,7 +42,7 @@ public class QueuesController : Controller
         return Ok();
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<ActionResult<QueueTrack[]>> GetQueue([FromRoute] Guid userId)
     {
         return await queuesService.GetQueue(userId);
@@ -47,11 +61,11 @@ public class QueuesController : Controller
         {
             return await queuesService.MovePreviousAsync(userId);
         }
-        catch (QueueNotFoundException queueNotFoundException)
+        catch (QueueNotFoundException)
         {
             return NotFound();
         }
-        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        catch (QueueIndexOutOfRangeException)
         {
             return Conflict();
         }
@@ -64,11 +78,11 @@ public class QueuesController : Controller
         {
             return await queuesService.MoveNextAsync(userId);
         }
-        catch (QueueNotFoundException queueNotFoundException)
+        catch (QueueNotFoundException)
         {
             return NotFound();
         }
-        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        catch (QueueIndexOutOfRangeException)
         {
             return Conflict();
         }
@@ -81,11 +95,11 @@ public class QueuesController : Controller
         {
             return await queuesService.MoveToPositionAsync(userId, nextPosition);
         }
-        catch (QueueNotFoundException queueNotFoundException)
+        catch (QueueNotFoundException)
         {
             return NotFound();
         }
-        catch (QueueIndexOutOfRangeException queueIndexOutOfRangeException)
+        catch (QueueIndexOutOfRangeException)
         {
             return Conflict();
         }

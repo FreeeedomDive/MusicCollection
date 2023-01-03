@@ -1,4 +1,5 @@
 using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.Api.Dto.Queues;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueContext;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
@@ -38,6 +39,17 @@ public class QueuesService : IQueuesService
             TrackId = x
         });
         await queueListRepository.CreateAsync(userId, queueElements);
+    }
+
+    public async Task<FileSystemNode> GetCurrentContextAsync(Guid userId)
+    {
+        var currentContext = await queueContextRepository.TryReadAsync(userId);
+        if (currentContext == null)
+        {
+            throw new QueueNotFoundException(userId);
+        }
+
+        return await filesService.ReadNodeAsync(currentContext.Value);
     }
 
     public async Task ClearQueueAsync(Guid userId)

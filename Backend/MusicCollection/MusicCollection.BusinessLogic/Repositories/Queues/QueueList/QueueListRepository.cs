@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.Api.Dto.Exceptions;
-using MusicCollection.Api.Dto.Queues;
 using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
