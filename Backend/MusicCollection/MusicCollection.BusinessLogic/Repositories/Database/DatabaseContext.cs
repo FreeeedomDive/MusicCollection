@@ -7,6 +7,7 @@ using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueContext;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueuePointer;
+using MusicCollection.BusinessLogic.Repositories.Users.Personalization;
 
 namespace MusicCollection.BusinessLogic.Repositories.Database;
 
@@ -34,4 +35,5 @@ public class DatabaseContext : DbContext
     public DbSet<QueueContextStorageElement> QueueContextStorage { get; set; }
     public DbSet<QueuePointerStorageElement> QueuePointerStorage { get; set; }
     public DbSet<QueueListStorageElement> QueueListStorage { get; set; }
+    public DbSet<UserSettingsStorageElement> UserSettingsStorage { get; set; }
 }
