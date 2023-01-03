@@ -1,9 +1,11 @@
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.Api.Dto.Queues;
+using MusicCollection.BusinessLogic.Extensions;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueContext;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueueList;
 using MusicCollection.BusinessLogic.Repositories.Queues.QueuePointer;
+using MusicCollection.BusinessLogic.Repositories.Users.Personalization;
 using MusicCollection.BusinessLogic.Services.FilesService;
 
 namespace MusicCollection.BusinessLogic.Services.QueuesService;
@@ -14,13 +16,15 @@ public class QueuesService : IQueuesService
         IQueueContextRepository queueContextRepository,
         IQueuePointerRepository queuePointerRepository,
         IQueueListRepository queueListRepository,
-        IFilesService filesService
+        IFilesService filesService,
+        IUserSettingsRepository userSettingsRepository
     )
     {
         this.queueContextRepository = queueContextRepository;
         this.queuePointerRepository = queuePointerRepository;
         this.queueListRepository = queueListRepository;
         this.filesService = filesService;
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     public async Task CreateQueueAsync(Guid userId, Guid contextId)
@@ -32,13 +36,63 @@ public class QueuesService : IQueuesService
         await queueContextRepository.CreateOrUpdateAsync(userId, contextId);
         await queuePointerRepository.CreateOrUpdateAsync(userId, 1);
 
+        var userSettings = await userSettingsRepository.ReadOrCreateAsync(userId);
         var allFiles = await filesService.ReadAllFilesFromDirectoryAsync(contextId);
-        var queueElements = allFiles.Select((x, i) => new QueueListElement
-        {
-            Position = i + 1,
-            TrackId = x
-        });
+        var queueElements = allFiles
+            .ModifyIf(userSettings.Shuffle, x => x.Shuffle())
+            .Select((x, i) => new QueueListElement
+            {
+                Position = i + 1,
+                TrackId = x
+            });
         await queueListRepository.CreateAsync(userId, queueElements);
+    }
+
+    // todo - в будущем порефачить и как-нибудь унифицировать создание и модификацию очереди
+    public async Task UpdateWithShuffleAsync(Guid userId, bool shuffle)
+    {
+        var userSettings = await userSettingsRepository.ReadOrCreateAsync(userId);
+        userSettings.Shuffle = shuffle;
+        await userSettingsRepository.UpdateAsync(userId, userSettings);
+
+        var currentQueueContext = await queueContextRepository.TryReadAsync(userId);
+        var currentTrackPosition = await queuePointerRepository.TryReadAsync(userId);
+        if (currentQueueContext == null || currentTrackPosition == null)
+        {
+            return;
+        }
+
+        var currentTrack = await queueListRepository.ReadAsync(userId, currentTrackPosition.Value);
+        await ClearQueueAsync(userId);
+        await queueContextRepository.CreateOrUpdateAsync(userId, currentQueueContext.Value);
+        var allFiles = await filesService.ReadAllFilesFromDirectoryAsync(currentQueueContext.Value);
+        if (shuffle)
+        {
+            // если включен шафл, ставим текущий трек на 1 позицию, остальные в перемешанном виде добавляем после него
+            currentTrack.Position = 1;
+            allFiles = allFiles.Except(currentTrack.TrackId).Shuffle().ToArray();
+            var newQueueElements = allFiles
+                .Select((x, i) => new QueueListElement
+                {
+                    Position = i + 2,
+                    TrackId = x
+                });
+            await queueListRepository.CreateAsync(userId, new[] { currentTrack }.Concat(newQueueElements));
+            await queuePointerRepository.CreateOrUpdateAsync(userId, 1);
+        }
+        else
+        {
+            // если выключен шафл, ставим все треки в список без перемешиваний, вычисляем позицию текущего трека в этом списке и ставим текущую позицию, равную ей
+            var currentTrackIndexWithoutShuffle = Array.IndexOf(allFiles, currentTrack.TrackId);
+            var queueElements = allFiles
+                .Select((x, i) => new QueueListElement
+                {
+                    Position = i + 1,
+                    TrackId = x
+                });
+            await queueListRepository.CreateAsync(userId, queueElements);
+            await queuePointerRepository.CreateOrUpdateAsync(userId, currentTrackIndexWithoutShuffle == -1 ? 1 : currentTrackIndexWithoutShuffle);
+        }
     }
 
     public async Task<FileSystemNode> GetCurrentContextAsync(Guid userId)
@@ -135,4 +189,5 @@ public class QueuesService : IQueuesService
     private readonly IQueuePointerRepository queuePointerRepository;
     private readonly IQueueListRepository queueListRepository;
     private readonly IFilesService filesService;
+    private readonly IUserSettingsRepository userSettingsRepository;
 }

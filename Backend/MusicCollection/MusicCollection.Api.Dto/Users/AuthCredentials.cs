@@ -1,4 +1,4 @@
-﻿namespace MusicCollection.Api.Dto.Auth;
+﻿namespace MusicCollection.Api.Dto.Users;
 
 public class AuthCredentials
 {

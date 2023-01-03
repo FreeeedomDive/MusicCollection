@@ -1,5 +1,5 @@
-﻿using MusicCollection.Api.Dto.Auth;
-using MusicCollection.Api.Dto.Exceptions;
+﻿using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 
 namespace MusicCollection.BusinessLogic.Services.UsersService;

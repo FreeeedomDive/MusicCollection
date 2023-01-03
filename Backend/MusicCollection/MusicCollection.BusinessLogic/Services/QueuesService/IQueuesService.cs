@@ -6,6 +6,7 @@ namespace MusicCollection.BusinessLogic.Services.QueuesService;
 public interface IQueuesService : IMusicCollectionLogicService
 {
     Task CreateQueueAsync(Guid userId, Guid contextId);
+    Task UpdateWithShuffleAsync(Guid userId, bool shuffle);
     Task<FileSystemNode> GetCurrentContextAsync(Guid userId);
     Task ClearQueueAsync(Guid userId);
 

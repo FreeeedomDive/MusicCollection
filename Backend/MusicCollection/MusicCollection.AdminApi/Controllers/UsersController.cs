@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Auth;
+using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 
 namespace MusicCollection.AdminApi.Controllers;

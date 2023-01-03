@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Auth;
 using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Services.UsersService;
 
 

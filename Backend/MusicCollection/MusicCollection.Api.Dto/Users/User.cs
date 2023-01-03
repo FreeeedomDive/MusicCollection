@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MusicCollection.Api.Dto.Auth;
+﻿namespace MusicCollection.Api.Dto.Users;
 
 public class User
 {
-    [Key]
     public Guid Id { get; set; }
     public string Login { get; set; }
 }
