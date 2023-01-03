@@ -105,5 +105,12 @@ public class QueuesController : Controller
         }
     }
 
+    [HttpPost("shuffle/{shuffle:bool}")]
+    public async Task<ActionResult> UpdateShuffle([FromRoute] Guid userId, [FromRoute] bool shuffle)
+    {
+        await queuesService.UpdateWithShuffleAsync(userId, shuffle);
+        return Ok();
+    }
+
     private readonly IQueuesService queuesService;
 }
