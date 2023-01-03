@@ -1,9 +1,9 @@
 import './App.css';
-import AppRouter from "./Application/AppRouter";
+import AdminApp from "./Application/AdminApp";
 
 function App() {
   return (
-    <AppRouter/>
+    <AdminApp/>
   );
 }
 
