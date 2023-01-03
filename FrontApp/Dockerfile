@@ -5,4 +5,7 @@ COPY . .
 RUN npm install --production
 RUN npm run build
 COPY . .
-CMD ["npx", "serve", "-s", "build", "-l", "4567"]
+
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]
