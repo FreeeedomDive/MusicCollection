@@ -16,8 +16,8 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5" />
-        <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.2" />
-        <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.2" />
+        <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.3" />
+        <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
