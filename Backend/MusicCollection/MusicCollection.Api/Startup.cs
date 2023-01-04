@@ -1,18 +1,10 @@
-using ApiUtils;
 using ApiUtils.ContainerConfiguration;
-using ApiUtils.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using MusicCollection.BusinessLogic.Repositories.Auth;
 using MusicCollection.BusinessLogic.Repositories.Database;
-using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
-using MusicCollection.BusinessLogic.Repositories.Files.Roots;
-using MusicCollection.BusinessLogic.Services.FilesService;
-using MusicCollection.BusinessLogic.Services.UsersService;
-using MusicCollection.Common.Loggers.NLog;
-using MusicCollection.Common.TagsService;
 using SqlRepositoryBase.Configuration.Extensions;
-using ILogger = MusicCollection.Common.Loggers.ILogger;
+using TelemetryApp.Api.Client.Extensions;
+using TelemetryApp.Utilities.Middlewares;
 
 namespace MusicCollection;
 
@@ -32,7 +24,9 @@ public class Startup
         services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
         
-        services.ConfigureLogger()
+        services
+            .ConfigureApiTelemetryClient("MusicCollection", "MusicCollection.Api")
+            .ConfigureLoggerClient("MusicCollection", "MusicCollection.Api")
             .ConfigureTagsExtractor()
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()

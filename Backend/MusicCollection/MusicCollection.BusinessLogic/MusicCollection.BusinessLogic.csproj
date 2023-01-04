@@ -17,13 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Loggers\Loggers.csproj" />
       <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
       <ProjectReference Include="..\TagsService\TagsService.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

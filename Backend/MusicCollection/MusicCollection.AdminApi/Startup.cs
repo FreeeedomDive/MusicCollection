@@ -1,9 +1,10 @@
 using ApiUtils.ContainerConfiguration;
-using ApiUtils.Middlewares;
 using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
+using TelemetryApp.Api.Client.Extensions;
+using TelemetryApp.Utilities.Middlewares;
 
 namespace MusicCollection.AdminApi;
 
@@ -23,7 +24,9 @@ public class Startup
         services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
 
-        services.ConfigureLogger()
+        services
+            .ConfigureApiTelemetryClient("MusicCollection", "MusicCollection.AdminApi")
+            .ConfigureLoggerClient("MusicCollection", "MusicCollection.AdminApi")
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()
             .ConfigureTagsExtractor()

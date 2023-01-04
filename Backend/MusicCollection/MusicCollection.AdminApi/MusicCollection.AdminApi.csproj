@@ -13,12 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="NLog.config">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="startProduction.bat">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -26,6 +20,8 @@
 
     <ItemGroup>
       <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5" />
+      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.2" />
+      <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.2" />
     </ItemGroup>
 
 </Project>

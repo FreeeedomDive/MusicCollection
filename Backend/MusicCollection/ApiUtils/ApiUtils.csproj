@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\Loggers\Loggers.csproj" />
       <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
     </ItemGroup>
 

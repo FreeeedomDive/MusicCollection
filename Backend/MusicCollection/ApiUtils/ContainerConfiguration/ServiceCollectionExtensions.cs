@@ -4,8 +4,6 @@ using BackgroundTasksDaemon.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using MusicCollection.BusinessLogic.Repositories;
 using MusicCollection.BusinessLogic.Services;
-using MusicCollection.Common.Loggers;
-using MusicCollection.Common.Loggers.NLog;
 using MusicCollection.Common.TagsService;
 using SqlRepositoryBase.Core.Models;
 using SqlRepositoryBase.Core.Repository;
@@ -14,13 +12,6 @@ namespace ApiUtils.ContainerConfiguration;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection ConfigureLogger(this IServiceCollection services)
-    {
-        services.AddSingleton<ILogger>(NLogLogger.Build("Default"));
-
-        return services;
-    }
-
     public static IServiceCollection ConfigureBusinessLogicRepositories(this IServiceCollection services)
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();

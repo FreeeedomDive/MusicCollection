@@ -1,5 +1,5 @@
 using BackgroundTasksDaemon.Storage;
-using MusicCollection.Common.Loggers;
+using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon;
 
@@ -7,7 +7,7 @@ public class TasksDaemon : ITasksDaemon
 {
     public TasksDaemon(
         IBackgroundTasksStorage backgroundTasksStorage,
-        ILogger logger
+        ILoggerClient logger
     )
     {
         this.backgroundTasksStorage = backgroundTasksStorage;
@@ -16,7 +16,7 @@ public class TasksDaemon : ITasksDaemon
 
     public async Task Start()
     {
-        logger.Info("{Daemon} has started", nameof(TasksDaemon));
+        await logger.InfoAsync("{Daemon} has started", nameof(TasksDaemon));
         while (true)
         {
             const int secondsToSleep = 10;
@@ -28,18 +28,18 @@ public class TasksDaemon : ITasksDaemon
                 continue;
             }
 
-            logger.Info("Task {Id} is starting", nextTask.Id);
+            await logger.InfoAsync("Task {Id} is starting", nextTask.Id);
             try
             {
                 await nextTask.ExecuteAsync();
             }
             catch
             {
-                logger.Info("Task {Id} has failed", nextTask.Id);
+                await logger.InfoAsync("Task {Id} has failed", nextTask.Id);
             }
         }
     }
 
     private readonly IBackgroundTasksStorage backgroundTasksStorage;
-    private readonly ILogger logger;
+    private readonly ILoggerClient logger;
 }
