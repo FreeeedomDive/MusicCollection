@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
-using TelemetryApp.Api.Client.Extensions;
+using TelemetryApp.Utilities.Extensions;
 using TelemetryApp.Utilities.Middlewares;
 
 namespace MusicCollection;
