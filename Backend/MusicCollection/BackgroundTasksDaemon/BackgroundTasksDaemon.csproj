@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.6" />
+      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.7" />
     </ItemGroup>
 
 </Project>
