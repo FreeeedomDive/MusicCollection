@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /certificate
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https -ep ./https/certificate.pfx -p aspnet
+RUN dotnet dev-certs https --trust
+WORKDIR /src
+COPY ["MusicCollection.Api/MusicCollection.Api.csproj", "MusicCollection.Api/"]
+COPY ["MusicCollection.Api.Dto/MusicCollection.Api.Dto.csproj", "MusicCollection.Api.Dto/"]
+COPY ["ApiUtils/ApiUtils.csproj", "ApiUtils/"]
+RUN dotnet restore "MusicCollection.Api/MusicCollection.Api.csproj"
+COPY . .
+WORKDIR "/src/MusicCollection.Api"
+RUN dotnet build "MusicCollection.Api.csproj" -c Release -o /app/build
+
+FROM build AS publish
+WORKDIR "/src/MusicCollection.Api"
+RUN dotnet publish "MusicCollection.Api.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /certificate /certificate
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "MusicCollection.Api.dll"]
