@@ -26,7 +26,7 @@ public class Startup
         
         var telemetryApiUrl = Configuration.GetSection("TelemetryApp").GetSection("ApiUrl").Value ?? throw new InvalidOperationException("TelemetryApp.Api url is not configured");
         services
-            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.AdminApi", telemetryApiUrl)
+            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.Api", telemetryApiUrl)
             .ConfigureTagsExtractor()
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()
