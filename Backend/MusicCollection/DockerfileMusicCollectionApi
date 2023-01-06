@@ -8,7 +8,10 @@ RUN dotnet dev-certs https -ep ./https/certificate.pfx -p aspnet
 RUN dotnet dev-certs https --trust
 WORKDIR /src
 COPY ["MusicCollection.Api/MusicCollection.Api.csproj", "MusicCollection.Api/"]
+COPY ["MusicCollection.BusinessLogic/MusicCollection.BusinessLogic.csproj", "MusicCollection.BusinessLogic/"]
 COPY ["MusicCollection.Api.Dto/MusicCollection.Api.Dto.csproj", "MusicCollection.Api.Dto/"]
+COPY ["BackgroundTasksDaemon/BackgroundTasksDaemon.csproj", "BackgroundTasksDaemon/"]
+COPY ["TagsService/TagsService.csproj", "TagsService/"]
 COPY ["ApiUtils/ApiUtils.csproj", "ApiUtils/"]
 RUN dotnet restore "MusicCollection.Api/MusicCollection.Api.csproj"
 COPY . .

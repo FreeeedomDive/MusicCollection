@@ -24,9 +24,9 @@ public class Startup
         services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
         
+        var telemetryApiUrl = Configuration.GetSection("TelemetryApp").GetSection("ApiUrl").Value ?? throw new InvalidOperationException("TelemetryApp.Api url is not configured");
         services
-            .ConfigureApiTelemetryClient("MusicCollection", "MusicCollection.Api")
-            .ConfigureLoggerClient("MusicCollection", "MusicCollection.Api")
+            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.AdminApi", telemetryApiUrl)
             .ConfigureTagsExtractor()
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()
