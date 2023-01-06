@@ -15,6 +15,6 @@ data class NodeModel(
 )
 {
     fun fileName(): String {
-        return path.split("\\").last();
+        return path.split("\\", "/").last();
     }
 }
