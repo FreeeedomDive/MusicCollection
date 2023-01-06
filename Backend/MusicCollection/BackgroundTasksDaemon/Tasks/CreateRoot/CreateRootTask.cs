@@ -47,7 +47,7 @@ public class CreateRootTask : IBackgroundTask
         {
             throw new InvalidOperationException("Name and Path are empty");
         }
-        
+
         if (Directory.Exists(rootPath))
         {
             return Task.CompletedTask;
@@ -67,7 +67,7 @@ public class CreateRootTask : IBackgroundTask
             state = CreateRootTaskState.Done;
             Progress = 100;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             await logger.ErrorAsync(e, "Unhandled exception happened in task {task} in state {state}", nameof(CreateRootTask), state);
             state = CreateRootTaskState.Fatal;
@@ -80,7 +80,7 @@ public class CreateRootTask : IBackgroundTask
         state = CreateRootTaskState.FetchingDirectories;
 
         await ProcessDirectoryAsync(Guid.Empty, rootPath, CollectDirectoriesAndFilesAsync);
-        
+
         await logger.InfoAsync($"Total {totalDirectories} directories and {totalFiles} files");
     }
 
@@ -88,7 +88,7 @@ public class CreateRootTask : IBackgroundTask
     {
         totalDirectories += directories.Length;
         totalFiles += files.Length;
-            
+
         foreach (var directory in directories)
         {
             await ProcessDirectoryAsync(Guid.Empty, directory, CollectDirectoriesAndFilesAsync);
@@ -134,7 +134,7 @@ public class CreateRootTask : IBackgroundTask
             UpdateProgress(() => processedDirectories++);
         }
     }
-    
+
     private static FileSystemNode[] BuildNodes(IEnumerable<string> paths, Guid parentId, NodeType type)
     {
         return paths.Select(x => new FileSystemNode
@@ -173,6 +173,11 @@ public class CreateRootTask : IBackgroundTask
     {
         var directories = Directory.GetDirectories(path);
         var files = Directory.GetFiles(path).Where(x => x.IsSupportedExtension()).ToArray();
+
+        if (directories.Length == 0 && files.Length == 0)
+        {
+            return;
+        }
 
         await func(nodeId, directories, files);
     }
