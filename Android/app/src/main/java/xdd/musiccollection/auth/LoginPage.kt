@@ -17,18 +17,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import xdd.musiccollection.R
 import xdd.musiccollection.apiClient.UsersApiClient
-import xdd.musiccollection.apiDto.users.AuthCredentialsDto
 import xdd.musiccollection.defaultComponents.RoundedCornerOutlinedButton
 import xdd.musiccollection.defaultComponents.RoundedTextField
 import xdd.musiccollection.defaultComponents.RoundedTextFieldPosition
 import xdd.musiccollection.ui.theme.*
-import java.lang.Exception
+import java.util.*
 
 @Composable
-fun LoginPage(showMainPage: () -> Unit, switchToRegistration: () -> Unit) {
+fun LoginPage(showMainPage: (userId: UUID) -> Unit, switchToRegistration: () -> Unit) {
     val (loginValue, setLoginValue) = remember { mutableStateOf("") }
     val (passwordValue, setPasswordValue) = remember { mutableStateOf("") }
     val (isLoading, setLoading) = remember { mutableStateOf(false) }
@@ -85,7 +83,7 @@ fun LoginPage(showMainPage: () -> Unit, switchToRegistration: () -> Unit) {
                             when(loginResult.statusCode){
                                 200 -> {
                                     Log.i("Login", "Successful login as ${loginResult.value?.login}")
-                                    showMainPage()
+                                    showMainPage(loginResult.value!!.id!!)
                                 }
                                 404 -> {
                                     Log.e("Login", "Invalid login or password")
