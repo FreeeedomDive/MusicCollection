@@ -5,7 +5,7 @@ using MusicCollection.BusinessLogic.Repositories.Auth;
 namespace MusicCollection.AdminApi.Controllers;
 
 [ApiController]
-[Route("users")]
+[Route("adminApi/[controller]")]
 public class UsersController : Controller
 {
     public UsersController(IUsersRepository usersRepository)

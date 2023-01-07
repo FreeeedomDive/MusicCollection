@@ -5,7 +5,7 @@ using MusicCollection.Api.Dto.Admin;
 namespace MusicCollection.AdminApi.Controllers;
 
 [ApiController]
-[Route("tasks")]
+[Route("adminApi/[controller]")]
 public class TasksController : Controller
 {
     public TasksController(IBackgroundTasksStorage backgroundTasksStorage)
