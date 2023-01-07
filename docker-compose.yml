@@ -39,7 +39,7 @@ services:
     ports:
       - "7022:7022"
         
-  proxy:
+  MusicCollection.Nginx:
     image: nginx:mainline
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
