@@ -13,12 +13,11 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
       <PackageReference Include="Microsoft.OpenApi" Version="1.4.5" />
-      <PackageReference Include="Xdd.SqlRepositoryBase.Core" Version="1.0.3" />
+      <PackageReference Include="Xdd.SqlRepositoryBase.Core" Version="1.0.5" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\Loggers\Loggers.csproj" />
       <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
     </ItemGroup>
 

@@ -3,7 +3,7 @@ using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
-using MusicCollection.Common.Loggers;
+using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon.Tasks.DeleteRoot;
 
@@ -13,7 +13,7 @@ public class DeleteRootTask : IBackgroundTask
         IRootsRepository rootsRepository,
         INodesRepository nodesRepository,
         ITagsRepository tagsRepository,
-        ILogger logger
+        ILoggerClient logger
     )
     {
         this.rootsRepository = rootsRepository;
@@ -61,7 +61,7 @@ public class DeleteRootTask : IBackgroundTask
         }
         catch (Exception e)
         {
-            logger.Error(e, "Unhandled exception happened in task {task} in state {state}", nameof(DeleteRootTask), state);
+            await logger.ErrorAsync(e, "Unhandled exception happened in task {task} in state {state}", nameof(DeleteRootTask), state);
             state = DeleteRootTaskState.Fatal;
             throw;
         }
@@ -132,5 +132,5 @@ public class DeleteRootTask : IBackgroundTask
     private readonly IRootsRepository rootsRepository;
     private readonly INodesRepository nodesRepository;
     private readonly ITagsRepository tagsRepository;
-    private readonly ILogger logger;
+    private readonly ILoggerClient logger;
 }

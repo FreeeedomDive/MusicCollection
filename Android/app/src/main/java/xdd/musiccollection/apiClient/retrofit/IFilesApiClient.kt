@@ -11,27 +11,24 @@ import xdd.musiccollection.apiDto.files.FileSystemRootDto
 import java.util.*
 
 interface IFilesApiClient {
-    @GET("roots")
+    @GET("files/roots")
     suspend fun readAllRoots(): Array<FileSystemRootDto>
 
-    @GET("roots/{rootId}/nodes/{nodeId}")
+    @GET("files/nodes/{nodeId}")
     suspend fun readNode(
-        @Path("rootId") rootId: UUID,
         @Path("nodeId") nodeId: UUID
     ): FileSystemNodeDto
 
-    @GET("roots/{rootId}/nodes/{nodeId}/ReadChildren")
+    @GET("files/nodes/{nodeId}/ReadChildren")
     suspend fun readNodeAsDirectory(
-        @Path("rootId") rootId: UUID,
         @Path("nodeId") nodeId: UUID,
         @Query("skip") skip: Int = 0,
         @Query("take") take: Int = 50
     ): Array<FileSystemNodeDto>
 
     @Streaming
-    @GET("roots/{rootId}/nodes/{nodeId}/DownloadStream")
+    @GET("files/nodes/{nodeId}/DownloadStream")
     suspend fun download(
-        @Path("rootId") rootId: UUID,
         @Path("nodeId") nodeId: UUID
     ): Response<ResponseBody>
 }

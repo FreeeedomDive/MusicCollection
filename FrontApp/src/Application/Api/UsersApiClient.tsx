@@ -1,12 +1,11 @@
 import axios from "axios";
 import UserDto from "../Dto/UserDto";
 import {Guid} from "guid-typescript";
-import ApiConstants from "./ApiConstants";
 
 export default class UsersApiClient {
     static init = () => {
         return axios.create({
-            baseURL: `${ApiConstants.AdminApiBaseRoute}/users`, timeout: 10000, headers: {
+            baseURL: `adminApi/users`, timeout: 10000, headers: {
                 Accept: "application/json"
             }
         });

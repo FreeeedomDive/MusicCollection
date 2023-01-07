@@ -7,3 +7,4 @@ Obj
 appsettings.Production.json
 appsettings.RemoteDb.json
 Android/app/release
+Android/app/src/main/java/xdd/musiccollection/apiClient/retrofit/apiurl.txt

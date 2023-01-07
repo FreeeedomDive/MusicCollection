@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  MusicCollection.Api:
+    image: musiccollectionapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://*:7078
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/certificate/https/certificate.pfx
+      - ASPNETCORE_KESTREL__Certificates__Default__Password=aspnet
+    build:
+      context: Backend/MusicCollection
+      dockerfile: DockerfileMusicCollectionApi
+    volumes:
+      - ${MusicCollectionDirectory}:/music:ro
+    ports:
+      - "7078:7078"
+
+  MusicCollection.AdminApi:
+    image: musiccollectionadminapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://*:7039
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/certificate/https/certificate.pfx
+      - ASPNETCORE_KESTREL__Certificates__Default__Password=aspnet
+    build:
+      context: Backend/MusicCollection
+      dockerfile: DockerfileMusicCollectionAdminApi
+    volumes:
+      - ${MusicCollectionDirectory}:/music:ro
+    ports:
+      - "7039:7039"
+
+  MusicCollection.Front:
+    image: musiccollectionfront
+    build:
+      context: FrontApp
+      dockerfile: Dockerfile
+    ports:
+      - "7022:7022"
+        
+  MusicCollection.Nginx:
+    image: nginx:mainline
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "4567:80"
+
+networks:
+  default:
+    name: MusicCollectionNetwork

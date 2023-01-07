@@ -26,9 +26,10 @@ import xdd.musiccollection.defaultComponents.RoundedCornerOutlinedButton
 import xdd.musiccollection.defaultComponents.RoundedTextField
 import xdd.musiccollection.defaultComponents.RoundedTextFieldPosition
 import xdd.musiccollection.ui.theme.*
+import java.util.*
 
 @Composable
-fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit) {
+fun RegistrationPage(showMainPage: (userId: UUID) -> Unit, switchToLogin: () -> Unit) {
     val (loginValue, setLoginValue) = remember { mutableStateOf("") }
     val (passwordValue, setPasswordValue) = remember { mutableStateOf("") }
     val (confirmPasswordValue, setConfirmPasswordValue) = remember { mutableStateOf("") }
@@ -100,7 +101,7 @@ fun RegistrationPage(showMainPage: () -> Unit, switchToLogin: () -> Unit) {
                             when(registerResult.statusCode){
                                 200 -> {
                                     Log.i("Register", "Successful register as ${registerResult.value?.login}")
-                                    showMainPage()
+                                    showMainPage(registerResult.value!!.id!!)
                                 }
                                 409 -> {
                                     Log.e("Register", "")

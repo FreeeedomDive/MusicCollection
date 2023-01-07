@@ -7,16 +7,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.Divider
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import xdd.musiccollection.R
 import xdd.musiccollection.defaultComponents.BackPressHandler
-import xdd.musiccollection.defaultComponents.SearchComponent
-import xdd.musiccollection.defaultComponents.TopAppBarSearchButton
 import xdd.musiccollection.mainPage.viewModels.FileSystemPageViewModel
 import xdd.musiccollection.models.MainWindowViewState
 import xdd.musiccollection.models.NodeModel
@@ -45,7 +50,7 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
                             500 -> scaffoldState.snackbarHostState.showSnackbar(message = "Internal server is unavailable")
                         }
                     }
-                    viewModel.songViewModel.setCurrentTrack(viewModel.currentRoot!!.id, element)
+                    viewModel.setCurrentTrack(element)
                     disableSelectedElementLoading()
                 }
             }
@@ -92,24 +97,80 @@ fun FileSystemPage(viewModel: FileSystemPageViewModel) {
         {
             TopAppBar(
                 backgroundColor = BlueColorPalette1,
-                contentColor = Color.White
+                contentColor = Color.White,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                if (viewModel.isSearchOpened) {
-                    SearchComponent(
-                        searchQuery = viewModel.searchQuery,
-                        setSearchQuery = { query ->
-                            Log.i("Search", "Query has changed to $query")
-                            viewModel.search(query)
-                        },
-                        onClose = { viewModel.setOpenedSearch(false) }
-                    )
-                } else {
-                    TopAppBarSearchButton(onClick = { viewModel.setOpenedSearch(true) })
+                Box(Modifier.height(32.dp)) {
+                    Row(
+                        Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 4.dp),
+                            textAlign = TextAlign.Justify,
+                            maxLines = 1,
+                            text = viewModel.currentNode?.fileName() ?: "All folders"
+                        )
+                    }
+                    Row(
+                        Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            enabled = viewModel.currentNode != null,
+                            onClick = {
+                                composableScope.launch {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Creating queue for folder ${
+                                            viewModel.currentNode?.fileName()
+                                        }..."
+                                    )
+                                }
+                                composableScope.launch {
+                                    viewModel.createQueueFromDirectory()
+                                }
+                            }) {
+                            Icon(
+                                Icons.Default.PlayArrow,
+                                contentDescription = "Play",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        IconButton(onClick = {
+                            val newShuffleValue = !viewModel.shuffle
+                            composableScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("Shuffle is ${if (newShuffleValue) "enabled" else "disabled"}\nReordering the queue...")
+                            }
+                            composableScope.launch {
+                                viewModel.switchShuffle(newShuffleValue)
+                            }
+                        }) {
+                            Icon(
+                                painter = if (viewModel.shuffle)
+                                    painterResource(id = R.drawable.shuffle_enabled)
+                                else
+                                    painterResource(id = R.drawable.shuffle_disabled),
+                                contentDescription = "Shuffle",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.show_queue),
+                                contentDescription = "Show queue",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
                 }
             }
         },
         bottomBar = {
-            CurrentPlayingSongCard(viewModel.songViewModel)
+            CurrentPlayingSongCard(viewModel)
         }
     ) {
         Column(

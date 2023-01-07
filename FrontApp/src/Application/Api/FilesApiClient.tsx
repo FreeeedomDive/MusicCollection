@@ -1,12 +1,11 @@
 import axios from "axios";
 import {RootDto} from "../Dto/RootDto";
-import ApiConstants from "./ApiConstants";
 import {Guid} from "guid-typescript";
 
 export default class FilesApiClient {
     static init = () => {
         return axios.create({
-            baseURL: `${ApiConstants.AdminApiBaseRoute}/files`, timeout: 10000, headers: {
+            baseURL: `adminApi/files`, timeout: 10000, headers: {
                 Accept: "application/json"
             }
         });

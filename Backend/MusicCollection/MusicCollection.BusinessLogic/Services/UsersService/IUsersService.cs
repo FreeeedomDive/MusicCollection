@@ -1,4 +1,4 @@
-﻿using MusicCollection.Api.Dto.Auth;
+﻿using MusicCollection.Api.Dto.Users;
 
 namespace MusicCollection.BusinessLogic.Services.UsersService;
 

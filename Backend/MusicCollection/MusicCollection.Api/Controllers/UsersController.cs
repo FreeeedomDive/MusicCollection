@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Auth;
 using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Services.UsersService;
 
 
 namespace MusicCollection.Controllers;
 
 [ApiController]
-[Route("users")]
+[Route("api/[controller]")]
 public class UsersController : Controller
 {
     private readonly IUsersService usersService;

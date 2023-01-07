@@ -15,6 +15,5 @@ class UsersApiClient {
         return ApiClient.performRequest { client.login(AuthCredentialsDto(login, password)) }
     }
 
-    private val client: IUsersApiClient =
-        RetrofitClient.getClient().create(IUsersApiClient::class.java)
+    private val client: IUsersApiClient = RetrofitClient.getClient().create(IUsersApiClient::class.java)
 }

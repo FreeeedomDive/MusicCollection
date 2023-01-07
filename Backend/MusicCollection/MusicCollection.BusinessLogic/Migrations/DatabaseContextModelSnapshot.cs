@@ -17,7 +17,7 @@ namespace MusicCollection.BusinessLogic.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0-rc.1.22426.7")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -119,6 +119,64 @@ namespace MusicCollection.BusinessLogic.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TagsStorage");
+                });
+
+            modelBuilder.Entity("MusicCollection.BusinessLogic.Repositories.Queues.QueueContext.QueueContextStorageElement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ContextId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QueueContextStorage");
+                });
+
+            modelBuilder.Entity("MusicCollection.BusinessLogic.Repositories.Queues.QueueList.QueueListStorageElement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TrackId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id", "Position");
+
+                    b.ToTable("QueueListStorage");
+                });
+
+            modelBuilder.Entity("MusicCollection.BusinessLogic.Repositories.Queues.QueuePointer.QueuePointerStorageElement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Current")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QueuePointerStorage");
+                });
+
+            modelBuilder.Entity("MusicCollection.BusinessLogic.Repositories.Users.Personalization.UserSettingsStorageElement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Shuffle")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserSettingsStorage");
                 });
 #pragma warning restore 612, 618
         }

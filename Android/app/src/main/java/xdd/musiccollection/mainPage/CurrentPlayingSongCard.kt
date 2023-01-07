@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -11,14 +12,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
 import xdd.musiccollection.R
 import xdd.musiccollection.extensions.shorten
+import xdd.musiccollection.mainPage.viewModels.FileSystemPageViewModel
 import xdd.musiccollection.mainPage.viewModels.PlayingState
-import xdd.musiccollection.mainPage.viewModels.SongViewModel
 
 @Composable
-fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
+fun CurrentPlayingSongCard(viewModel: FileSystemPageViewModel) {
+    val composableScope = rememberCoroutineScope()
+
     Card(
         backgroundColor = Color.Black,
         modifier = Modifier
@@ -43,15 +47,15 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                 ) {
                     val topText: String
                     val bottomText: String
-                    if (songViewModel.currentSelectedTrack == null) {
+                    if (viewModel.currentSelectedTrack == null) {
                         topText = "No selected track"
                         bottomText = "0 tracks in queue"
-                    } else if (songViewModel.currentSelectedTrack!!.tags == null) {
-                        topText = songViewModel.currentSelectedTrack!!.fileName().shorten(25)
+                    } else if (viewModel.currentSelectedTrack!!.tags == null) {
+                        topText = viewModel.currentSelectedTrack!!.fileName().shorten(25)
                         bottomText = "No tags available"
                     } else {
-                        topText = songViewModel.currentSelectedTrack!!.tags!!.trackName?.shorten(25) ?: ""
-                        bottomText = songViewModel.currentSelectedTrack!!.tags!!.artist?.shorten(25) ?: ""
+                        topText = viewModel.currentSelectedTrack!!.tags!!.trackName?.shorten(25) ?: ""
+                        bottomText = viewModel.currentSelectedTrack!!.tags!!.artist?.shorten(25) ?: ""
                     }
                     Column {
                         Text(
@@ -72,13 +76,17 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    composableScope.launch {
+                        viewModel.movePrevious()
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.previous),
                         contentDescription = "back button"
                     )
                 }
-                if (songViewModel.playingState == PlayingState.Loading) {
+                if (viewModel.playingState == PlayingState.Loading) {
                     CircularProgressIndicator(
                         color = Color.White,
                         modifier = Modifier
@@ -87,21 +95,21 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                     )
                 } else {
                     IconButton(onClick = {
-                        when (songViewModel.playingState) {
+                        when (viewModel.playingState) {
                             PlayingState.Loading -> {
                                 return@IconButton
                             }
                             PlayingState.Play -> {
-                                songViewModel.stopPlaying()
+                                viewModel.stopPlaying()
                             }
                             else -> {
-                                songViewModel.resumePlaying()
+                                viewModel.resumePlaying()
                             }
                         }
                     }) {
                         Icon(
                             painter = painterResource(
-                                id = if (songViewModel.playingState == PlayingState.Pause)
+                                id = if (viewModel.playingState == PlayingState.Pause)
                                     R.drawable.play
                                 else R.drawable.pause
                             ),
@@ -110,7 +118,11 @@ fun CurrentPlayingSongCard(songViewModel: SongViewModel) {
                     }
                 }
 
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    composableScope.launch {
+                        viewModel.moveNext()
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.next),
                         contentDescription = "next button"
