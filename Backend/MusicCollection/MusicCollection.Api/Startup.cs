@@ -1,6 +1,5 @@
 using ApiUtils.ContainerConfiguration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
 using TelemetryApp.Utilities.Extensions;
@@ -33,23 +32,10 @@ public class Startup
             .ConfigureBusinessLogicServices();
 
         services.AddControllers();
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "MusicCollection API", Version = "v1" });
-        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MusicCollection API v1"));
-        }
-
-        app.UseHttpsRedirection();
-
         app.UseRouting();
         app.UseWebSockets();
         app.UseMiddleware<RequestLoggingMiddleware>();
