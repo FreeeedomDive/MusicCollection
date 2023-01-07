@@ -6,4 +6,4 @@ RUN npm install --production
 RUN npm run build
 COPY . .
 
-RUN npx serve -s build -l 5555
+CMD ["npx", "serve", "-s", "build", "-l", "7022"]

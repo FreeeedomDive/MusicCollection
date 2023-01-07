@@ -37,7 +37,7 @@ services:
       context: FrontApp
       dockerfile: Dockerfile
     ports:
-      - "5555:5555"
+      - "7022:7022"
         
   proxy:
     image: nginx:mainline

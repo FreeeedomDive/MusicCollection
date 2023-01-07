@@ -44,8 +44,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseHttpsRedirection();
-
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseRouting();
         app.UseCors(CorsConfigurationName);
