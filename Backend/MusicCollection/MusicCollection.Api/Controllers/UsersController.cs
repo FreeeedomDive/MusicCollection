@@ -7,7 +7,7 @@ using MusicCollection.BusinessLogic.Services.UsersService;
 namespace MusicCollection.Controllers;
 
 [ApiController]
-[Route("users")]
+[Route("api/[controller]")]
 public class UsersController : Controller
 {
     private readonly IUsersService usersService;

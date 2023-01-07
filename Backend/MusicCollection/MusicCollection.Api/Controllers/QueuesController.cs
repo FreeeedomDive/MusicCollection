@@ -7,7 +7,7 @@ using MusicCollection.BusinessLogic.Services.QueuesService;
 namespace MusicCollection.Controllers;
 
 [ApiController]
-[Route("queues/{userId:guid}")]
+[Route("api/[controller]/{userId:guid}")]
 public class QueuesController : Controller
 {
     public QueuesController(IQueuesService queuesService)
