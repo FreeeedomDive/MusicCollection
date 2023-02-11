@@ -21,8 +21,8 @@ public class Startup
     {
         var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
-        services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
+        services.AddTransient<DbContext, DatabaseContext>();
 
         var telemetryApiUrl = Configuration.GetSection("TelemetryApp").GetSection("ApiUrl").Value ?? throw new InvalidOperationException("TelemetryApp.Api url is not configured");
         services

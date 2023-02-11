@@ -34,7 +34,7 @@ public class FilesController : Controller
     }
 
     [HttpGet("nodes/{nodeId:guid}")]
-    public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid nodeId)
     {
         try
         {
@@ -48,7 +48,7 @@ public class FilesController : Controller
     }
 
     [HttpGet("nodes/{nodeId:guid}/ReadChildren")]
-    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid rootId, [FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
+    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
         try
         {
@@ -65,7 +65,7 @@ public class FilesController : Controller
     }
 
     [HttpGet("nodes/{nodeId:guid}/ReadAll")]
-    public async Task<ActionResult<Guid[]>> ReadAllFiles([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task<ActionResult<Guid[]>> ReadAllFiles([FromRoute] Guid nodeId)
     {
         try
         {
@@ -82,14 +82,14 @@ public class FilesController : Controller
     }
 
     [HttpGet("nodes/{nodeId:guid}/Download")]
-    public async Task DownloadFileContent([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task DownloadFileContent([FromRoute] Guid nodeId)
     {
         var result = await filesService.ReadFileContentAsync(nodeId);
         await Response.Body.WriteAsync(result);
     }
 
     [HttpGet("nodes/{nodeId:guid}/DownloadStream")]
-    public async Task<IActionResult> DownloadFileContentAsStream([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    public async Task<IActionResult> DownloadFileContentAsStream([FromRoute] Guid nodeId)
     {
         var (stream, mimeType) = await filesService.ReadFileContentAsStreamAsync(nodeId);
         var result = File(stream, mimeType);
