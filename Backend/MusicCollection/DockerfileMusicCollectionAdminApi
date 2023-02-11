@@ -12,8 +12,6 @@ COPY ["TagsService/TagsService.csproj", "TagsService/"]
 COPY ["ApiUtils/ApiUtils.csproj", "ApiUtils/"]
 RUN dotnet restore "MusicCollection.AdminApi/MusicCollection.AdminApi.csproj"
 COPY . .
-WORKDIR "/src/MusicCollection.AdminApi"
-RUN dotnet build "MusicCollection.AdminApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
 WORKDIR "/src/MusicCollection.AdminApi"
