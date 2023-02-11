@@ -2,7 +2,6 @@
 using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Services.FilesService;
-
 namespace MusicCollection.Controllers;
 
 [ApiController]
@@ -19,66 +18,29 @@ public class FilesController : Controller
     {
         return await filesService.ReadAllRoots();
     }
-    
+
     [HttpGet("roots/{rootId:guid}")]
     public async Task<ActionResult<FileSystemRoot>> GetRoot([FromRoute] Guid rootId)
     {
-        try
-        {
-            return await filesService.ReadRootAsync(rootId);
-        }
-        catch (RootNotFoundException)
-        {
-            return NotFound();
-        }
+        return await filesService.ReadRootAsync(rootId);
     }
 
     [HttpGet("nodes/{nodeId:guid}")]
     public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid nodeId)
     {
-        try
-        {
-            var result = await filesService.ReadNodeAsync(nodeId);
-            return result;
-        }
-        catch (FileSystemNodeNotFoundException)
-        {
-            return NotFound();
-        }
+        return  await filesService.ReadNodeAsync(nodeId);
     }
 
     [HttpGet("nodes/{nodeId:guid}/ReadChildren")]
     public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
-        try
-        {
-            return await filesService.ReadDirectoryAsync(nodeId, skip, take);
-        }
-        catch (FileSystemNodeNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (ReadFilesFromNonDirectoryException)
-        {
-            return Conflict();
-        }
+        return await filesService.ReadDirectoryAsync(nodeId, skip, take);
     }
 
     [HttpGet("nodes/{nodeId:guid}/ReadAll")]
     public async Task<ActionResult<Guid[]>> ReadAllFiles([FromRoute] Guid nodeId)
     {
-        try
-        {
-            return await filesService.ReadAllFilesFromDirectoryAsync(nodeId);
-        }
-        catch (FileSystemNodeNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (ReadFilesFromNonDirectoryException)
-        {
-            return Conflict();
-        }
+        return await filesService.ReadAllFilesFromDirectoryAsync(nodeId);
     }
 
     [HttpGet("nodes/{nodeId:guid}/Download")]

@@ -1,6 +1,8 @@
-﻿namespace MusicCollection.Api.Dto.Exceptions;
+﻿using MusicCollection.Api.Dto.Exceptions.Api;
 
-public class UserNotFoundException : MusicCollectionApiExceptionBase
+namespace MusicCollection.Api.Dto.Exceptions.Users;
+
+public class UserNotFoundException : MusicCollectionApiNotFoundException
 {
     public UserNotFoundException(Guid id) : base($"User {id} not found")
     {

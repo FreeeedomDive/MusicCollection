@@ -1,4 +1,4 @@
-﻿using MusicCollection.Api.Dto.Exceptions;
+﻿using MusicCollection.Api.Dto.Exceptions.Users;
 using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 
