@@ -4,15 +4,15 @@ using BackgroundTasksDaemon.Tasks.DeleteRoot;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
-using MusicCollection.Common.Loggers;
 using MusicCollection.Common.TagsService;
+using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon.Builder;
 
 public class BackgroundTaskBuilder : IBackgroundTaskBuilder
 {
     public BackgroundTaskBuilder(
-        ILogger logger,
+        ILoggerClient logger,
         IRootsRepository rootsRepository,
         INodesRepository nodesRepository,
         ITagsRepository tagsRepository,
@@ -58,7 +58,7 @@ public class BackgroundTaskBuilder : IBackgroundTaskBuilder
     private BackgroundTaskType Type { get; set; }
     private string[]? Args { get; set; }
 
-    private readonly ILogger logger;
+    private readonly ILoggerClient logger;
     private readonly IRootsRepository rootsRepository;
     private readonly INodesRepository nodesRepository;
     private readonly ITagsRepository tagsRepository;

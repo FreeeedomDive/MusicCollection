@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Auth;
+using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Repositories.Auth;
 
 namespace MusicCollection.AdminApi.Controllers;
 
 [ApiController]
-[Route("users")]
+[Route("adminApi/[controller]")]
 public class UsersController : Controller
 {
     public UsersController(IUsersRepository usersRepository)

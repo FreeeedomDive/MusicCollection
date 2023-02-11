@@ -3,8 +3,8 @@ using MusicCollection.BusinessLogic.Extensions;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
-using MusicCollection.Common.Loggers;
 using MusicCollection.Common.TagsService;
+using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon.Tasks.CreateRoot;
 
@@ -15,7 +15,7 @@ public class CreateRootTask : IBackgroundTask
         INodesRepository nodesRepository,
         ITagsExtractor tagsExtractor,
         ITagsRepository tagsRepository,
-        ILogger logger
+        ILoggerClient logger
     )
     {
         this.rootsRepository = rootsRepository;
@@ -47,7 +47,7 @@ public class CreateRootTask : IBackgroundTask
         {
             throw new InvalidOperationException("Name and Path are empty");
         }
-        
+
         if (Directory.Exists(rootPath))
         {
             return Task.CompletedTask;
@@ -67,9 +67,9 @@ public class CreateRootTask : IBackgroundTask
             state = CreateRootTaskState.Done;
             Progress = 100;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            logger.Error(e, "Unhandled exception happened in task {task} in state {state}", nameof(CreateRootTask), state);
+            await logger.ErrorAsync(e, "Unhandled exception happened in task {task} in state {state}", nameof(CreateRootTask), state);
             state = CreateRootTaskState.Fatal;
             throw;
         }
@@ -80,15 +80,15 @@ public class CreateRootTask : IBackgroundTask
         state = CreateRootTaskState.FetchingDirectories;
 
         await ProcessDirectoryAsync(Guid.Empty, rootPath, CollectDirectoriesAndFilesAsync);
-        
-        logger.Info($"Total {totalDirectories} directories and {totalFiles} files");
+
+        await logger.InfoAsync($"Total {totalDirectories} directories and {totalFiles} files");
     }
 
     private async Task CollectDirectoriesAndFilesAsync(Guid _, string[] directories, string[] files)
     {
         totalDirectories += directories.Length;
         totalFiles += files.Length;
-            
+
         foreach (var directory in directories)
         {
             await ProcessDirectoryAsync(Guid.Empty, directory, CollectDirectoriesAndFilesAsync);
@@ -134,7 +134,7 @@ public class CreateRootTask : IBackgroundTask
             UpdateProgress(() => processedDirectories++);
         }
     }
-    
+
     private static FileSystemNode[] BuildNodes(IEnumerable<string> paths, Guid parentId, NodeType type)
     {
         return paths.Select(x => new FileSystemNode
@@ -174,6 +174,11 @@ public class CreateRootTask : IBackgroundTask
         var directories = Directory.GetDirectories(path);
         var files = Directory.GetFiles(path).Where(x => x.IsSupportedExtension()).ToArray();
 
+        if (directories.Length == 0 && files.Length == 0)
+        {
+            return;
+        }
+
         await func(nodeId, directories, files);
     }
 
@@ -188,7 +193,7 @@ public class CreateRootTask : IBackgroundTask
     private readonly INodesRepository nodesRepository;
     private readonly ITagsExtractor tagsExtractor;
     private readonly ITagsRepository tagsRepository;
-    private readonly ILogger logger;
+    private readonly ILoggerClient logger;
 
     private string rootName;
     private string rootPath;

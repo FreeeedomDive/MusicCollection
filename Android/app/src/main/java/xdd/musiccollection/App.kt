@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import xdd.musiccollection.auth.AuthenticationPage
 import xdd.musiccollection.mainPage.FileSystemPage
 import xdd.musiccollection.mainPage.viewModels.FileSystemPageViewModel
+import java.util.*
 
 private enum class CurrentState {
     Authentication,
@@ -16,11 +17,15 @@ private enum class CurrentState {
 @Composable
 fun App() {
     val (currentState, setCurrentState) = remember { mutableStateOf(CurrentState.Authentication) }
+    val (currentUser, setCurrentUser) = remember { mutableStateOf(UUID.randomUUID()) }
 
     if (currentState == CurrentState.Authentication) {
-        AuthenticationPage { setCurrentState(CurrentState.MainPage) }
+        AuthenticationPage { userId ->
+            setCurrentState(CurrentState.MainPage)
+            setCurrentUser(userId)
+        }
     }
-    if (currentState == CurrentState.MainPage){
-        FileSystemPage(FileSystemPageViewModel(LocalContext.current.cacheDir))
+    if (currentState == CurrentState.MainPage) {
+        FileSystemPage(FileSystemPageViewModel(currentUser, LocalContext.current.cacheDir))
     }
 }

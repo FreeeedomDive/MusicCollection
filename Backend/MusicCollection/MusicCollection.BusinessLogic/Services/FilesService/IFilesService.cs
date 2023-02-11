@@ -8,6 +8,7 @@ public interface IFilesService : IMusicCollectionLogicService
     Task<Guid[]> ReadAllFilesFromDirectoryAsync(Guid directoryId);
     Task<FileSystemRoot[]> ReadAllRoots();
     Task<FileSystemNode> ReadNodeAsync(Guid id);
+    Task<FileSystemNode[]> ReadManyNodesAsync(Guid[] ids);
     Task<FileSystemNode?> TryReadNodeAsync(Guid id);
     Task<FileSystemRoot> ReadRootAsync(Guid id);
     Task<Guid> CreateRootWithIndexAsync(string name, string path);

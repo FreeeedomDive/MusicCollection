@@ -9,7 +9,7 @@ using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryN
 namespace MusicCollection.AdminApi.Controllers;
 
 [ApiController]
-[Route("files")]
+[Route("adminApi/[controller]")]
 public class FilesController : Controller
 {
     public FilesController(

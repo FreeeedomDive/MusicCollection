@@ -10,4 +10,8 @@
       <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12" />
+    </ItemGroup>
+
 </Project>

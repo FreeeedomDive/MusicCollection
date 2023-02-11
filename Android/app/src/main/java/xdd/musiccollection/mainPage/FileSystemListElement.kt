@@ -107,7 +107,7 @@ fun FileSystemListElement(
                 FileSystemListElementText("..", 20)
             }
             NodeType.Directory -> Column {
-                FileSystemListElementText(element.path.split("\\").last(), 20)
+                FileSystemListElementText(element.fileName(), 20)
                 FileSystemListElementText(buildDirectoryDataString(), 14)
             }
             NodeType.File -> Column {

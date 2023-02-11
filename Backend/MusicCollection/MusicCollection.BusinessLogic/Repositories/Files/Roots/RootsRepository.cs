@@ -28,7 +28,7 @@ public class RootsRepository : IRootsRepository
     public async Task<FileSystemRoot[]> ReadAllAsync()
     {
         var result = await sqlRepository.ReadAllAsync();
-        return result.Select(ToModel).ToArray();
+        return result.Select(ToModel).OrderBy(x => x.Name).ToArray();
     }
 
     public async Task CreateAsync(FileSystemRoot root)

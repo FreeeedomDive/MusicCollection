@@ -6,7 +6,7 @@ using MusicCollection.BusinessLogic.Services.FilesService;
 namespace MusicCollection.Controllers;
 
 [ApiController]
-[Route("roots")]
+[Route("api/[controller]")]
 public class FilesController : Controller
 {
     public FilesController(IFilesService filesService)
@@ -14,13 +14,13 @@ public class FilesController : Controller
         this.filesService = filesService;
     }
     
-    [HttpGet]
+    [HttpGet("roots")]
     public async Task<ActionResult<FileSystemRoot[]>> GetAllRoots()
     {
         return await filesService.ReadAllRoots();
     }
     
-    [HttpGet("{rootId:guid}")]
+    [HttpGet("roots/{rootId:guid}")]
     public async Task<ActionResult<FileSystemRoot>> GetRoot([FromRoute] Guid rootId)
     {
         try
@@ -33,8 +33,8 @@ public class FilesController : Controller
         }
     }
 
-    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}")]
-    public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    [HttpGet("nodes/{nodeId:guid}")]
+    public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid nodeId)
     {
         try
         {
@@ -47,8 +47,8 @@ public class FilesController : Controller
         }
     }
 
-    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/ReadChildren")]
-    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid rootId, [FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
+    [HttpGet("nodes/{nodeId:guid}/ReadChildren")]
+    public async Task<ActionResult<FileSystemNode[]>> ReadDirectory([FromRoute] Guid nodeId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
         try
         {
@@ -64,8 +64,8 @@ public class FilesController : Controller
         }
     }
 
-    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/ReadAll")]
-    public async Task<ActionResult<Guid[]>> ReadAllFiles([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    [HttpGet("nodes/{nodeId:guid}/ReadAll")]
+    public async Task<ActionResult<Guid[]>> ReadAllFiles([FromRoute] Guid nodeId)
     {
         try
         {
@@ -81,15 +81,15 @@ public class FilesController : Controller
         }
     }
 
-    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/Download")]
-    public async Task DownloadFileContent([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    [HttpGet("nodes/{nodeId:guid}/Download")]
+    public async Task DownloadFileContent([FromRoute] Guid nodeId)
     {
         var result = await filesService.ReadFileContentAsync(nodeId);
         await Response.Body.WriteAsync(result);
     }
 
-    [HttpGet("{rootId:guid}/nodes/{nodeId:guid}/DownloadStream")]
-    public async Task<IActionResult> DownloadFileContentAsStream([FromRoute] Guid rootId, [FromRoute] Guid nodeId)
+    [HttpGet("nodes/{nodeId:guid}/DownloadStream")]
+    public async Task<IActionResult> DownloadFileContentAsStream([FromRoute] Guid nodeId)
     {
         var (stream, mimeType) = await filesService.ReadFileContentAsStreamAsync(nodeId);
         var result = File(stream, mimeType);

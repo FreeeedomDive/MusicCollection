@@ -15,7 +15,7 @@ fun TopAppBarSearchButton(onClick: () -> Unit){
     IconButton(onClick = onClick) {
         Icon(
             Icons.Default.Search,
-            contentDescription = "",
+            contentDescription = "Search",
             modifier = Modifier
                 .padding(15.dp)
                 .size(24.dp)

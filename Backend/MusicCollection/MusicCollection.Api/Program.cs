@@ -13,7 +13,7 @@ public class Program
             .CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>().UseUrls("https://*:7078");
+                webBuilder.UseStartup<Startup>();
             });
     }
 }

@@ -1,9 +1,10 @@
 using ApiUtils.ContainerConfiguration;
-using ApiUtils.Middlewares;
 using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
+using TelemetryApp.Utilities.Extensions;
+using TelemetryApp.Utilities.Middlewares;
 
 namespace MusicCollection.AdminApi;
 
@@ -20,10 +21,12 @@ public class Startup
     {
         var postgreSqlConfigurationSection = Configuration.GetSection("PostgreSql");
         services.Configure<DatabaseOptions>(postgreSqlConfigurationSection);
-        services.AddTransient<DbContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
+        services.AddTransient<DbContext, DatabaseContext>();
 
-        services.ConfigureLogger()
+        var telemetryApiUrl = Configuration.GetSection("TelemetryApp").GetSection("ApiUrl").Value ?? throw new InvalidOperationException("TelemetryApp.Api url is not configured");
+        services
+            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.AdminApi", telemetryApiUrl)
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()
             .ConfigureTagsExtractor()
@@ -41,8 +44,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseHttpsRedirection();
-
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseRouting();
         app.UseCors(CorsConfigurationName);

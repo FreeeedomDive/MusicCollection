@@ -1,4 +1,4 @@
-﻿using MusicCollection.Api.Dto.Auth;
+﻿using MusicCollection.Api.Dto.Users;
 using SqlRepositoryBase.Core.Repository;
 
 namespace MusicCollection.BusinessLogic.Repositories.Auth;
