@@ -1,4 +1,4 @@
-﻿using MusicCollection.Api.Dto.Exceptions;
+﻿using MusicCollection.Api.Dto.Exceptions.Files;
 using MusicCollection.Api.Dto.FileSystem;
 using SqlRepositoryBase.Core.Exceptions;
 using SqlRepositoryBase.Core.Repository;

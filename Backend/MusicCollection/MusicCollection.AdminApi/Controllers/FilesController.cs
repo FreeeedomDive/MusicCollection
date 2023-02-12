@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Admin;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Services.FilesService;
-using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
+using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.Files.DirectoryNotFoundException;
 
 namespace MusicCollection.AdminApi.Controllers;
 
@@ -42,15 +42,8 @@ public class FilesController : Controller
     [HttpPost("nodes/{nodeId:guid}/hide")]
     public async Task<ActionResult> HideNode(Guid nodeId)
     {
-        try
-        {
-            await filesService.HideNodeAsync(nodeId);
-            return Ok();
-        }
-        catch (DirectoryNotFoundException)
-        {
-            return NotFound();
-        }
+        await filesService.HideNodeAsync(nodeId);
+        return Ok();
     }
 
     private readonly IFilesService filesService;

@@ -1,4 +1,4 @@
-using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Exceptions.Queues;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.Api.Dto.Queues;
 using MusicCollection.BusinessLogic.Extensions;

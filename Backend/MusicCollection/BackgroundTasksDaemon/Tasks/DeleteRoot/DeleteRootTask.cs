@@ -1,4 +1,4 @@
-using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Exceptions.Files;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
 using MusicCollection.BusinessLogic.Repositories.Files.Roots;

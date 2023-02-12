@@ -25,14 +25,7 @@ public class QueuesController : Controller
     [HttpGet("context")]
     public async Task<ActionResult<FileSystemNode>> GetCurrentQueueContext([FromRoute] Guid userId)
     {
-        try
-        {
-            return await queuesService.GetCurrentContextAsync(userId);
-        }
-        catch (QueueNotFoundException)
-        {
-            return NotFound();
-        }
+        return await queuesService.GetCurrentContextAsync(userId);
     }
 
     [HttpDelete]
@@ -57,52 +50,19 @@ public class QueuesController : Controller
     [HttpPost("move/previous")]
     public async Task<ActionResult<QueueTrack>> MovePreviousAsync([FromRoute] Guid userId)
     {
-        try
-        {
-            return await queuesService.MovePreviousAsync(userId);
-        }
-        catch (QueueNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (QueueIndexOutOfRangeException)
-        {
-            return Conflict();
-        }
+        return await queuesService.MovePreviousAsync(userId);
     }
 
     [HttpPost("move/next")]
     public async Task<ActionResult<QueueTrack>> MoveNextAsync([FromRoute] Guid userId)
     {
-        try
-        {
-            return await queuesService.MoveNextAsync(userId);
-        }
-        catch (QueueNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (QueueIndexOutOfRangeException)
-        {
-            return Conflict();
-        }
+        return await queuesService.MoveNextAsync(userId);
     }
 
     [HttpPost("move/{nextPosition:int}")]
     public async Task<ActionResult<QueueTrack>> MoveToPositionAsync([FromRoute] Guid userId, [FromRoute] int nextPosition)
     {
-        try
-        {
-            return await queuesService.MoveToPositionAsync(userId, nextPosition);
-        }
-        catch (QueueNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (QueueIndexOutOfRangeException)
-        {
-            return Conflict();
-        }
+        return await queuesService.MoveToPositionAsync(userId, nextPosition);
     }
 
     [HttpPost("shuffle/{shuffle:bool}")]

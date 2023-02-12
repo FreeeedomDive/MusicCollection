@@ -1,4 +1,4 @@
-using MusicCollection.Api.Dto.Exceptions;
+using MusicCollection.Api.Dto.Exceptions.Files;
 
 namespace MusicCollection.BusinessLogic.Repositories.Files.Music;
 

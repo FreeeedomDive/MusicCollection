@@ -6,7 +6,7 @@ using MusicCollection.BusinessLogic.Repositories.Files.Roots;
 using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.BusinessLogic.Utils;
 using MusicCollection.Common.TagsService;
-using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.DirectoryNotFoundException;
+using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.Files.DirectoryNotFoundException;
 
 namespace MusicCollection.BusinessLogic.Services.FilesService;
 

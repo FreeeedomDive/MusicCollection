@@ -1,4 +1,5 @@
 using ApiUtils.ContainerConfiguration;
+using ApiUtils.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
@@ -39,6 +40,7 @@ public class Startup
         app.UseRouting();
         app.UseWebSockets();
         app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseMiddleware<ExceptionsMiddleware>();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
