@@ -1,4 +1,5 @@
 using ApiUtils.ContainerConfiguration;
+using ApiUtils.Middlewares;
 using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
 using MusicCollection.BusinessLogic.Repositories.Database;
@@ -45,6 +46,7 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseMiddleware<ExceptionsMiddleware>();
         app.UseRouting();
         app.UseCors(CorsConfigurationName);
         app.UseWebSockets();

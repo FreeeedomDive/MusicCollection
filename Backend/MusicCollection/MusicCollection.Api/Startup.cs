@@ -39,8 +39,8 @@ public class Startup
     {
         app.UseRouting();
         app.UseWebSockets();
-        app.UseMiddleware<ExceptionsMiddleware>();
         app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseMiddleware<ExceptionsMiddleware>();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
