@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12" />
+      <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
     </ItemGroup>
 
 </Project>

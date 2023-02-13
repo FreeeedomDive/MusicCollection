@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+      <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
+      <ProjectReference Include="..\TagsService\TagsService.csproj" />
     </ItemGroup>
 
     <ItemGroup>

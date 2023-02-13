@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ApiUtils\ApiUtils.csproj" />
       <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+      <ProjectReference Include="..\UsersService\UsersService.csproj" />
     </ItemGroup>
 
     <ItemGroup>
