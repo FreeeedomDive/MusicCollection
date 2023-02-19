@@ -1,0 +1,31 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musiccollection-front-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: musiccollectionfront
+  template:
+    metadata:
+      labels:
+        app: musiccollectionfront
+    spec:
+      containers:
+        - name: musiccollectionfront
+          image: localhost:5000/musiccollectionfront:{{TAG_NUMBER}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: musiccollection-front-clusterip-service
+spec:
+  type: ClusterIP
+  selector:
+    app: musiccollectionfront
+  ports:
+    - name: musiccollectionfront
+      protocol: TCP
+      port: 7022
+      targetPort: 7022
