@@ -26,7 +26,7 @@ spec:
             - name: ASPNETCORE_KESTREL__Certificates__Default__Password
               value: aspnet
             - name: ASPNETCORE_URLS
-              value: https://+:7078
+              value: http://+:7078
       volumes:
         - hostPath:
             path: /run/desktop/mnt/host/{{MUSIC_PATH}}
