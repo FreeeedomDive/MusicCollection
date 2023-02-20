@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicService", "MusicService\MusicService.csproj", "{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.MusicService", "MusicCollection.MusicService\MusicCollection.MusicService.csproj", "{F4E72C46-1201-4CF6-B05B-DF1C9F94F841}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.Api.Dto", "MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj", "{2FC4E49C-9D10-4EE8-A08D-E5986B5FDE99}"
 EndProject
@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundTasksDaemon", "Ba
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2299FD73-8831-4F65-8B7B-EB21AAE6EAB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersService", "UsersService\UsersService.csproj", "{F3A89A9F-C0EB-4FD3-9090-FD1277C7BF86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicCollection.UserService", "MusicCollection.UserService\MusicCollection.UserService.csproj", "{F3A89A9F-C0EB-4FD3-9090-FD1277C7BF86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

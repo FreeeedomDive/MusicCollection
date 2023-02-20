@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MusicCollection.Api.Dto\MusicCollection.Api.Dto.csproj" />
+      <ProjectReference Include="..\MusicCollection.MusicService\MusicCollection.MusicService.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,21 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /certificate
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https -ep ./https/certificate.pfx -p aspnet
+RUN dotnet dev-certs https --trust
+WORKDIR /src
+COPY ["MusicCollection.UserService/MusicCollection.UserService.csproj", "MusicCollection.UserService/"]
+COPY ["MusicCollection.Api.Dto/MusicCollection.Api.Dto.csproj", "MusicCollection.Api.Dto/"]
+COPY ["ApiUtils/ApiUtils.csproj", "ApiUtils/"]
+RUN dotnet restore "MusicCollection.UserService/MusicCollection.UserService.csproj"
+COPY . .
+
+FROM build AS publish
+WORKDIR "/src/MusicCollection.UserService"
+RUN dotnet publish "MusicCollection.UserService.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+WORKDIR /app/publish
+COPY --from=build /certificate /certificate
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "MusicCollection.UserService.dll"]

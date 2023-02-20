@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ApiUtils\ApiUtils.csproj" />
       <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\UsersService\UsersService.csproj" />
+      <ProjectReference Include="..\MusicCollection.UserService\MusicCollection.UserService.csproj" />
     </ItemGroup>
 
     <ItemGroup>

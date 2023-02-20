@@ -1,6 +1,10 @@
 using BackgroundTasksDaemon.Tasks;
 using BackgroundTasksDaemon.Tasks.CreateRoot;
 using BackgroundTasksDaemon.Tasks.DeleteRoot;
+using MusicCollection.Common.TagsService;
+using MusicCollection.MusicService.Repositories.Files.Nodes;
+using MusicCollection.MusicService.Repositories.Files.Roots;
+using MusicCollection.MusicService.Repositories.Files.Tags;
 using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon.Builder;

@@ -1,14 +1,12 @@
-using ApiUtils.ContainerConfiguration;
+﻿using ApiUtils.ContainerConfiguration;
 using ApiUtils.Middlewares;
-using BackgroundTasksDaemon;
 using Microsoft.EntityFrameworkCore;
-using MusicCollection.AdminApi.Extensions.ContainerConfiguration;
 using MusicCollection.UserService.Repositories.Database;
 using SqlRepositoryBase.Configuration.Extensions;
 using TelemetryApp.Utilities.Extensions;
 using TelemetryApp.Utilities.Middlewares;
 
-namespace MusicCollection.AdminApi;
+namespace MusicCollection.UserService;
 
 public class Startup
 {
@@ -28,34 +26,21 @@ public class Startup
 
         var telemetryApiUrl = Configuration.GetSection("TelemetryApp").GetSection("ApiUrl").Value ?? throw new InvalidOperationException("TelemetryApp.Api url is not configured");
         services
-            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.AdminApi", telemetryApiUrl)
+            .ConfigureTelemetryClientWithLogger("MusicCollection", "MusicCollection.UserService", telemetryApiUrl)
+            .ConfigureTagsExtractor()
             .ConfigurePostgreSql()
             .ConfigureBusinessLogicRepositories()
-            .ConfigureTagsExtractor()
-            .ConfigureBusinessLogicServices()
-            .ConfigureTasksWorker();
-
-        services.AddCors(options =>
-        {
-            options.AddPolicy(CorsConfigurationName,
-                policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
-        });
+            .ConfigureBusinessLogicServices();
 
         services.AddControllers();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseRouting();
+        app.UseWebSockets();
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseMiddleware<ExceptionsMiddleware>();
-        app.UseRouting();
-        app.UseCors(CorsConfigurationName);
-        app.UseWebSockets();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-        var taskDaemon = app.ApplicationServices.GetService<ITasksDaemon>();
-        taskDaemon?.Start();
     }
-
-    private const string CorsConfigurationName = "AllowOrigins";
 }
