@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using ApiUtils.Extensions;
 using MusicCollection.Api.Dto.Exceptions.Users;
 using MusicCollection.Api.Dto.Users;
 
@@ -15,8 +16,8 @@ public class UserServiceClient : IUserServiceClient
     }
     public async Task<UserSettings> ReadOrCreateUserSettingsAsync(Guid userId)
     {
-        var usersServiceApiUrl = configuration.GetSection("UserService").GetSection("ApiUrl").Value ??
-                                 throw new InvalidOperationException("UsersService.Api url is not configured");
+        var usersServiceApiUrl = configuration.GetServiceApiUrl("UserService") ??
+                                 throw new InvalidOperationException("UserService.Api url is not configured");
         
         var response =  await httpClient.GetAsync(new Uri($"{usersServiceApiUrl}/api/users/{userId}"));
         var userSettingsAsString = await response.Content.ReadAsStringAsync();
