@@ -1,0 +1,47 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musiccollection-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: musiccollectionapi
+  template:
+    metadata:
+      labels:
+        app: musiccollectionapi
+    spec:
+      containers:
+        - name: musiccollectionapi
+          image: localhost:5000/musiccollectionapi:{{TAG_NUMBER}}
+          volumeMounts:
+            - mountPath: /music
+              name: musiccollection-music-volume
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: /certificate/https/certificate.pfx
+            - name: ASPNETCORE_KESTREL__Certificates__Default__Password
+              value: aspnet
+            - name: ASPNETCORE_URLS
+              value: http://+:7078
+      volumes:
+        - hostPath:
+            path: /run/desktop/mnt/host/{{MUSIC_PATH}}
+          name: musiccollection-music-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: musiccollection-api-clusterip-service
+spec:
+  type: ClusterIP
+  selector:
+    app: musiccollectionapi
+  ports:
+    - name: musiccollectionapi
+      protocol: TCP
+      port: 7078
+      targetPort: 7078
