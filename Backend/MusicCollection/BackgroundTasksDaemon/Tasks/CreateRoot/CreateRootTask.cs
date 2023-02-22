@@ -1,9 +1,9 @@
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Extensions;
-using MusicCollection.BusinessLogic.Repositories.Files.Nodes;
-using MusicCollection.BusinessLogic.Repositories.Files.Roots;
-using MusicCollection.BusinessLogic.Repositories.Files.Tags;
 using MusicCollection.Common.TagsService;
+using MusicCollection.MusicService.Repositories.Files.Nodes;
+using MusicCollection.MusicService.Repositories.Files.Roots;
+using MusicCollection.MusicService.Repositories.Files.Tags;
 using TelemetryApp.Api.Client.Log;
 
 namespace BackgroundTasksDaemon.Tasks.CreateRoot;

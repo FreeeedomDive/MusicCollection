@@ -1,21 +1,18 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using MusicCollection.Api.Dto.Exceptions;
-using TelemetryApp.Api.Client.Log;
 
 namespace ApiUtils.Middlewares;
 
 public class ExceptionsMiddleware
 {
     private RequestDelegate next;
-    private ILoggerClient loggerClient;
 
-    public ExceptionsMiddleware(RequestDelegate next, ILoggerClient loggerClient)
+    public ExceptionsMiddleware(RequestDelegate next)
     {
         this.next = next;
-        this.loggerClient = loggerClient;
     }
-    
+
     public async Task InvokeAsync(HttpContext context)
     {
         try

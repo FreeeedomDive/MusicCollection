@@ -3,8 +3,7 @@ using BackgroundTasksDaemon.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Admin;
 using MusicCollection.Api.Dto.FileSystem;
-using MusicCollection.BusinessLogic.Services.FilesService;
-using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.Files.DirectoryNotFoundException;
+using MusicCollection.MusicService.Services.FilesService;
 
 namespace MusicCollection.AdminApi.Controllers;
 

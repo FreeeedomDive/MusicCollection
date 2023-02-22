@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Users;
-using MusicCollection.BusinessLogic.Repositories.Auth;
+using MusicCollection.UserService.Repositories.Users.Auth;
 
 namespace MusicCollection.AdminApi.Controllers;
 
