@@ -1,21 +1,17 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using MusicCollection.Api.Dto.Exceptions;
+using Newtonsoft.Json;
 using TelemetryApp.Api.Client.Log;
 
 namespace ApiUtils.Middlewares;
 
 public class ExceptionsMiddleware
 {
-    private RequestDelegate next;
-    private ILoggerClient loggerClient;
-
     public ExceptionsMiddleware(RequestDelegate next, ILoggerClient loggerClient)
     {
         this.next = next;
-        this.loggerClient = loggerClient;
     }
-    
+
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -35,9 +31,17 @@ public class ExceptionsMiddleware
 
     private static async Task WriteExceptionAsync(HttpContext context, Exception exception, int statusCode)
     {
-        context.Response.StatusCode = statusCode;
-        var serializedException = JsonSerializer.Serialize(exception);
+        var result = JsonConvert.SerializeObject(
+            exception, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+            }
+        );
+
         context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync(serializedException);
+        context.Response.StatusCode = statusCode;
+        await context.Response.WriteAsync(result);
     }
+
+    private readonly RequestDelegate next;
 }
