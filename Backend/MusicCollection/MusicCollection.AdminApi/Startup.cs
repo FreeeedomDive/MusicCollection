@@ -11,8 +11,6 @@ namespace MusicCollection.AdminApi;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
-
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -34,11 +32,15 @@ public class Startup
             .ConfigureBusinessLogicServices()
             .ConfigureTasksWorker();
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy(CorsConfigurationName,
-                policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
-        });
+        services.AddCors(
+            options =>
+            {
+                options.AddPolicy(
+                    CorsConfigurationName,
+                    policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }
+                );
+            }
+        );
 
         services.AddControllers();
     }
@@ -55,6 +57,8 @@ public class Startup
         var taskDaemon = app.ApplicationServices.GetService<ITasksDaemon>();
         taskDaemon?.Start();
     }
+
+    public IConfiguration Configuration { get; }
 
     private const string CorsConfigurationName = "AllowOrigins";
 }

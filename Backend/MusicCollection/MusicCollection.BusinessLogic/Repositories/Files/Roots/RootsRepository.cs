@@ -47,7 +47,7 @@ public class RootsRepository : IRootsRepository
         {
             Id = root.Id,
             Name = root.Name,
-            Path = root.Path
+            Path = root.Path,
         };
     }
 
@@ -57,7 +57,7 @@ public class RootsRepository : IRootsRepository
         {
             Id = root.Id,
             Name = root.Name,
-            Path = root.Path
+            Path = root.Path,
         };
     }
 

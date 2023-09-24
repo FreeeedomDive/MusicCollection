@@ -6,5 +6,5 @@ public enum DeleteRootTaskState
     Fatal,
     FetchingData,
     Deleting,
-    Done
+    Done,
 }

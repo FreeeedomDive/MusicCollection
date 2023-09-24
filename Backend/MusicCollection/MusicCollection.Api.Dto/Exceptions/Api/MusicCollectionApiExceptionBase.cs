@@ -2,7 +2,9 @@
 
 public abstract class MusicCollectionApiExceptionBase : Exception
 {
-    protected MusicCollectionApiExceptionBase(string message): base(message) { }
+    protected MusicCollectionApiExceptionBase(string message) : base(message)
+    {
+    }
 
     public virtual int StatusCode { get; set; }
 }

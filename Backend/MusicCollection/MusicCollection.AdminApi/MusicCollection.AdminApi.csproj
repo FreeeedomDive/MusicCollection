@@ -7,21 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ApiUtils\ApiUtils.csproj" />
-      <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj" />
-      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+        <ProjectReference Include="..\ApiUtils\ApiUtils.csproj"/>
+        <ProjectReference Include="..\BackgroundTasksDaemon\BackgroundTasksDaemon.csproj"/>
+        <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="startProduction.bat">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="startProduction.bat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5" />
-      <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12" />
-      <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.12" />
+        <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5"/>
+        <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12"/>
+        <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.12"/>
     </ItemGroup>
 
 </Project>

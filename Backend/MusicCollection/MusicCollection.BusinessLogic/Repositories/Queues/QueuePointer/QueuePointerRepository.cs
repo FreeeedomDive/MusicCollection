@@ -17,11 +17,13 @@ public class QueuePointerRepository : IQueuePointerRepository
             return;
         }
 
-        await sqlRepository.CreateAsync(new QueuePointerStorageElement
-        {
-            Id = userId,
-            Current = position
-        });
+        await sqlRepository.CreateAsync(
+            new QueuePointerStorageElement
+            {
+                Id = userId,
+                Current = position,
+            }
+        );
     }
 
     public async Task<int?> TryReadAsync(Guid userId)

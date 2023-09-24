@@ -39,12 +39,14 @@ public class QueuesService : IQueuesService
         var userSettings = await userSettingsRepository.ReadOrCreateAsync(userId);
         var allFiles = await filesService.ReadAllFilesFromDirectoryAsync(contextId);
         var queueElements = allFiles
-            .ModifyIf(userSettings.Shuffle, x => x.Shuffle())
-            .Select((x, i) => new QueueListElement
-            {
-                Position = i + 1,
-                TrackId = x
-            });
+                            .ModifyIf(userSettings.Shuffle, x => x.Shuffle())
+                            .Select(
+                                (x, i) => new QueueListElement
+                                {
+                                    Position = i + 1,
+                                    TrackId = x,
+                                }
+                            );
         await queueListRepository.CreateAsync(userId, queueElements);
     }
 
@@ -72,11 +74,13 @@ public class QueuesService : IQueuesService
             currentTrack.Position = 1;
             allFiles = allFiles.Except(currentTrack.TrackId).Shuffle().ToArray();
             var newQueueElements = allFiles
-                .Select((x, i) => new QueueListElement
-                {
-                    Position = i + 2,
-                    TrackId = x
-                });
+                .Select(
+                    (x, i) => new QueueListElement
+                    {
+                        Position = i + 2,
+                        TrackId = x,
+                    }
+                );
             await queueListRepository.CreateAsync(userId, new[] { currentTrack }.Concat(newQueueElements));
             await queuePointerRepository.CreateOrUpdateAsync(userId, 1);
         }
@@ -85,11 +89,13 @@ public class QueuesService : IQueuesService
             // если выключен шафл, ставим все треки в список без перемешиваний, вычисляем позицию текущего трека в этом списке и ставим текущую позицию, равную ей
             var currentTrackIndexWithoutShuffle = Array.IndexOf(allFiles, currentTrack.TrackId);
             var queueElements = allFiles
-                .Select((x, i) => new QueueListElement
-                {
-                    Position = i + 1,
-                    TrackId = x
-                });
+                .Select(
+                    (x, i) => new QueueListElement
+                    {
+                        Position = i + 1,
+                        TrackId = x,
+                    }
+                );
             await queueListRepository.CreateAsync(userId, queueElements);
             await queuePointerRepository.CreateOrUpdateAsync(userId, currentTrackIndexWithoutShuffle == -1 ? 1 : currentTrackIndexWithoutShuffle + 1);
         }
@@ -125,7 +131,7 @@ public class QueuesService : IQueuesService
         return new QueueTrack
         {
             Position = currentQueuePosition.Value,
-            Track = await filesService.ReadNodeAsync(currentTrackId.TrackId)
+            Track = await filesService.ReadNodeAsync(currentTrackId.TrackId),
         };
     }
 
@@ -141,13 +147,15 @@ public class QueuesService : IQueuesService
         var trackIdToPosition = queue.ToDictionary(x => x.TrackId, x => x.Position);
         var nodes = await filesService.ReadManyNodesAsync(queue.Select(x => x.TrackId).ToArray());
 
-        return nodes.Select(x => new QueueTrack
-            {
-                Position = trackIdToPosition[x.Id],
-                Track = x
-            })
-            .OrderBy(x => x.Position)
-            .ToArray();
+        return nodes.Select(
+                        x => new QueueTrack
+                        {
+                            Position = trackIdToPosition[x.Id],
+                            Track = x,
+                        }
+                    )
+                    .OrderBy(x => x.Position)
+                    .ToArray();
     }
 
     public async Task<QueueTrack> MovePreviousAsync(Guid userId)
@@ -181,13 +189,14 @@ public class QueuesService : IQueuesService
         return new QueueTrack
         {
             Position = nextTrack.Position,
-            Track = track
+            Track = track,
         };
     }
 
-    private readonly IQueueContextRepository queueContextRepository;
-    private readonly IQueuePointerRepository queuePointerRepository;
-    private readonly IQueueListRepository queueListRepository;
     private readonly IFilesService filesService;
+
+    private readonly IQueueContextRepository queueContextRepository;
+    private readonly IQueueListRepository queueListRepository;
+    private readonly IQueuePointerRepository queuePointerRepository;
     private readonly IUserSettingsRepository userSettingsRepository;
 }

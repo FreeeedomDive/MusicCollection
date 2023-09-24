@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Exceptions.Users;
 using MusicCollection.Api.Dto.Users;
 using MusicCollection.BusinessLogic.Services.UsersService;
 
-
 namespace MusicCollection.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+[ApiController, Route("api/[controller]")]
 public class UsersController : Controller
 {
-    private readonly IUsersService usersService;
-
     public UsersController(IUsersService usersService)
     {
         this.usersService = usersService;
@@ -28,4 +23,6 @@ public class UsersController : Controller
     {
         return await usersService.RegisterAsync(authCredentials);
     }
+
+    private readonly IUsersService usersService;
 }

@@ -37,15 +37,15 @@ public class NodesRepository : INodesRepository
         }
 
         var requiredNodesQueryable = sqlRepository
-            .BuildCustomQuery()
-            .Where(node => node.ParentId == parentId && !node.Hidden)
-            .OrderByDescending(x => x.Type)
-            .ThenBy(x => x.Path);
+                                     .BuildCustomQuery()
+                                     .Where(node => node.ParentId == parentId && !node.Hidden)
+                                     .OrderByDescending(x => x.Type)
+                                     .ThenBy(x => x.Path);
         var result = withPages
             ? await requiredNodesQueryable
-                .Skip(skip)
-                .Take(take)
-                .ToArrayAsync()
+                    .Skip(skip)
+                    .Take(take)
+                    .ToArrayAsync()
             : await requiredNodesQueryable.ToArrayAsync();
 
         return result.Select(ToModel).ToArray()!;
@@ -103,7 +103,7 @@ public class NodesRepository : INodesRepository
             ParentId = node.ParentId,
             Type = node.Type,
             Path = node.Path,
-            Hidden = node.Hidden
+            Hidden = node.Hidden,
         };
     }
 
@@ -115,7 +115,7 @@ public class NodesRepository : INodesRepository
             ParentId = node.ParentId,
             Type = node.Type,
             Path = node.Path,
-            Hidden = node.Hidden
+            Hidden = node.Hidden,
         };
     }
 

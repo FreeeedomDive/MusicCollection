@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using MusicCollection.Api.Dto.Admin;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Services.FilesService;
-using DirectoryNotFoundException = MusicCollection.Api.Dto.Exceptions.Files.DirectoryNotFoundException;
 
 namespace MusicCollection.AdminApi.Controllers;
 
-[ApiController]
-[Route("adminApi/[controller]")]
+[ApiController, Route("adminApi/[controller]")]
 public class FilesController : Controller
 {
     public FilesController(
@@ -46,6 +44,7 @@ public class FilesController : Controller
         return Ok();
     }
 
-    private readonly IFilesService filesService;
     private readonly IBackgroundTasksStorage backgroundTasksStorage;
+
+    private readonly IFilesService filesService;
 }

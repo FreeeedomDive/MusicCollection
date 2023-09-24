@@ -75,6 +75,11 @@ public class CreateRootTask : IBackgroundTask
         }
     }
 
+    public Guid Id { get; }
+    public string CurrentState => state.ToString();
+    public string TaskType => BackgroundTaskType.CreateRoot.ToString();
+    public int Progress { get; private set; }
+
     private async Task FetchDirectories()
     {
         state = CreateRootTaskState.FetchingDirectories;
@@ -100,18 +105,22 @@ public class CreateRootTask : IBackgroundTask
         state = CreateRootTaskState.CreatingNodes;
 
         var rootId = Guid.NewGuid();
-        await rootsRepository.CreateAsync(new FileSystemRoot
-        {
-            Id = rootId,
-            Name = rootName,
-            Path = rootPath
-        });
-        await nodesRepository.CreateAsync(new FileSystemNode
-        {
-            Id = rootId,
-            Path = rootPath,
-            Type = NodeType.Directory
-        });
+        await rootsRepository.CreateAsync(
+            new FileSystemRoot
+            {
+                Id = rootId,
+                Name = rootName,
+                Path = rootPath,
+            }
+        );
+        await nodesRepository.CreateAsync(
+            new FileSystemNode
+            {
+                Id = rootId,
+                Path = rootPath,
+                Type = NodeType.Directory,
+            }
+        );
 
         await ProcessDirectoryAsync(rootId, rootPath, CreateNodesAsync);
     }
@@ -137,13 +146,15 @@ public class CreateRootTask : IBackgroundTask
 
     private static FileSystemNode[] BuildNodes(IEnumerable<string> paths, Guid parentId, NodeType type)
     {
-        return paths.Select(x => new FileSystemNode
-        {
-            Id = Guid.NewGuid(),
-            ParentId = parentId,
-            Path = x,
-            Type = type
-        }).ToArray();
+        return paths.Select(
+            x => new FileSystemNode
+            {
+                Id = Guid.NewGuid(),
+                ParentId = parentId,
+                Path = x,
+                Type = type,
+            }
+        ).ToArray();
     }
 
     private void UpdateProgress(Action action)
@@ -182,26 +193,21 @@ public class CreateRootTask : IBackgroundTask
         await func(nodeId, directories, files);
     }
 
-    public Guid Id { get; }
-    public string CurrentState => state.ToString();
-    public string TaskType => BackgroundTaskType.CreateRoot.ToString();
-    public int Progress { get; private set; }
-
-    private CreateRootTaskState state;
+    private readonly List<FileSystemNode> allFileNodes;
+    private readonly ILoggerClient logger;
+    private readonly INodesRepository nodesRepository;
 
     private readonly IRootsRepository rootsRepository;
-    private readonly INodesRepository nodesRepository;
     private readonly ITagsExtractor tagsExtractor;
     private readonly ITagsRepository tagsRepository;
-    private readonly ILoggerClient logger;
+
+    private int processedDirectories;
+    private int processedFiles;
 
     private string rootName;
     private string rootPath;
 
-    private int processedDirectories;
-    private int processedFiles;
+    private CreateRootTaskState state;
     private int totalDirectories;
     private int totalFiles;
-
-    private readonly List<FileSystemNode> allFileNodes;
 }

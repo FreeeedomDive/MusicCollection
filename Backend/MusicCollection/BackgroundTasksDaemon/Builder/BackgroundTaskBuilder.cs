@@ -44,11 +44,11 @@ public class BackgroundTaskBuilder : IBackgroundTaskBuilder
     {
         IBackgroundTask task = Type switch
         {
-            BackgroundTaskType.CreateRoot => 
+            BackgroundTaskType.CreateRoot =>
                 new CreateRootTask(rootsRepository, nodesRepository, tagsExtractor, tagsRepository, logger),
-            BackgroundTaskType.DeleteRoot => 
+            BackgroundTaskType.DeleteRoot =>
                 new DeleteRootTask(rootsRepository, nodesRepository, tagsRepository, logger),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
         await task.InitializeWithArgsAsync(Args);
@@ -59,8 +59,8 @@ public class BackgroundTaskBuilder : IBackgroundTaskBuilder
     private string[]? Args { get; set; }
 
     private readonly ILoggerClient logger;
-    private readonly IRootsRepository rootsRepository;
     private readonly INodesRepository nodesRepository;
-    private readonly ITagsRepository tagsRepository;
+    private readonly IRootsRepository rootsRepository;
     private readonly ITagsExtractor tagsExtractor;
+    private readonly ITagsRepository tagsRepository;
 }

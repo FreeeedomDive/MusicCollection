@@ -32,12 +32,12 @@ public class QueueListRepository : IQueueListRepository
     public async Task<QueueListElement[]> ReadManyAsync(Guid userId, int skip = 0, int take = 50)
     {
         var result = await sqlRepository
-            .BuildCustomQuery()
-            .Where(x => x.Id == userId)
-            .OrderBy(x => x.Position)
-            .Skip(skip)
-            .Take(take)
-            .ToArrayAsync();
+                           .BuildCustomQuery()
+                           .Where(x => x.Id == userId)
+                           .OrderBy(x => x.Position)
+                           .Skip(skip)
+                           .Take(take)
+                           .ToArrayAsync();
 
         return result.Select(ToModel).ToArray();
     }
@@ -58,7 +58,7 @@ public class QueueListRepository : IQueueListRepository
         return new QueueListElement
         {
             Position = storageElement.Position,
-            TrackId = storageElement.TrackId
+            TrackId = storageElement.TrackId,
         };
     }
 
@@ -68,7 +68,7 @@ public class QueueListRepository : IQueueListRepository
         {
             Id = userId,
             Position = queueListElement.Position,
-            TrackId = queueListElement.TrackId
+            TrackId = queueListElement.TrackId,
         };
     }
 

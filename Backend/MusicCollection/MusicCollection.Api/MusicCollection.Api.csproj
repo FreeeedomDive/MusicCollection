@@ -8,27 +8,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5" />
-        <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12" />
-        <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.12" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Xdd.SqlRepositoryBase.Configuration" Version="1.0.5"/>
+        <PackageReference Include="Xdd.TelemetryApp.Api.Client" Version="1.0.12"/>
+        <PackageReference Include="Xdd.TelemetryApp.Api.Utilities" Version="1.0.12"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ApiUtils\ApiUtils.csproj" />
-      <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj" />
+        <ProjectReference Include="..\ApiUtils\ApiUtils.csproj"/>
+        <ProjectReference Include="..\MusicCollection.BusinessLogic\MusicCollection.BusinessLogic.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="startProduction.bat">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="startProduction.bat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

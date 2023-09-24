@@ -17,8 +17,8 @@ public static class ServiceCollectionExtensions
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
 
         var sqlStorageElementTypes = allTypes
-            .Where(p => typeof(SqlStorageElement).IsAssignableFrom(p))
-            .Where(p => p != typeof(SqlStorageElement));
+                                     .Where(p => typeof(SqlStorageElement).IsAssignableFrom(p))
+                                     .Where(p => p != typeof(SqlStorageElement));
         foreach (var sqlStorageElementType in sqlStorageElementTypes)
         {
             var genericSqlRepositoryInterfaceType = typeof(ISqlRepository<>).MakeGenericType(sqlStorageElementType);
@@ -26,10 +26,11 @@ public static class ServiceCollectionExtensions
             services.AddTransient(genericSqlRepositoryInterfaceType, genericSqlRepositoryImplementationType);
         }
 
-        var repositories = allTypes.Where(type =>
-            type.IsInterface
-            && typeof(IMusicCollectionRepository).IsAssignableFrom(type)
-            && type != typeof(IMusicCollectionRepository)
+        var repositories = allTypes.Where(
+            type =>
+                type.IsInterface
+                && typeof(IMusicCollectionRepository).IsAssignableFrom(type)
+                && type != typeof(IMusicCollectionRepository)
         );
         foreach (var repository in repositories)
         {
@@ -44,10 +45,11 @@ public static class ServiceCollectionExtensions
     {
         var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToArray();
 
-        var logicServices = allTypes.Where(type =>
-            type.IsInterface
-            && typeof(IMusicCollectionLogicService).IsAssignableFrom(type)
-            && type != typeof(IMusicCollectionLogicService)
+        var logicServices = allTypes.Where(
+            type =>
+                type.IsInterface
+                && typeof(IMusicCollectionLogicService).IsAssignableFrom(type)
+                && type != typeof(IMusicCollectionLogicService)
         );
         foreach (var service in logicServices)
         {

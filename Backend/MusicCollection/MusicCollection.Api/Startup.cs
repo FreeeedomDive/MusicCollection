@@ -10,8 +10,6 @@ namespace MusicCollection;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
-
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -43,4 +41,6 @@ public class Startup
         app.UseMiddleware<ExceptionsMiddleware>();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
+
+    public IConfiguration Configuration { get; }
 }

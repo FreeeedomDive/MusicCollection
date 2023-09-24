@@ -26,18 +26,20 @@ public class UserSettingsRepository : IUserSettingsRepository
 
     public async Task UpdateAsync(Guid userId, UserSettings userSettings)
     {
-        await sqlRepository.UpdateAsync(userId, x =>
-        {
-            // update every property
-            x.Shuffle = userSettings.Shuffle;
-        });
+        await sqlRepository.UpdateAsync(
+            userId, x =>
+            {
+                // update every property
+                x.Shuffle = userSettings.Shuffle;
+            }
+        );
     }
 
     private static UserSettings ToModel(UserSettingsStorageElement storageElement)
     {
         return new UserSettings
         {
-            Shuffle = storageElement.Shuffle
+            Shuffle = storageElement.Shuffle,
         };
     }
 
@@ -46,7 +48,7 @@ public class UserSettingsRepository : IUserSettingsRepository
         return new UserSettingsStorageElement
         {
             Id = userId,
-            Shuffle = model.Shuffle
+            Shuffle = model.Shuffle,
         };
     }
 

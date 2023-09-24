@@ -17,11 +17,13 @@ public class QueueContextRepository : IQueueContextRepository
             return;
         }
 
-        await sqlRepository.CreateAsync(new QueueContextStorageElement
-        {
-            Id = userId,
-            ContextId = contextId
-        });
+        await sqlRepository.CreateAsync(
+            new QueueContextStorageElement
+            {
+                Id = userId,
+                ContextId = contextId,
+            }
+        );
     }
 
     public async Task<Guid?> TryReadAsync(Guid userId)

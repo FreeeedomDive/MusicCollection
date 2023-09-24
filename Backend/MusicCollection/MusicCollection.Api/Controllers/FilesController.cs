@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.BusinessLogic.Services.FilesService;
+
 namespace MusicCollection.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+[ApiController, Route("api/[controller]")]
 public class FilesController : Controller
 {
     public FilesController(IFilesService filesService)
     {
         this.filesService = filesService;
     }
-    
+
     [HttpGet("roots")]
     public async Task<ActionResult<FileSystemRoot[]>> GetAllRoots()
     {
@@ -28,7 +27,7 @@ public class FilesController : Controller
     [HttpGet("nodes/{nodeId:guid}")]
     public async Task<ActionResult<FileSystemNode>> GetNode([FromRoute] Guid nodeId)
     {
-        return  await filesService.ReadNodeAsync(nodeId);
+        return await filesService.ReadNodeAsync(nodeId);
     }
 
     [HttpGet("nodes/{nodeId:guid}/ReadChildren")]

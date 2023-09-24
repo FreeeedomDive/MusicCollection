@@ -4,15 +4,14 @@ using MusicCollection.Api.Dto.Admin;
 
 namespace MusicCollection.AdminApi.Controllers;
 
-[ApiController]
-[Route("adminApi/[controller]")]
+[ApiController, Route("adminApi/[controller]")]
 public class TasksController : Controller
 {
     public TasksController(IBackgroundTasksStorage backgroundTasksStorage)
     {
         this.backgroundTasksStorage = backgroundTasksStorage;
     }
-    
+
     [HttpGet]
     public TaskDto[] GetAll()
     {
@@ -24,6 +23,6 @@ public class TasksController : Controller
     {
         backgroundTasksStorage.RemoveTask(id);
     }
-    
+
     private readonly IBackgroundTasksStorage backgroundTasksStorage;
 }

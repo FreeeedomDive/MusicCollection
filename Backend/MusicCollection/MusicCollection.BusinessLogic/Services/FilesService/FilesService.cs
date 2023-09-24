@@ -91,18 +91,22 @@ public class FilesService : IFilesService
         }
 
         var rootId = Guid.NewGuid();
-        await rootsRepository.CreateAsync(new FileSystemRoot
-        {
-            Id = rootId,
-            Name = name,
-            Path = path
-        });
-        await nodesRepository.CreateAsync(new FileSystemNode
-        {
-            Id = rootId,
-            Path = path,
-            Type = NodeType.Directory
-        });
+        await rootsRepository.CreateAsync(
+            new FileSystemRoot
+            {
+                Id = rootId,
+                Name = name,
+                Path = path,
+            }
+        );
+        await nodesRepository.CreateAsync(
+            new FileSystemNode
+            {
+                Id = rootId,
+                Path = path,
+                Type = NodeType.Directory,
+            }
+        );
         await ProcessDirectoryAsync(rootId, path);
 
         return rootId;
@@ -169,13 +173,15 @@ public class FilesService : IFilesService
 
     private static FileSystemNode[] CreateNodes(IEnumerable<string> paths, Guid parentId, NodeType type)
     {
-        return paths.Select(x => new FileSystemNode
-        {
-            Id = Guid.NewGuid(),
-            ParentId = parentId,
-            Path = x,
-            Type = type
-        }).ToArray();
+        return paths.Select(
+            x => new FileSystemNode
+            {
+                Id = Guid.NewGuid(),
+                ParentId = parentId,
+                Path = x,
+                Type = type,
+            }
+        ).ToArray();
     }
 
     private async Task ExtendNodeAsync(FileSystemNode node)
@@ -186,7 +192,7 @@ public class FilesService : IFilesService
             node.DirectoryData = new DirectoryData
             {
                 Directories = innerData.Count(x => x.Type == NodeType.Directory),
-                Files = innerData.Count(x => x.Type == NodeType.File)
+                Files = innerData.Count(x => x.Type == NodeType.File),
             };
         }
         else
@@ -195,9 +201,10 @@ public class FilesService : IFilesService
         }
     }
 
+    private readonly IMusicFilesRepository musicFilesRepository;
+
     private readonly INodesRepository nodesRepository;
     private readonly IRootsRepository rootsRepository;
-    private readonly IMusicFilesRepository musicFilesRepository;
-    private readonly ITagsRepository tagsRepository;
     private readonly ITagsExtractor tagsExtractor;
+    private readonly ITagsRepository tagsRepository;
 }

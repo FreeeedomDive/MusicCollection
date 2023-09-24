@@ -6,8 +6,6 @@ namespace MusicCollection.BusinessLogic.Services.UsersService;
 
 public class UsersService : IUsersService
 {
-    private readonly IUsersRepository usersRepository;
-
     public UsersService(IUsersRepository usersRepository)
     {
         this.usersRepository = usersRepository;
@@ -27,7 +25,11 @@ public class UsersService : IUsersService
             throw new UserWithLoginAlreadyExistsException(authCredentials.Login);
         }
 
-        return await usersRepository.CreateAsync(authCredentials.Login,
-            CryptoService.Encrypt(authCredentials.Password));
+        return await usersRepository.CreateAsync(
+            authCredentials.Login,
+            CryptoService.Encrypt(authCredentials.Password)
+        );
     }
+
+    private readonly IUsersRepository usersRepository;
 }

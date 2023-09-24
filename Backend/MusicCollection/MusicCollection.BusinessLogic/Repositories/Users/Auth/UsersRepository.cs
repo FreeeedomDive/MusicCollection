@@ -40,7 +40,7 @@ public class UsersRepository : IUsersRepository
         {
             Id = Guid.NewGuid(),
             Login = login,
-            Password = encryptedPassword
+            Password = encryptedPassword,
         };
         await sqlRepository.CreateAsync(newUser);
         return ToModel(newUser)!;
@@ -61,6 +61,6 @@ public class UsersRepository : IUsersRepository
                 Login = user.Login,
             };
     }
-    
+
     private readonly ISqlRepository<UserStorageElement> sqlRepository;
 }

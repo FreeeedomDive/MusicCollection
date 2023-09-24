@@ -7,5 +7,5 @@ public enum CreateRootTaskState
     FetchingDirectories,
     CreatingNodes,
     CreatingTags,
-    Done
+    Done,
 }

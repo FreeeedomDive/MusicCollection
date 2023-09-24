@@ -13,8 +13,6 @@ namespace MusicCollection.BusinessLogic.Repositories.Database;
 
 public class DatabaseContext : DbContext
 {
-    public DatabaseOptions Options { get; }
-
     public DatabaseContext(
         DbContextOptions<DatabaseContext> options,
         IOptions<DatabaseOptions> dbOptionsAccessor
@@ -22,11 +20,13 @@ public class DatabaseContext : DbContext
     {
         Options = dbOptionsAccessor.Value;
     }
-        
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(Options.ConnectionString);
     }
+
+    public DatabaseOptions Options { get; }
 
     public DbSet<NodeStorageElement> NodesStorage { get; set; }
     public DbSet<RootStorageElement> RootsStorage { get; set; }

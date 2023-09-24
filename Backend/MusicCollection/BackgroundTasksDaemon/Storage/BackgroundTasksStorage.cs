@@ -18,9 +18,9 @@ public class BackgroundTasksStorage : IBackgroundTasksStorage
     public async Task<Guid> AddTask(BackgroundTaskType type, string[]? args)
     {
         var task = await backgroundTaskBuilder
-            .ForTaskType(type)
-            .WithArgs(args)
-            .BuildAsync();
+                         .ForTaskType(type)
+                         .WithArgs(args)
+                         .BuildAsync();
 
         tasks[task.Id] = task;
         queue.Enqueue(task);
@@ -56,13 +56,15 @@ public class BackgroundTasksStorage : IBackgroundTasksStorage
 
     public TaskDto[] GetTasks()
     {
-        return tasks.Values.Select(x => new TaskDto
-        {
-            Id = x.Id,
-            Type = x.TaskType,
-            Progress = x.Progress,
-            State = x.CurrentState
-        }).ToArray();
+        return tasks.Values.Select(
+            x => new TaskDto
+            {
+                Id = x.Id,
+                Type = x.TaskType,
+                Progress = x.Progress,
+                State = x.CurrentState,
+            }
+        ).ToArray();
     }
 
     public TaskDto GetTaskState(Guid id)
@@ -74,12 +76,12 @@ public class BackgroundTasksStorage : IBackgroundTasksStorage
         return new TaskDto
         {
             Progress = task.Progress,
-            State = task.CurrentState
+            State = task.CurrentState,
         };
     }
 
     private readonly IBackgroundTaskBuilder backgroundTaskBuilder;
-    private readonly ConcurrentDictionary<Guid, IBackgroundTask> tasks;
     private readonly ConcurrentQueue<IBackgroundTask> queue;
+    private readonly ConcurrentDictionary<Guid, IBackgroundTask> tasks;
     private readonly ConcurrentBag<Guid> tasksToRemove;
 }

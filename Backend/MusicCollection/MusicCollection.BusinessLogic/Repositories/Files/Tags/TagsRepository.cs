@@ -41,7 +41,7 @@ public class TagsRepository : ITagsRepository
                 Format = storageElement.Format,
                 SampleFrequency = storageElement.SampleFrequency,
                 BitDepth = storageElement.BitDepth,
-                BitRate = storageElement.BitRate
+                BitRate = storageElement.BitRate,
             };
     }
 
@@ -57,7 +57,7 @@ public class TagsRepository : ITagsRepository
             Format = model.Format,
             SampleFrequency = model.SampleFrequency,
             BitDepth = model.BitDepth,
-            BitRate = model.BitRate
+            BitRate = model.BitRate,
         };
     }
 

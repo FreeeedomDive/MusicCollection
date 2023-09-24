@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using MusicCollection.Api.Dto.Exceptions;
 using MusicCollection.Api.Dto.FileSystem;
 using MusicCollection.Api.Dto.Queues;
 using MusicCollection.BusinessLogic.Services.QueuesService;
 
 namespace MusicCollection.Controllers;
 
-[ApiController]
-[Route("api/[controller]/{userId:guid}")]
+[ApiController, Route("api/[controller]/{userId:guid}")]
 public class QueuesController : Controller
 {
     public QueuesController(IQueuesService queuesService)

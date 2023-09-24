@@ -67,6 +67,11 @@ public class DeleteRootTask : IBackgroundTask
         }
     }
 
+    public Guid Id { get; }
+    public string CurrentState => state.ToString();
+    public string TaskType => BackgroundTaskType.DeleteRoot.ToString();
+    public int Progress { get; private set; }
+
     private async Task FetchDataToDeleteAsync()
     {
         state = DeleteRootTaskState.FetchingData;
@@ -119,18 +124,14 @@ public class DeleteRootTask : IBackgroundTask
         Progress = processedDirectories * 100 / totalDirectories;
     }
 
-    public Guid Id { get; }
-    public string CurrentState => state.ToString();
-    public string TaskType => BackgroundTaskType.DeleteRoot.ToString();
-    public int Progress { get; private set; }
+    private readonly ILoggerClient logger;
+    private readonly INodesRepository nodesRepository;
+    private readonly IRootsRepository rootsRepository;
+    private readonly ITagsRepository tagsRepository;
 
 
     private int processedDirectories;
-    private int totalDirectories;
     private Guid rootId;
     private DeleteRootTaskState state;
-    private readonly IRootsRepository rootsRepository;
-    private readonly INodesRepository nodesRepository;
-    private readonly ITagsRepository tagsRepository;
-    private readonly ILoggerClient logger;
+    private int totalDirectories;
 }

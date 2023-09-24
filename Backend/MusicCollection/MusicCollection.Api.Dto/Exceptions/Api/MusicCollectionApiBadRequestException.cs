@@ -2,7 +2,9 @@
 
 public class MusicCollectionApiBadRequestException : MusicCollectionApiExceptionBase
 {
-    public MusicCollectionApiBadRequestException(string message) : base(message) { }
+    public MusicCollectionApiBadRequestException(string message) : base(message)
+    {
+    }
 
     public override int StatusCode { get; set; } = 400;
 }
