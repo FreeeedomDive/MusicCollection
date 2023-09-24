@@ -25,7 +25,6 @@ public class ExceptionsMiddleware
         catch (MusicCollectionApiExceptionBase e)
         {
             await WriteExceptionAsync(context, e, e.StatusCode);
-            throw;
         }
         catch (Exception e)
         {
